@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ & How It Works — EXP EQUITY</title>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f5f4f0;
+      --accent: #c8ff00;
+      --accent-dark: #9ccc00;
+      --gray: #888;
+      --light-gray: #e8e8e4;
+      --card-bg: #141414;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--black); padding: 0.55rem 1.4rem; border-radius: 50px; font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+    .nav-cta:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 8rem 4rem 4rem;
+      max-width: 780px;
+    }
+    .page-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25);
+      color: var(--accent); padding: 0.35rem 1rem; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .page-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .page-header h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+    .page-header p { font-size: 1.05rem; color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    /* ── LAYOUT ── */
+    .faq-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 4rem 6rem;
+    }
+
+    /* ── STICKY NAV ── */
+    .faq-nav {
+      position: sticky; top: 90px; height: fit-content;
+      padding-right: 2rem;
+      padding-top: 0.5rem;
+    }
+    .faq-nav-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .faq-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
+    .faq-nav a {
+      font-size: 0.82rem; color: rgba(255,255,255,0.4);
+      text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 7px;
+      transition: all 0.15s; display: block; line-height: 1.4;
+    }
+    .faq-nav a:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+    .faq-nav a.active { color: var(--accent); background: rgba(200,255,0,0.07); }
+
+    /* ── CONTENT ── */
+    .faq-content { border-left: 1px solid rgba(255,255,255,0.07); padding-left: 4rem; }
+
+    /* Section heading */
+    .faq-section { margin-bottom: 5rem; }
+    .faq-section-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+    }
+    .faq-section h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em;
+      margin-bottom: 2rem; line-height: 1.2;
+    }
+
+    /* Accordion */
+    .accordion { display: flex; flex-direction: column; gap: 0; }
+    .accordion-item { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .accordion-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+    .accordion-btn {
+      width: 100%; background: none; border: none; color: var(--white);
+      text-align: left; padding: 1.25rem 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-size: 0.95rem; font-weight: 600; line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .accordion-btn:hover { color: var(--accent); }
+    .accordion-btn.open { color: var(--accent); }
+    .accordion-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.85rem; transition: all 0.2s;
+      color: var(--gray);
+    }
+    .accordion-btn.open .accordion-icon {
+      border-color: var(--accent); color: var(--accent);
+      background: rgba(200,255,0,0.1); transform: rotate(45deg);
+    }
+    .accordion-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.2s ease;
+    }
+    .accordion-body.open { max-height: 600px; }
+    .accordion-body-inner {
+      padding-bottom: 1.5rem;
+      font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.8;
+    }
+    .accordion-body-inner p + p { margin-top: 0.75rem; }
+    .accordion-body-inner strong { color: var(--white); font-weight: 600; }
+    .accordion-body-inner .highlight-box {
+      background: rgba(200,255,0,0.06); border: 1px solid rgba(200,255,0,0.15);
+      border-radius: 10px; padding: 1rem 1.25rem; margin-top: 1rem;
+      font-size: 0.85rem; color: rgba(255,255,255,0.6);
+    }
+
+    /* Pipeline visual */
+    .pipeline {
+      display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+      margin: 1.5rem 0;
+    }
+    .pipe-step {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 0.5rem 1rem;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.6);
+    }
+    .pipe-step.active { background: rgba(200,255,0,0.1); border-color: rgba(200,255,0,0.3); color: var(--accent); }
+    .pipe-arrow { color: rgba(255,255,255,0.2); padding: 0 0.35rem; font-size: 0.8rem; }
+
+    /* Onboarding paths */
+    .paths-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .path-card {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 1.25rem;
+    }
+    .path-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+    }
+    .path-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--white); }
+    .path-card p { font-size: 0.78rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+    /* Wallet MCCs */
+    .mcc-list { display: flex; flex-direction: column; gap: 0.6rem; margin: 1rem 0; }
+    .mcc-item {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: rgba(255,255,255,0.03); border-radius: 10px;
+      padding: 0.75rem 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.65);
+    }
+    .mcc-icon { font-size: 1.2rem; }
+
+    /* Strike system */
+    .strike-row {
+      display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;
+    }
+    .strike-badge {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800;
+    }
+    .strike-badge.s1 { background: rgba(255,180,0,0.15); color: #ffb400; border: 1px solid rgba(255,180,0,0.3); }
+    .strike-badge.s2 { background: rgba(255,60,60,0.15); color: #ff4444; border: 1px solid rgba(255,60,60,0.3); }
+    .strike-body { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .strike-body strong { color: var(--white); }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: var(--accent); color: var(--black);
+      padding: 5rem 4rem; text-align: center;
+    }
+    .cta-band h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+    .cta-band p { font-size: 1.05rem; color: rgba(0,0,0,0.6); margin-bottom: 2rem; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-dark { background: var(--black); color: var(--white); padding: 1rem 2.4rem; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: background 0.2s; }
+    .btn-dark:hover { background: #222; }
+    .btn-outline-dark { background: transparent; color: var(--black); padding: 1rem 2.4rem; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; border: 2px solid rgba(0,0,0,0.3); transition: border-color 0.2s; }
+    .btn-outline-dark:hover { border-color: var(--black); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 3rem 4rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-header { padding: 6rem 1.5rem 2.5rem; }
+      .faq-layout { grid-template-columns: 1fr; padding: 0 1.5rem 4rem; }
+      .faq-nav { display: none; }
+      .faq-content { border-left: none; padding-left: 0; }
+      .paths-grid { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="index.html">EXP EQUITY</a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How It Works</a></li>
+    <li><a href="gigs.html">Gig Board</a></li>
+    <li><a href="faq.html" class="active">FAQ</a></li>
+    <li><a href="index.html#roles">Join</a></li>
+  </ul>
+  <a href="index.html#roles" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-tag"><span></span>Documentation</div>
+  <h1>FAQ &amp; How It Works</h1>
+  <p>Everything you need to know about onboarding, gig lifecycle, escrow, payouts, and dispute resolution — drawn directly from the platform charter and SOPs.</p>
+</div>
+
+<!-- ── LAYOUT ── -->
+<div class="faq-layout">
+
+  <!-- STICKY SIDEBAR NAV -->
+  <nav class="faq-nav" aria-label="Page sections">
+    <div class="faq-nav-label">On This Page</div>
+    <ul>
+      <li><a href="#general" class="active">General</a></li>
+      <li><a href="#onboarding">Onboarding</a></li>
+      <li><a href="#lifecycle">Gig Lifecycle</a></li>
+      <li><a href="#wallet">The Wallet</a></li>
+      <li><a href="#disputes">Disputes</a></li>
+      <li><a href="#accountability">Rules &amp; Accountability</a></li>
+      <li><a href="#legal">Legal &amp; Tax</a></li>
+    </ul>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="faq-content">
+
+    <!-- GENERAL -->
+    <div class="faq-section" id="general">
+      <div class="faq-section-label">Overview</div>
+      <h2>General Questions</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is EXP EQUITY? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>EXP EQUITY is a <strong>mutual-aid professional skills exchange</strong> that connects recent graduates with businesses through escrow-backed micro-gigs. Graduates earn real portfolio credits and get their essential living costs paid directly — rent, utilities, groceries, and transport — without touching raw cash.</p>
+              <p>It addresses the entry-level catch-22: you need experience to get a job, but you need a job to pay your bills. EXP EQUITY breaks that cycle by letting you trade real skills for verified work history and direct bill payments.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            Who is this for? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>There are two roles on the platform:</p>
+              <p><strong>Graduate Contractors</strong> — recent graduates from accredited institutions (or holders of recognized industry certifications, or self-taught developers with a sandbox track record) who offer technical, business, creative, or in-person services.</p>
+              <p><strong>Sponsors</strong> — commercial entities, small business owners, solopreneurs, or individual alumni who fund micro-gigs in exchange for deliverables.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How is EXP EQUITY different from Upwork or Fiverr? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Three structural differences separate EXP EQUITY from freelance platforms:</p>
+              <p><strong>1. Isolated talent pool.</strong> Upwork pits U.S. graduates against global contractors at unsustainable rates. EXP EQUITY restricts the applicant pool to un-established emerging professionals, making it an "impact sponsorship" rather than a commodity procurement.</p>
+              <p><strong>2. Restricted payout.</strong> Earnings don't go to your bank account — they go directly to your landlord, utility company, and grocery store. This gives sponsors complete transparency and eliminates financial mismanagement risk.</p>
+              <p><strong>3. Scope-locked contracts.</strong> Once a sponsor funds escrow, the Definition of Done checklist is legally frozen. No hidden requests, no scope creep, and a 72-hour auto-approval window protects you from being ghosted.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What are the four work categories? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>All gigs must fall under one of four authorized verticals:</p>
+              <div class="highlight-box">
+                <p>💻 <strong>Technical &amp; Software</strong> — Web dev, script automation, front-end layout, data parsing, database setup, API integration.</p>
+                <p style="margin-top:0.6rem">📋 <strong>Business Administration</strong> — Data entry, inbox triage, meeting coordination, spreadsheet auditing, market research.</p>
+                <p style="margin-top:0.6rem">🎨 <strong>Creative &amp; Design</strong> — Graphic design, branding, UI/UX, document design, social assets, video editing.</p>
+                <p style="margin-top:0.6rem">🤝 <strong>On-Site / In-Person</strong> — Local physical operations: event setup, inventory, moving assistance, manual labor support.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="faq-section" id="onboarding">
+      <div class="faq-section-label">Getting Started</div>
+      <h2>Onboarding &amp; Verification</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How do I verify as a Graduate Contractor? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>EXP EQUITY uses a three-path verification model to validate contractors without creating unnecessary systemic barriers:</p>
+              <div class="paths-grid">
+                <div class="path-card">
+                  <div class="path-label">Path A</div>
+                  <h4>Academic Credentialing</h4>
+                  <p>Upload a transcript or diploma from an accredited institution.</p>
+                </div>
+                <div class="path-card">
+                  <div class="path-label">Path B</div>
+                  <h4>Industry Certification</h4>
+                  <p>Upload recognized certs (e.g., Google Professional Certificates, AWS Certifications, State Vocational Licenses).</p>
+                </div>
+                <div class="path-card">
+                  <div class="path-label">Path C</div>
+                  <h4>Sandbox Proof-of-Work</h4>
+                  <p>Register as Level 1. Complete 3 micro-gigs (max $50 each) with 5-star ratings to auto-upgrade to Verified.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How does Sponsor onboarding work? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Sponsors complete three steps: <strong>(1)</strong> create an account with organizational details (business name, industry, website) or individual capacity; <strong>(2)</strong> connect a primary funding source via the integrated Stripe payment processor; <strong>(3)</strong> pass a pre-authorization check — a micro-authorization ($0.00 or $1.00 hold) to verify the financial instrument is valid before any real funds are committed.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is the Sandbox (Level 1) track? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>For self-taught developers and creators without formal credentials, the Sandbox track lets you prove your skills through work rather than paper. Level 1 accounts are restricted to low-risk, low-value micro-gigs (max $50 per gig). After completing <strong>three projects with 5-star ratings</strong>, the system automatically upgrades your account to "Verified," unlocking the full gig board.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LIFECYCLE -->
+    <div class="faq-section" id="lifecycle">
+      <div class="faq-section-label">Project Process</div>
+      <h2>Gig Lifecycle &amp; Escrow</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is the project pipeline? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Every contract on the platform progresses linearly through five explicit states:</p>
+              <div class="pipeline">
+                <span class="pipe-step">Pending</span>
+                <span class="pipe-arrow">→</span>
+                <span class="pipe-step active">Active (Escrow Locked)</span>
+                <span class="pipe-arrow">→</span>
+                <span class="pipe-step">Submitted</span>
+                <span class="pipe-arrow">→</span>
+                <span class="pipe-step">Paid / Settled</span>
+              </div>
+              <p>In the event of a conflict, a project enters <strong>Disputed (Escrow Frozen)</strong> status instead of Paid.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is a Definition of Done (DoD) checklist? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The DoD is an immutable, objective checklist of requirements set by the Sponsor before any work begins. It must contain a minimum of <strong>three binary (Yes/No) metrics</strong> — e.g., "Must be deployed to a live URL," "Must be 1,000 words," "Must use brand hex codes."</p>
+              <p>Once the Sponsor funds escrow and the project shifts to Active, the DoD is legally frozen. <strong>The Sponsor cannot add or change requirements after this point.</strong> All dispute arbitration is judged strictly against this original checklist.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What happens after I submit my work? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>When you submit deliverables, the project status shifts to <strong>Submitted</strong> and the Sponsor receives an automated notification. They have exactly <strong>72 hours</strong> to review the work against the DoD checklist.</p>
+              <p>If the Sponsor does not respond within 72 hours, the platform <strong>automatically approves</strong> the work and releases escrow funds to your Restricted Wallet. This prevents you from being ghosted or held hostage by an unresponsive client.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How many revisions can a Sponsor request? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Contracts are bounded by a mandatory maximum of <strong>two (2) revision cycles</strong>. A revision round is defined as a specific list of modifications requested to correct discrepancies between the submitted work and the <em>original</em> DoD checklist.</p>
+              <p>Requests for aesthetic overhauls that diverge from the original brief are <strong>not considered valid revisions</strong> and are rejected by the system as unauthorized scope creep. This is enforced at the admin level.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What happens if a gig doesn't get claimed? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The platform enforces a mandatory liquidity protocol to prevent capital stagnation:</p>
+              <p>If a project stays in <strong>Pending</strong> for 48 hours without a bid, the platform automatically requests that the Sponsor increase the budget (based on category benchmarking data).</p>
+              <p>If it remains unclaimed for <strong>7 consecutive calendar days</strong>, the project is automatically cancelled and the full escrowed amount is immediately refunded to the Sponsor's original payment method.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WALLET -->
+    <div class="faq-section" id="wallet">
+      <div class="faq-section-label">Payouts</div>
+      <h2>The Restricted Digital Wallet</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            Why can't I receive cash directly? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The <strong>Zero-Cash-Touch Policy</strong> is the core integrity mechanism of EXP EQUITY. Under no circumstances is unrestricted cash disbursed directly from a Sponsor to a Contractor's personal bank account.</p>
+              <p>This policy exists to eliminate fraud, give Sponsors complete payout transparency, and protect Contractors from financial mismanagement pressure. All capital introduced by a Sponsor moves directly into the platform's Escrow Account via Stripe before any work begins.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What can the Restricted Wallet be used for? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Wallet disbursements are locked to verified essential categories via <strong>Merchant Category Codes (MCCs)</strong>:</p>
+              <div class="mcc-list">
+                <div class="mcc-item"><span class="mcc-icon">🏠</span> <strong>Housing / Rent</strong> — Direct electronic transfer to verified corporate property management portals or commercial landlords.</div>
+                <div class="mcc-item"><span class="mcc-icon">⚡</span> <strong>Utilities</strong> — Electric, gas, water, municipal wastewater, and internet service providers.</div>
+                <div class="mcc-item"><span class="mcc-icon">🛒</span> <strong>Groceries</strong> — Authorized transactions at physical or digital supermarkets.</div>
+                <div class="mcc-item"><span class="mcc-icon">🚌</span> <strong>Transportation</strong> — Commercial fueling stations or municipal public transit authorities.</div>
+              </div>
+              <p style="margin-top:0.75rem">Any attempt to spend at unauthorized categories (e.g., alcohol retailers, luxury goods, gift cards) is automatically blocked by the system.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How does the payout process work step by step? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p><strong>1. Ledger Crediting</strong> — Upon Sponsor approval (or 72-hour auto-approval), Escrow funds transfer to your Restricted Digital Wallet. This is a ledger update, not a cash transfer to your bank.</p>
+              <p><strong>2. Request Generation</strong> — You navigate to your Wallet dashboard and select an audited Vendor Endpoint (e.g., "Pay $150 to my registered water bill").</p>
+              <p><strong>3. Balance Verification</strong> — The system checks you have sufficient Ledger Equity to cover the request.</p>
+              <p><strong>4. Direct B2B Transfer</strong> — The platform initiates an ACH, virtual card transaction, or manual check routing directly to the corporate vendor. During the MVP phase, the Admin manually verifies receipts before executing direct-to-vendor payment.</p>
+              <p><strong>5. Receipt Logging</strong> — Both you and the system log the transaction. Your ledger is debited by the exact payout amount.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DISPUTES -->
+    <div class="faq-section" id="disputes">
+      <div class="faq-section-label">Conflict Resolution</div>
+      <h2>Disputes &amp; Arbitration</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            How do I open a dispute as a Sponsor? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>If you believe the submitted work does not comply with the DoD checklist, you must trigger a formal <strong>Disputed</strong> state within the <strong>72-hour review window</strong>. Failure to act within this window results in automatic escrow release to the Contractor — you cannot file a dispute after auto-approval.</p>
+              <p>Once disputed, the Escrow Account is frozen by the backend and the Admin assumes the role of a neutral arbitrator.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What happens during arbitration? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The arbitration procedure is structured and time-bounded:</p>
+              <p><strong>Step 1 (48 hrs):</strong> The Sponsor submits written documentation specifying exactly which DoD metrics were not fulfilled.</p>
+              <p><strong>Step 2 (48 hrs):</strong> The Contractor submits counter-documentation proving checklist compliance, or demonstrating that the rejection constitutes unauthorized scope creep.</p>
+              <p><strong>Step 3:</strong> The Admin audits the deliverables strictly against the initial DoD. Subjective arguments about personal taste, market performance, or shifting corporate preferences are completely disregarded.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What are the possible arbitration outcomes? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>There are two binding, final outcomes:</p>
+              <p><strong>Judgment for the Sponsor:</strong> If the Admin determines the Contractor failed to satisfy the objective DoD metrics, the full escrow amount is returned to the Sponsor. The Contractor receives zero allocation and a Strike is logged against their account.</p>
+              <p><strong>Judgment for the Contractor:</strong> If the Admin determines the Contractor met the checklist, or that the Sponsor's rejection was structurally invalid (i.e., scope creep), the full escrow amount is released immediately to the Contractor's Restricted Wallet.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACCOUNTABILITY -->
+    <div class="faq-section" id="accountability">
+      <div class="faq-section-label">Platform Rules</div>
+      <h2>Rules &amp; Accountability</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is the Strike System? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <div class="strike-row">
+                <div class="strike-badge s1">S1</div>
+                <div class="strike-body"><strong>Strike 1 — Suspension:</strong> If a Contractor submits plagiarized, unedited AI output, or explicitly incomplete work, escrow is refunded to the Sponsor and the Contractor's account is frozen for <strong>14 calendar days</strong>.</div>
+              </div>
+              <div class="strike-row">
+                <div class="strike-badge s2">S2</div>
+                <div class="strike-body"><strong>Strike 2 — Permanent Ban:</strong> A second instance of contractual breach or fraudulent submission results in immediate, permanent revocation of platform access. The user's verified identity is permanently blacklisted from re-registration.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What is prohibited in deliverables? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The following activities are strictly prohibited and constitute a material breach of contract:</p>
+              <p><strong>Plagiarism</strong> — Submission of intellectual property owned by a third party without authorization or licensing.</p>
+              <p><strong>Unedited Generative AI Output</strong> — Reliance on LLMs or code-generation tools without human refinement, verification, and contextual customization. AI-assisted work is permitted; raw AI output is not.</p>
+              <p><strong>Malicious Code</strong> — Insertion of unauthorized scripts, trackers, or security vulnerabilities into technical deliverables.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            Are there special rules for In-Person gigs? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Yes. In-Person gigs carry additional safety requirements:</p>
+              <p><strong>Geographic restriction:</strong> Engagements are restricted to verified matching municipal or regional borders.</p>
+              <p><strong>Hazardous work ban:</strong> Contracts involving high-voltage electrical modification, deep-structural civil excavation, specialized industrial machinery, or hazardous materials are strictly prohibited.</p>
+              <p><strong>Liability waiver:</strong> Both Sponsor and Contractor must digitally sign a mutual liability waiver before the project enters Active status, certifying the platform administrator is held harmless against bodily injury or property damage.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            What happens after a successful project? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Following successful settlement, the platform solidifies your career momentum in two ways:</p>
+              <p><strong>Automated Endorsement:</strong> The Sponsor is prompted to leave a 1–5 star rating and a brief written endorsement.</p>
+              <p><strong>Portfolio Verification:</strong> The completed project is anonymized (financial details hidden) and added to your public EXP EQUITY portfolio, proving you have executed commercial-grade work for real entities.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LEGAL -->
+    <div class="faq-section" id="legal">
+      <div class="faq-section-label">Legal</div>
+      <h2>Legal &amp; Tax</h2>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            Is EXP EQUITY my employer? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>No. EXP EQUITY operates exclusively as a digital mutual-aid marketplace connector. It provides the technological framework to link independent entities for project collaboration and restricted financial relief. Participation on the platform <strong>does not establish an employer-employee relationship</strong>, a joint venture, or a legal partnership between the Platform Administrator and any Contractor or Sponsor.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggle(this)">
+            Am I responsible for reporting taxes on my earnings? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Yes. Contractors and Sponsors remain solely responsible for local, state, and federal tax reporting requirements. The platform does not assume tax withholding liabilities. While the Restricted Wallet limits spending to essential survival needs, this does not alter your individual tax obligations.</p>
+              <p>All participants are advised to seek independent certified legal and financial counsel regarding how micro-sponsorship payments, non-cash compensation, or mutual-aid receipts affect their individual tax filings.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /faq-content -->
+</div><!-- /faq-layout -->
+
+<!-- ── CTA ── -->
+<div class="cta-band">
+  <h2>Ready to get started?</h2>
+  <p>Join the waitlist. We're onboarding our first cohort now.</p>
+  <div class="cta-btns">
+    <a href="index.html#roles" class="btn-dark">Apply as a Graduate</a>
+    <a href="index.html#roles" class="btn-outline-dark">Post a Gig</a>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="gigs.html">Gig Board</a>
+    <a href="index.html">Home</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function toggle(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    // close all
+    document.querySelectorAll('.accordion-btn.open').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      body.classList.add('open');
+    }
+  }
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('.faq-section');
+  const navLinks = document.querySelectorAll('.faq-nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>

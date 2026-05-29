@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gig Detail — EXP EQUITY</title>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f5f4f0;
+      --accent: #c8ff00;
+      --accent-dark: #9ccc00;
+      --gray: #888;
+      --light-gray: #e8e8e4;
+      --card-bg: #141414;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black); color: var(--white);
+      line-height: 1.6; overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--black); padding: 0.55rem 1.4rem; border-radius: 50px; font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 5.5rem 4rem 0;
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; color: var(--gray);
+    }
+    .breadcrumb a { color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+
+    /* ── MAIN LAYOUT ── */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 3rem;
+      padding: 2.5rem 4rem 6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── LEFT: GIG BODY ── */
+    .gig-header { margin-bottom: 2rem; }
+    .gig-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .gig-cat {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.06); border-radius: 50px;
+      padding: 0.3rem 0.85rem; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    .gig-cat.coding { background: rgba(100,160,255,0.1); color: #82b4ff; }
+    .gig-cat.admin { background: rgba(255,180,100,0.1); color: #ffbe78; }
+    .gig-cat.design { background: rgba(200,100,255,0.1); color: #d08cff; }
+    .gig-cat.inperson { background: rgba(100,220,150,0.1); color: #78dfa0; }
+    .gig-featured-badge {
+      background: rgba(200,255,0,0.15); color: var(--accent);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 50px;
+      border: 1px solid rgba(200,255,0,0.2);
+    }
+    .gig-status-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: rgba(200,255,0,0.1); color: var(--accent);
+      border: 1px solid rgba(200,255,0,0.2); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem; border-radius: 50px;
+    }
+    .gig-status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .gig-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 900;
+      letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1rem;
+    }
+    .gig-meta-bar {
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      padding: 1.25rem 0; border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 2rem;
+    }
+    .meta-item { display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; color: var(--gray); }
+    .meta-icon { font-size: 1rem; }
+
+    /* Content blocks */
+    .content-block { margin-bottom: 2.5rem; }
+    .block-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .block-text {
+      font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.8;
+    }
+
+    /* DoD Checklist */
+    .dod-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .dod-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .dod-check {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(200,255,0,0.1); border: 1.5px solid rgba(200,255,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 0.05rem;
+      font-size: 0.75rem; color: var(--accent); font-weight: 700;
+    }
+    .dod-item-text { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.55; }
+
+    /* Scope rules */
+    .rule-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .rule-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.6;
+    }
+    .rule-item .rule-icon { flex-shrink: 0; font-size: 1rem; margin-top: 0.05rem; }
+
+    /* ── RIGHT: STICKY SIDEBAR ── */
+    .sidebar-card {
+      position: sticky; top: 90px; height: fit-content;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px; padding: 2rem;
+    }
+    .sidebar-pay {
+      font-size: 2.8rem; font-weight: 900; color: var(--accent);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .sidebar-pay-label {
+      font-size: 0.75rem; color: var(--gray);
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem;
+      margin-top: 0.25rem;
+    }
+    .sidebar-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 1.25rem 0; }
+    .sidebar-detail-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.82rem; padding: 0.35rem 0;
+    }
+    .sidebar-detail-row .label { color: var(--gray); }
+    .sidebar-detail-row .val { color: var(--white); font-weight: 600; }
+    .sidebar-detail-row .val.accent { color: var(--accent); }
+
+    /* Claim form */
+    .claim-form { margin-top: 1.5rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-label {
+      display: block; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); margin-bottom: 0.45rem;
+    }
+    .form-input, .form-textarea {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      color: var(--white); font-size: 0.875rem; font-family: inherit;
+      padding: 0.7rem 0.9rem; outline: none; resize: none;
+      transition: border-color 0.18s;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: rgba(200,255,0,0.4); }
+    .form-textarea { min-height: 90px; }
+    .btn-claim-full {
+      width: 100%; background: var(--accent); color: var(--black);
+      padding: 0.9rem 1.5rem; border-radius: 50px;
+      font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+    .btn-claim-full:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .form-note {
+      font-size: 0.72rem; color: var(--gray); text-align: center;
+      margin-top: 0.75rem; line-height: 1.5;
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none; text-align: center; padding: 1.5rem 0;
+    }
+    .success-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .success-state h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .success-state p { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 3rem 4rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .breadcrumb { padding: 5rem 1.5rem 0; }
+      .detail-layout { grid-template-columns: 1fr; padding: 2rem 1.5rem 4rem; gap: 2rem; }
+      .sidebar-card { position: static; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="index.html">EXP EQUITY</a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How It Works</a></li>
+    <li><a href="gigs.html">Gig Board</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="index.html#roles">Join</a></li>
+  </ul>
+  <a href="index.html#roles" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ── BREADCRUMB ── -->
+<div class="breadcrumb">
+  <a href="gigs.html">← Gig Board</a>
+  <span class="breadcrumb-sep">/</span>
+  <span id="breadcrumb-title">Loading…</span>
+</div>
+
+<!-- ── DETAIL LAYOUT ── -->
+<div class="detail-layout">
+
+  <!-- LEFT -->
+  <div class="gig-left" id="gigLeft">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside>
+    <div class="sidebar-card">
+      <div class="sidebar-pay" id="sidebarPay">—</div>
+      <div class="sidebar-pay-label">Flat Fee · Escrow Locked on Claim</div>
+      <hr class="sidebar-divider" />
+      <div class="sidebar-detail-row"><span class="label">Status</span><span class="val accent" id="sidebarStatus">Open</span></div>
+      <div class="sidebar-detail-row"><span class="label">Category</span><span class="val" id="sidebarCat">—</span></div>
+      <div class="sidebar-detail-row"><span class="label">Posted</span><span class="val" id="sidebarPosted">—</span></div>
+      <div class="sidebar-detail-row"><span class="label">Deadline</span><span class="val" id="sidebarDeadline">—</span></div>
+      <div class="sidebar-detail-row"><span class="label">Revisions</span><span class="val">Max 2 rounds</span></div>
+      <div class="sidebar-detail-row"><span class="label">Auto-approve</span><span class="val">72 hrs after submit</span></div>
+      <hr class="sidebar-divider" />
+
+      <!-- Claim Form -->
+      <div class="claim-form" id="claimForm">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="Alex Johnson" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="you@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brief cover note</label>
+          <textarea class="form-textarea" placeholder="Why are you a great fit for this gig? (2–3 sentences)"></textarea>
+        </div>
+        <button class="btn-claim-full" onclick="submitClaim()">Claim This Gig →</button>
+        <p class="form-note">Claiming locks the DoD. Sponsor is notified and escrow is charged automatically.</p>
+      </div>
+
+      <!-- Success State -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✅</div>
+        <h3>Gig Claimed!</h3>
+        <p>The sponsor has been notified. Escrow will be locked once they confirm. You'll receive an email with next steps.</p>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="gigs.html">Gig Board</a>
+    <a href="faq.html">FAQ</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  const GIGS = [
+    {
+      id: 1,
+      featured: true,
+      cat: 'coding',
+      catLabel: '💻 Technical & Software',
+      title: 'Build a Responsive Landing Page (HTML/CSS/JS)',
+      pay: '$350',
+      posted: '2 days ago',
+      deadline: '7-day deadline',
+      location: null,
+      desc: 'A small e-commerce brand is launching a new product and needs a single-page marketing landing page. The site must be mobile-first, load fast, use the provided brand assets, and include a working contact form that routes to the sponsor\'s inbox.',
+      fullDesc: 'The sponsor will provide a Figma mockup, logo files (SVG + PNG), brand colors (HEX), and copy. The Contractor is responsible for converting these assets into a fully coded, live, publicly accessible page. No CMS or framework is required — plain HTML, CSS, and vanilla JS is preferred for simplicity and performance.',
+      dod: [
+        'Mobile-responsive at 375px, 768px, and 1280px breakpoints (screenshots required as proof)',
+        'Contact form submits successfully via EmailJS or Formspree to the sponsor\'s specified email address',
+        'Page is deployed and accessible at a public URL (Vercel, Netlify, or GitHub Pages)',
+        'Google Lighthouse Performance score of ≥ 85 on the deployed URL (screenshot required)',
+      ],
+      rules: [
+        '🚫 No WordPress, page builders, or website templates — custom code only',
+        '📁 Full source code must be delivered in a public or shared GitHub repository',
+        '🎨 Brand assets will be provided within 24 hours of contract activation',
+      ],
+    },
+    {
+      id: 2,
+      featured: false,
+      cat: 'design',
+      catLabel: '🎨 Creative & Design',
+      title: 'Brand Identity Kit — Logo, Colors & Typography',
+      pay: '$280',
+      posted: '1 day ago',
+      deadline: '10-day deadline',
+      location: null,
+      desc: 'A local fitness studio is expanding its presence online and needs a complete brand identity system built from scratch. This includes a primary logo with variations, a defined color palette, and a typography specification sheet.',
+      fullDesc: 'The sponsor will provide a brand brief describing their values, target audience, and aesthetic direction (mood board included). The Contractor is free to explore 2–3 initial concepts before finalizing. All work must be original — stock logo templates are not permitted.',
+      dod: [
+        'Minimum 3 logo variations delivered: primary (full), horizontal lockup, and icon-only mark',
+        'All logo files delivered in SVG, PNG (transparent background), and PDF formats',
+        'Color palette documented with HEX, RGB, and CMYK codes for each color (minimum 4 colors)',
+        'Typography spec sheet names the chosen font(s), includes usage hierarchy (H1, H2, body, caption), and links to free/licensed source',
+      ],
+      rules: [
+        '🚫 No stock logo templates or AI-generated imagery',
+        '✏️ Sponsor will receive 1 round of concept feedback before the DoD revision clock starts',
+        '📦 Final brand kit delivered as a single ZIP archive',
+      ],
+    },
+    {
+      id: 3,
+      featured: false,
+      cat: 'admin',
+      catLabel: '📋 Business Administration',
+      title: 'CRM Data Clean-Up & Deduplication (HubSpot)',
+      pay: '$150',
+      posted: '3 days ago',
+      deadline: '5-day deadline',
+      location: null,
+      desc: 'A B2B software company has accumulated approximately 2,000 HubSpot contacts over 18 months. The database has significant duplicate records, missing key fields, and incorrect lifecycle stage assignments that are distorting their sales reporting.',
+      fullDesc: 'The Contractor will be granted read/export access to the HubSpot account (no deletion permissions — all changes are made via a master CSV export). The deliverable is a cleaned master CSV and a written summary report explaining the scope of issues found and the methodology used to resolve them.',
+      dod: [
+        'All duplicate contacts identified and merged or flagged in the master CSV with a "DUPLICATE_OF" column',
+        'All contacts missing email address or primary phone number flagged in a "MISSING_FIELDS" column',
+        'Final clean CSV delivered with consistent field formatting (names title-cased, phone numbers in E.164 format)',
+        'Written summary report of minimum 500 words detailing methodology, total duplicates found, and recommendations',
+      ],
+      rules: [
+        '🔐 HubSpot access granted as read-only export — no direct database modifications',
+        '📄 Summary report delivered as a Google Doc shared with edit access',
+        '🚫 No contact records to be permanently deleted — flag only',
+      ],
+    },
+    {
+      id: 4,
+      featured: false,
+      cat: 'coding',
+      catLabel: '💻 Technical & Software',
+      title: 'Python Script: Automate Weekly Sales Report from Google Sheets',
+      pay: '$425',
+      posted: 'Today',
+      deadline: '14-day deadline',
+      location: null,
+      desc: 'The sales operations team at a growing SaaS company manually copies data from three Google Sheets tabs every Monday morning into a formatted PDF and emails it to six stakeholders. This process takes 45–60 minutes per week and is error-prone. They need it automated.',
+      fullDesc: 'The sponsor will provide access to the source Google Sheet (read-only), the PDF template layout (as a screenshot + annotations), and the distribution email list. The Contractor must use the official Google Sheets API and Gmail API — no browser automation or screen scraping.',
+      dod: [
+        'Script reads live data from the specified Google Sheets tabs via the Google Sheets API (OAuth2 or Service Account)',
+        'Generates a PDF report that structurally matches the provided template layout (correct section headers, table format, and totals row)',
+        'Sends the PDF as an email attachment via the Gmail API to the specified distribution list with the subject line format: "Weekly Sales Report — [Date]"',
+        'Includes a README.md with setup instructions (credentials, dependencies) and a cron job example for scheduling',
+      ],
+      rules: [
+        '🐍 Must be written in Python 3.10+',
+        '📦 All dependencies declared in a requirements.txt file',
+        '🚫 No hardcoded credentials — environment variables or a .env file only',
+        '🔐 Service account JSON key file not to be committed to any repo',
+      ],
+    },
+    {
+      id: 5,
+      featured: false,
+      cat: 'design',
+      catLabel: '🎨 Creative & Design',
+      title: '10-Slide Pitch Deck Redesign (Figma or PowerPoint)',
+      pay: '$200',
+      posted: '4 days ago',
+      deadline: '7-day deadline',
+      location: null,
+      desc: 'An early-stage startup preparing for seed fundraising has a 10-slide investor pitch deck with solid content but weak visual design. All written content is finalized — this is a pure visual redesign project.',
+      fullDesc: 'The sponsor will provide the existing PowerPoint file and a brand kit (logo, HEX colors, fonts). The Contractor\'s job is to apply a consistent, professional visual language across all slides. Slide content (text, data, narrative) must not be changed — only visual presentation.',
+      dod: [
+        'All 10 existing slides redesigned using the provided brand kit (correct colors, logo usage, and fonts)',
+        'Delivered as an editable Figma file (with frames set to 1920x1080) AND an exported PDF',
+        'All fonts used are either Google Fonts or the fonts explicitly provided in the brand kit — no unlicensed fonts',
+      ],
+      rules: [
+        '✏️ Slide copy (text content) must not be altered — visual layout only',
+        '🚫 No stock photo sites requiring paid subscriptions — use Unsplash, Pexels, or sponsor-provided images',
+        '🎯 Sponsor will provide one round of feedback before the revision clock formally starts',
+      ],
+    },
+    {
+      id: 6,
+      featured: false,
+      cat: 'admin',
+      catLabel: '📋 Business Administration',
+      title: 'Market Research Report: Competitor Pricing Analysis',
+      pay: '$120',
+      posted: '5 days ago',
+      deadline: '4-day deadline',
+      location: null,
+      desc: 'A SaaS company is re-evaluating its pricing tiers ahead of a product update. They need a structured, objective analysis of how 8 named competitors price their products, including feature-tier breakdowns and any publicly available pricing page details.',
+      fullDesc: 'The sponsor will provide the list of 8 competitors. All research must be conducted using publicly available information only — no purchases, trials, or social engineering. The final deliverable is a Google Doc formatted as a formal report with an executive summary table.',
+      dod: [
+        'All 8 specified competitors documented with their current pricing tiers, price points, and included features per tier',
+        'A comparative summary table included that maps features to prices across all 8 competitors on a single page',
+        'Minimum 1,500 words of written analysis covering pricing strategy observations, market positioning notes, and gaps/opportunities',
+      ],
+      rules: [
+        '🌐 Public information only — pricing pages, G2, Capterra, official documentation',
+        '📄 Delivered as a Google Doc shared with the sponsor',
+        '📅 Report must reflect pricing as of the week of delivery — note the date checked for each competitor',
+      ],
+    },
+    {
+      id: 7,
+      featured: false,
+      cat: 'coding',
+      catLabel: '💻 Technical & Software',
+      title: 'Shopify Custom Section: Product FAQ Accordion (Liquid)',
+      pay: '$500',
+      posted: '1 day ago',
+      deadline: '10-day deadline',
+      location: null,
+      desc: 'An e-commerce store running on Shopify 2.0 wants a custom FAQ accordion section that store owners can add to any product page via the theme editor, without needing developer access or a third-party app.',
+      fullDesc: 'The Contractor must build this as a native Shopify section using Liquid, JSON schema, and vanilla JS. The section must be fully configurable through the Shopify theme editor (no hardcoded Q&As). It must be accessible, performant, and compatible with the Dawn theme (and structurally compatible with any OS 2.0 theme).',
+      dod: [
+        'Built as a standalone Shopify section file (.liquid) with a complete JSON schema — all FAQ items configurable in the theme editor without touching code',
+        'Functions correctly within Shopify Online Store 2.0 themes (tested on Dawn)',
+        'Accordion is keyboard-navigable (Tab to focus, Enter/Space to toggle) and all interactive elements are ARIA-labeled',
+        'Tested and confirmed functional on Chrome (latest), Firefox (latest), and Safari on iOS (latest)',
+      ],
+      rules: [
+        '🚫 No third-party Shopify apps or external JS libraries — vanilla JS only',
+        '📂 Delivered as a single .liquid section file with inline CSS and JS',
+        '🏪 Contractor will be granted collaborator access to a development store for testing — do not modify other theme files',
+      ],
+    },
+    {
+      id: 8,
+      featured: false,
+      cat: 'inperson',
+      catLabel: '🤝 On-Site / In-Person',
+      title: 'Warehouse Inventory Count & Spreadsheet Entry (Brooklyn, NY)',
+      pay: '$175',
+      posted: '2 days ago',
+      deadline: 'This Saturday',
+      location: '📍 Brooklyn, NY',
+      desc: 'A small import business needs a full physical inventory count of approximately 400 SKUs across two shelving units in their Brooklyn warehouse. All counted quantities must be entered into a provided Google Sheet template in real time or same day.',
+      fullDesc: 'The work takes place at the sponsor\'s warehouse in Bushwick, Brooklyn. Estimated time on-site is 4–6 hours. The Contractor will be supervised by one staff member who can answer product questions. A digital liability waiver must be signed before work begins, as per platform policy for all in-person gigs.',
+      dod: [
+        'All ~400 SKUs counted and quantities entered accurately in the provided Google Sheet template',
+        'Completed Google Sheet submitted and shared with the sponsor by 6:00 PM on the agreed deadline day',
+        'Any damaged, mislabeled, or missing items documented in a separate "Issues" tab with a brief description',
+      ],
+      rules: [
+        '📍 In-person only — remote participation not applicable',
+        '📝 Digital liability waiver must be signed before work begins (platform requirement for all in-person gigs)',
+        '🕗 Work window: 9:00 AM – 4:00 PM on the agreed date. Contractor must confirm availability 24 hours in advance',
+        '🚫 No heavy lifting over 30 lbs required — shelving units are accessible by hand',
+      ],
+    },
+  ];
+
+  // Read gig ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const gigId = parseInt(params.get('id')) || 1;
+  const gig = GIGS.find(g => g.id === gigId) || GIGS[0];
+
+  // Populate page title
+  document.title = gig.title + ' — EXP EQUITY';
+  document.getElementById('breadcrumb-title').textContent = gig.title;
+
+  // Populate sidebar
+  document.getElementById('sidebarPay').textContent = gig.pay;
+  document.getElementById('sidebarCat').textContent = gig.catLabel.replace(/^[^\s]+\s/, '');
+  document.getElementById('sidebarPosted').textContent = gig.posted;
+  document.getElementById('sidebarDeadline').textContent = gig.deadline;
+
+  // Populate main content
+  const left = document.getElementById('gigLeft');
+  left.innerHTML = `
+    <div class="gig-header">
+      <div class="gig-top">
+        <span class="gig-cat ${gig.cat}">${gig.catLabel}</span>
+        ${gig.featured ? '<span class="gig-featured-badge">Featured</span>' : ''}
+        <span class="gig-status-badge">Open</span>
+      </div>
+      <h1 class="gig-title">${gig.title}</h1>
+      <div class="gig-meta-bar">
+        <span class="meta-item"><span class="meta-icon">💰</span> ${gig.pay} flat fee</span>
+        <span class="meta-item"><span class="meta-icon">📅</span> Posted ${gig.posted}</span>
+        <span class="meta-item"><span class="meta-icon">⏱</span> ${gig.deadline}</span>
+        ${gig.location ? `<span class="meta-item">${gig.location}</span>` : ''}
+        <span class="meta-item"><span class="meta-icon">🏢</span> Verified Sponsor</span>
+        <span class="meta-item"><span class="meta-icon">🔁</span> Max 2 revisions</span>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <div class="block-label">About This Gig</div>
+      <p class="block-text">${gig.desc}</p>
+      <p class="block-text" style="margin-top:0.85rem">${gig.fullDesc}</p>
+    </div>
+
+    <div class="content-block">
+      <div class="block-label">Definition of Done — Checklist</div>
+      <p class="block-text" style="margin-bottom:1rem; font-size:0.82rem;">
+        These are the objective, binary requirements you must satisfy. Once you claim this gig, this checklist is legally frozen — the sponsor cannot add or change requirements. Dispute arbitration is judged <em>strictly</em> against these items.
+      </p>
+      <div class="dod-list">
+        ${gig.dod.map((item, i) => `
+          <div class="dod-item">
+            <div class="dod-check">${i + 1}</div>
+            <div class="dod-item-text">${item}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="content-block">
+      <div class="block-label">Scope Rules & Deliverable Notes</div>
+      <div class="rule-list">
+        ${gig.rules.map(r => `
+          <div class="rule-item">
+            <span class="rule-icon">${r.split(' ')[0]}</span>
+            <span>${r.split(' ').slice(1).join(' ')}</span>
+          </div>
+        `).join('')}
+        <div class="rule-item">
+          <span class="rule-icon">🛡️</span>
+          <span>Claiming this gig triggers escrow lock. The sponsor's payment method is charged automatically and held in the EXP EQUITY escrow account until the DoD is verified.</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">⏰</span>
+          <span>After you submit, the sponsor has 72 hours to review. No response within 72 hours = automatic approval and escrow release to your Restricted Wallet.</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  function submitClaim() {
+    const name = document.querySelector('.form-input[type="text"]').value.trim();
+    const email = document.querySelector('.form-input[type="email"]').value.trim();
+    const note = document.querySelector('.form-textarea').value.trim();
+    if (!name || !email) {
+      alert('Please fill in your name and email before claiming.');
+      return;
+    }
+    document.getElementById('claimForm').style.display = 'none';
+    document.getElementById('successState').style.display = 'block';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gig Board — EXP EQUITY</title>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f5f4f0;
+      --accent: #c8ff00;
+      --accent-dark: #9ccc00;
+      --gray: #888;
+      --light-gray: #e8e8e4;
+      --card-bg: #141414;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em;
+      color: var(--accent); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.65); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta {
+      background: var(--accent); color: var(--black);
+      padding: 0.55rem 1.4rem; border-radius: 50px;
+      font-size: 0.875rem; font-weight: 700; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 8rem 4rem 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .page-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25);
+      color: var(--accent); padding: 0.35rem 1rem; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .page-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .page-header h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+    .page-header p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.5);
+      max-width: 500px;
+    }
+
+    /* ── LAYOUT ── */
+    .board-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 220px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      border-right: 1px solid rgba(255,255,255,0.07);
+      padding: 2.5rem 2rem;
+      position: sticky;
+      top: 72px;
+      height: fit-content;
+    }
+    .filter-group { margin-bottom: 2.25rem; }
+    .filter-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1rem; display: block;
+    }
+    .filter-options { display: flex; flex-direction: column; gap: 0.5rem; }
+    .filter-btn {
+      background: none; border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.55); border-radius: 10px;
+      padding: 0.55rem 1rem; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; text-align: left; transition: all 0.18s;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .filter-btn:hover { border-color: rgba(200,255,0,0.3); color: var(--white); }
+    .filter-btn.active {
+      background: rgba(200,255,0,0.1); border-color: rgba(200,255,0,0.4);
+      color: var(--accent);
+    }
+    .filter-count {
+      font-size: 0.72rem; background: rgba(255,255,255,0.08);
+      border-radius: 50px; padding: 0.1rem 0.5rem; color: var(--gray);
+    }
+    .filter-btn.active .filter-count { background: rgba(200,255,0,0.15); color: var(--accent); }
+
+    .budget-range { display: flex; flex-direction: column; gap: 0.5rem; }
+    .budget-range input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--accent) 60%, rgba(255,255,255,0.1) 60%);
+      border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .budget-range input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      border: 2px solid var(--black);
+    }
+    .budget-labels {
+      display: flex; justify-content: space-between;
+      font-size: 0.78rem; color: var(--gray);
+    }
+    .budget-max { font-size: 0.85rem; font-weight: 700; color: var(--white); }
+
+    /* ── MAIN BOARD ── */
+    .board-main { padding: 2.5rem 3rem; }
+    .board-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .board-count {
+      font-size: 0.85rem; color: var(--gray);
+    }
+    .board-count strong { color: var(--white); }
+    .sort-select {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white); padding: 0.5rem 1rem; border-radius: 8px;
+      font-size: 0.85rem; cursor: pointer; outline: none;
+    }
+
+    /* ── GIG CARDS ── */
+    .gigs-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+    .gig-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px; padding: 1.75rem 2rem;
+      transition: border-color 0.2s, transform 0.15s;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      text-decoration: none;
+      color: inherit;
+    }
+    .gig-card:hover {
+      border-color: rgba(200,255,0,0.3);
+      transform: translateY(-2px);
+    }
+    .gig-card.featured {
+      border-color: rgba(200,255,0,0.2);
+      background: linear-gradient(135deg, #141414 0%, #1a1f0a 100%);
+    }
+    .gig-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .gig-cat {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.06); border-radius: 50px;
+      padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    .gig-cat.coding { background: rgba(100,160,255,0.1); color: #82b4ff; }
+    .gig-cat.admin { background: rgba(255,180,100,0.1); color: #ffbe78; }
+    .gig-cat.design { background: rgba(200,100,255,0.1); color: #d08cff; }
+    .gig-cat.inperson { background: rgba(100,220,150,0.1); color: #78dfa0; }
+    .gig-featured-badge {
+      background: rgba(200,255,0,0.15); color: var(--accent);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 50px;
+      border: 1px solid rgba(200,255,0,0.2);
+    }
+    .gig-title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;
+      letter-spacing: -0.01em; line-height: 1.35;
+    }
+    .gig-desc {
+      font-size: 0.875rem; color: rgba(255,255,255,0.45);
+      line-height: 1.65; margin-bottom: 1.1rem;
+    }
+    .gig-dod {
+      display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.1rem;
+    }
+    .dod-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    }
+    .dod-item::before {
+      content: '✓'; color: var(--accent); font-size: 0.7rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .gig-meta {
+      display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+    }
+    .gig-meta-item {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.78rem; color: var(--gray);
+    }
+    .gig-meta-icon { font-size: 0.9rem; }
+    .gig-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;
+      min-width: 130px;
+    }
+    .gig-pay {
+      font-size: 1.6rem; font-weight: 800; color: var(--accent);
+      letter-spacing: -0.02em; line-height: 1;
+    }
+    .gig-pay-label {
+      font-size: 0.72rem; color: var(--gray); text-transform: uppercase;
+      letter-spacing: 0.05em; margin-top: 0.2rem; text-align: right;
+    }
+    .gig-status {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 50px;
+    }
+    .gig-status.open {
+      background: rgba(200,255,0,0.1); color: var(--accent);
+      border: 1px solid rgba(200,255,0,0.2);
+    }
+    .gig-status.open::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .btn-claim {
+      background: var(--accent); color: var(--black);
+      padding: 0.65rem 1.4rem; border-radius: 50px;
+      font-weight: 700; font-size: 0.85rem; text-decoration: none;
+      border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-claim:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    /* ── EMPTY / LOAD MORE ── */
+    .load-more-wrap { text-align: center; margin-top: 2.5rem; padding-bottom: 3rem; }
+    .btn-load {
+      background: transparent; border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6); padding: 0.8rem 2.2rem; border-radius: 50px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-load:hover { border-color: rgba(255,255,255,0.35); color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 3rem 4rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-header { padding: 6rem 1.5rem 2rem; }
+      .board-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 1.5rem; }
+      .board-main { padding: 1.5rem; }
+      .gig-card { grid-template-columns: 1fr; }
+      .gig-right { flex-direction: row; align-items: center; justify-content: space-between; min-width: auto; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="index.html">EXP EQUITY</a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How It Works</a></li>
+    <li><a href="gigs.html" class="active">Gig Board</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="index.html#roles">Join</a></li>
+  </ul>
+  <a href="index.html#roles" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-tag"><span></span>Live Gig Board</div>
+  <h1>Open Gigs — Claim &amp; Get Paid</h1>
+  <p>All projects are escrow-funded. Scope is locked. 72-hour auto-approval. Payout goes straight to your wallet.</p>
+</div>
+
+<!-- ── BOARD LAYOUT ── -->
+<div class="board-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="filter-group">
+      <span class="filter-label">Category</span>
+      <div class="filter-options" id="catFilters">
+        <button class="filter-btn active" data-cat="all" onclick="filterCat(this, 'all')">
+          All Categories <span class="filter-count" id="count-all">8</span>
+        </button>
+        <button class="filter-btn" data-cat="coding" onclick="filterCat(this, 'coding')">
+          💻 Technical &amp; Software <span class="filter-count" id="count-coding">3</span>
+        </button>
+        <button class="filter-btn" data-cat="admin" onclick="filterCat(this, 'admin')">
+          📋 Business Admin <span class="filter-count" id="count-admin">2</span>
+        </button>
+        <button class="filter-btn" data-cat="design" onclick="filterCat(this, 'design')">
+          🎨 Creative &amp; Design <span class="filter-count" id="count-design">2</span>
+        </button>
+        <button class="filter-btn" data-cat="inperson" onclick="filterCat(this, 'inperson')">
+          🤝 On-Site / In-Person <span class="filter-count" id="count-inperson">1</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Max Budget</span>
+      <div class="budget-range">
+        <div class="budget-max" id="budgetDisplay">Up to $500</div>
+        <input type="range" min="50" max="500" step="25" value="500" id="budgetSlider" oninput="filterBudget(this.value)" />
+        <div class="budget-labels"><span>$50</span><span>$500+</span></div>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Sort By</span>
+      <div class="filter-options">
+        <button class="filter-btn active" onclick="sortGigs(this, 'newest')">Newest First</button>
+        <button class="filter-btn" onclick="sortGigs(this, 'highest')">Highest Pay</button>
+        <button class="filter-btn" onclick="sortGigs(this, 'lowest')">Lowest Pay</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN BOARD -->
+  <main class="board-main">
+    <div class="board-toolbar">
+      <div class="board-count"><strong id="visibleCount">8</strong> open gigs</div>
+    </div>
+
+    <div class="gigs-grid" id="gigsGrid">
+
+      <!-- GIG 1 -->
+      <div class="gig-card featured" data-cat="coding" data-pay="350" data-id="1">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat coding">💻 Technical</span>
+            <span class="gig-featured-badge">Featured</span>
+          </div>
+          <div class="gig-title">Build a Responsive Landing Page (HTML/CSS/JS)</div>
+          <div class="gig-desc">Small e-commerce brand needs a single-page product landing page. Must be mobile-first, use their provided brand assets, and include a contact form.</div>
+          <div class="gig-dod">
+            <div class="dod-item">Mobile-responsive at 375px, 768px, and 1280px breakpoints</div>
+            <div class="dod-item">Contact form submits via EmailJS or Formspree</div>
+            <div class="dod-item">Deployed and live on a public URL (Vercel, Netlify, or GitHub Pages)</div>
+            <div class="dod-item">Passes Google Lighthouse performance score ≥ 85</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 2 days ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 7-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$350</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 2 -->
+      <div class="gig-card" data-cat="design" data-pay="280" data-id="2">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat design">🎨 Design</span>
+          </div>
+          <div class="gig-title">Brand Identity Kit — Logo, Colors &amp; Typography</div>
+          <div class="gig-desc">A local fitness studio launching online needs a full brand identity: logo (3 variations), a primary color palette, and a typography spec sheet.</div>
+          <div class="gig-dod">
+            <div class="dod-item">Minimum 3 logo variations (primary, horizontal, icon-only)</div>
+            <div class="dod-item">Delivered in SVG, PNG (transparent), and PDF formats</div>
+            <div class="dod-item">Color palette documented with HEX, RGB, and CMYK codes</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 1 day ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 10-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$280</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 3 -->
+      <div class="gig-card" data-cat="admin" data-pay="150" data-id="3">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat admin">📋 Admin</span>
+          </div>
+          <div class="gig-title">CRM Data Clean-Up &amp; Deduplication (HubSpot)</div>
+          <div class="gig-desc">B2B software company has ~2,000 HubSpot contacts with duplicate records, missing fields, and incorrect lifecycle stages. Needs a full audit and clean export.</div>
+          <div class="gig-dod">
+            <div class="dod-item">All duplicate contacts merged or flagged in a master CSV</div>
+            <div class="dod-item">Missing email or phone fields flagged for follow-up</div>
+            <div class="dod-item">Final clean CSV delivered with a summary report (minimum 500 words)</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 3 days ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 5-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$150</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 4 -->
+      <div class="gig-card" data-cat="coding" data-pay="425" data-id="4">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat coding">💻 Technical</span>
+          </div>
+          <div class="gig-title">Python Script: Automate Weekly Sales Report from Google Sheets</div>
+          <div class="gig-desc">Sales ops team manually copies data from 3 Google Sheets tabs into a formatted PDF every Monday. Need a Python script that automates this and emails the PDF.</div>
+          <div class="gig-dod">
+            <div class="dod-item">Script reads live data from specified Google Sheets via API</div>
+            <div class="dod-item">Generates a formatted PDF report matching provided template</div>
+            <div class="dod-item">Sends PDF via Gmail API to a specified distribution list</div>
+            <div class="dod-item">Includes a README with setup and scheduling instructions</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted today</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 14-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$425</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 5 -->
+      <div class="gig-card" data-cat="design" data-pay="200" data-id="5">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat design">🎨 Design</span>
+          </div>
+          <div class="gig-title">10-Slide Pitch Deck Redesign (Figma or PowerPoint)</div>
+          <div class="gig-desc">Early-stage startup needs their investor pitch deck redesigned. Content is written — needs visual polish, consistent layout, and brand alignment.</div>
+          <div class="gig-dod">
+            <div class="dod-item">All 10 existing slides redesigned using provided brand kit</div>
+            <div class="dod-item">Delivered as editable Figma file AND exported PDF</div>
+            <div class="dod-item">Fonts limited to Google Fonts or provided licensed fonts only</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 4 days ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 7-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$200</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 6 -->
+      <div class="gig-card" data-cat="admin" data-pay="120" data-id="6">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat admin">📋 Admin</span>
+          </div>
+          <div class="gig-title">Market Research Report: Competitor Pricing Analysis</div>
+          <div class="gig-desc">SaaS company needs a structured competitor pricing analysis across 8 named competitors. Needs to be delivered as a formatted Google Doc with a summary table.</div>
+          <div class="gig-dod">
+            <div class="dod-item">Minimum 8 competitors covered with pricing tiers documented</div>
+            <div class="dod-item">Comparative summary table included with feature-to-price mapping</div>
+            <div class="dod-item">Minimum 1,500 words of written analysis</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 5 days ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 4-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$120</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 7 -->
+      <div class="gig-card" data-cat="coding" data-pay="500" data-id="7">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat coding">💻 Technical</span>
+          </div>
+          <div class="gig-title">Shopify Custom Section: Product FAQ Accordion (Liquid)</div>
+          <div class="gig-desc">E-commerce store needs a custom FAQ accordion section built in Shopify Liquid that can be added to any product page via the theme editor.</div>
+          <div class="gig-dod">
+            <div class="dod-item">Built as a standalone Shopify section (schema-defined, no app required)</div>
+            <div class="dod-item">Works in Online Store 2.0 themes (Dawn or compatible)</div>
+            <div class="dod-item">Accessible: keyboard-navigable and ARIA-labeled</div>
+            <div class="dod-item">Tested on Chrome, Firefox, and Safari mobile</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 1 day ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> 10-day deadline</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$500</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+      <!-- GIG 8 -->
+      <div class="gig-card" data-cat="inperson" data-pay="175" data-id="8">
+        <div class="gig-body">
+          <div class="gig-top">
+            <span class="gig-cat inperson">🤝 In-Person</span>
+          </div>
+          <div class="gig-title">Warehouse Inventory Count &amp; Spreadsheet Entry (Brooklyn, NY)</div>
+          <div class="gig-desc">Small import business needs a physical inventory count of approximately 400 SKUs across two shelving units. Count must be entered into a provided Google Sheet template.</div>
+          <div class="gig-dod">
+            <div class="dod-item">All 400 SKUs counted and entered in the provided Google Sheet</div>
+            <div class="dod-item">Sheet submitted and shared with sponsor by 6pm on deadline day</div>
+            <div class="dod-item">Any damaged or missing items flagged in a separate "Issues" tab</div>
+          </div>
+          <div class="gig-meta">
+            <span class="gig-meta-item"><span class="gig-meta-icon">📅</span> Posted 2 days ago</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">📍</span> Brooklyn, NY</span>
+            <span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>
+          </div>
+        </div>
+        <div class="gig-right">
+          <div>
+            <div class="gig-pay">$175</div>
+            <div class="gig-pay-label">Flat Fee · Escrow Locked</div>
+          </div>
+          <span class="gig-status open">Open</span>
+          <button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>
+        </div>
+      </div>
+
+    </div><!-- /gigs-grid -->
+
+    <div class="load-more-wrap">
+      <button class="btn-load">Load More Gigs</button>
+    </div>
+  </main>
+</div><!-- /board-layout -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQ</a>
+    <a href="index.html">Home</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Navigate to detail page
+  function claimGig(e, btn) {
+    e.stopPropagation();
+    const card = btn.closest('.gig-card');
+    const id = card.dataset.id;
+    window.location.href = 'gig-detail.html?id=' + id;
+  }
+
+  // Also make the card body clickable
+  document.querySelectorAll('.gig-card').forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      window.location.href = 'gig-detail.html?id=' + card.dataset.id;
+    });
+  });
+
+  let activeSort = 'newest';
+
+  function filterCat(btn, cat) {
+    document.querySelectorAll('#catFilters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function filterBudget(val) {
+    const display = parseInt(val) >= 500 ? '$500+' : '$' + val;
+    document.getElementById('budgetDisplay').textContent = 'Up to ' + display;
+    // update slider gradient
+    const pct = ((val - 50) / (500 - 50)) * 100;
+    document.getElementById('budgetSlider').style.background =
+      `linear-gradient(90deg, var(--accent) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+    applyFilters();
+  }
+
+  function sortGigs(btn, sortType) {
+    activeSort = sortType;
+    document.querySelectorAll('.sidebar .filter-options:last-of-type .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const activeCat = document.querySelector('#catFilters .filter-btn.active').dataset.cat;
+    const maxBudget = parseInt(document.getElementById('budgetSlider').value);
+    const grid = document.getElementById('gigsGrid');
+    const cards = Array.from(grid.querySelectorAll('.gig-card'));
+
+    cards.forEach(card => {
+      const cat = card.dataset.cat;
+      const pay = parseInt(card.dataset.pay);
+      const show = (activeCat === 'all' || cat === activeCat) && pay <= maxBudget;
+      card.style.display = show ? '' : 'none';
+    });
+
+    // sort visible cards
+    const visible = cards.filter(c => c.style.display !== 'none');
+    visible.sort((a, b) => {
+      if (activeSort === 'highest') return parseInt(b.dataset.pay) - parseInt(a.dataset.pay);
+      if (activeSort === 'lowest') return parseInt(a.dataset.pay) - parseInt(b.dataset.pay);
+      return 0; // newest = original order
+    });
+    visible.forEach(c => grid.appendChild(c));
+
+    document.getElementById('visibleCount').textContent = visible.length;
+  }
+</script>
+</body>
+</html>

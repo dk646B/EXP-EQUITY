@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EXP EQUITY — Skill-for-Survival Exchange</title>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f5f4f0;
+      --accent: #c8ff00;
+      --accent-dark: #9ccc00;
+      --gray: #888;
+      --light-gray: #e8e8e4;
+      --card-bg: #141414;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em;
+      color: var(--accent); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.65); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--accent); color: var(--black);
+      padding: 0.55rem 1.4rem; border-radius: 50px;
+      font-size: 0.875rem; font-weight: 700; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+      padding: 8rem 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(200,255,0,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25);
+      color: var(--accent); padding: 0.35rem 1rem; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+      margin-bottom: 1.75rem;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p {
+      font-size: 1.2rem; color: rgba(255,255,255,0.6);
+      max-width: 560px; line-height: 1.7;
+      margin-bottom: 2.75rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: var(--black);
+      padding: 0.9rem 2.2rem; border-radius: 50px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      padding: 0.9rem 2.2rem; border-radius: 50px;
+      font-weight: 600; font-size: 1rem; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 3rem; margin-top: 4.5rem;
+      padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item {}
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+    .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.2rem; }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 6rem 4rem; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,0.55);
+      max-width: 520px; line-height: 1.7;
+    }
+
+    /* ── PROBLEM BANNER ── */
+    .problem {
+      background: var(--off-white); color: var(--black);
+    }
+    .problem .section-label { color: #666; }
+    .problem .section-sub { color: #555; }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .problem-card {
+      background: var(--white); border: 1px solid var(--light-gray);
+      border-radius: 16px; padding: 2rem;
+    }
+    .problem-card .icon {
+      font-size: 2rem; margin-bottom: 1rem;
+    }
+    .problem-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--black); }
+    .problem-card p { font-size: 0.9rem; color: #555; line-height: 1.65; }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      background: var(--black);
+    }
+    .how-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 4rem; flex-wrap: wrap; }
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0; position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute; top: 32px; left: 10%; right: 10%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.3;
+    }
+    .step { padding: 2rem; position: relative; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 2px solid rgba(200,255,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800; color: var(--accent);
+      background: rgba(200,255,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .step p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+    /* ── CATEGORIES ── */
+    .categories { background: #0f0f0f; }
+    .cats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem; margin-top: 3rem;
+    }
+    .cat-card {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; padding: 2rem;
+      transition: border-color 0.25s, transform 0.2s;
+      cursor: pointer;
+    }
+    .cat-card:hover { border-color: rgba(200,255,0,0.35); transform: translateY(-4px); }
+    .cat-icon {
+      font-size: 2.2rem; margin-bottom: 1.25rem;
+      width: 56px; height: 56px;
+      background: rgba(200,255,0,0.08); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .cat-card p { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+    .cat-tag {
+      display: inline-block; margin-top: 1.25rem;
+      background: rgba(200,255,0,0.1); color: var(--accent);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 50px;
+    }
+
+    /* ── WALLET / SAFETY ── */
+    .wallet { background: var(--black); }
+    .wallet-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .wallet-visual {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px; padding: 2.5rem;
+    }
+    .wallet-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .wallet-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); }
+    .wallet-badge {
+      background: rgba(200,255,0,0.15); color: var(--accent);
+      font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem;
+      border-radius: 50px; border: 1px solid rgba(200,255,0,0.2);
+    }
+    .wallet-balance { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+    .wallet-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 2rem; }
+    .wallet-items { display: flex; flex-direction: column; gap: 0.75rem; }
+    .wallet-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,0.04); border-radius: 12px;
+      padding: 0.875rem 1.1rem;
+    }
+    .wallet-item-left { display: flex; align-items: center; gap: 0.85rem; }
+    .wallet-item-icon { font-size: 1.1rem; }
+    .wallet-item-name { font-size: 0.9rem; font-weight: 600; }
+    .wallet-item-vendor { font-size: 0.75rem; color: var(--gray); }
+    .wallet-item-amount { font-size: 0.9rem; font-weight: 700; color: var(--accent); }
+    .wallet-text h2 { max-width: 440px; }
+    .wallet-text .section-sub { margin-bottom: 2rem; }
+    .allowed-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .allowed-list li {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.9rem; color: rgba(255,255,255,0.7);
+    }
+    .allowed-list li::before {
+      content: '✓'; color: var(--accent); font-weight: 700; font-size: 0.85rem;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(200,255,0,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── COMPARISON ── */
+    .compare { background: #0a0a0a; }
+    .compare-table-wrap { overflow-x: auto; margin-top: 3rem; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    thead th {
+      padding: 1rem 1.5rem; text-align: left;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--gray);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    thead th.highlight { color: var(--accent); }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 1rem 1.5rem; color: rgba(255,255,255,0.55); vertical-align: middle; }
+    tbody td:first-child { color: var(--white); font-weight: 600; }
+    tbody td.highlight { color: var(--white); background: rgba(200,255,0,0.04); }
+    .tick { color: var(--accent); font-weight: 700; }
+    .cross { color: #ff4444; }
+
+    /* ── ROLES ── */
+    .roles { background: var(--off-white); color: var(--black); }
+    .roles .section-title { color: var(--black); }
+    .roles .section-label { color: #666; }
+    .roles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+    .role-card {
+      background: var(--white); border: 1px solid var(--light-gray);
+      border-radius: 24px; padding: 2.5rem;
+    }
+    .role-card.dark {
+      background: var(--black); border-color: rgba(200,255,0,0.2);
+      color: var(--white);
+    }
+    .role-tag {
+      display: inline-block; margin-bottom: 1.5rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; border-radius: 50px;
+      background: rgba(200,255,0,0.15); color: #5a8c00; border: 1px solid rgba(90,140,0,0.2);
+    }
+    .role-card.dark .role-tag { color: var(--accent); background: rgba(200,255,0,0.1); border-color: rgba(200,255,0,0.2); }
+    .role-card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .role-card p { font-size: 0.9rem; color: #666; line-height: 1.7; margin-bottom: 1.75rem; }
+    .role-card.dark p { color: rgba(255,255,255,0.5); }
+    .perks { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 2rem; }
+    .perks li { font-size: 0.88rem; color: #333; display: flex; gap: 0.6rem; align-items: flex-start; }
+    .perks li::before { content: '→'; color: #5a8c00; font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+    .role-card.dark .perks li { color: rgba(255,255,255,0.7); }
+    .role-card.dark .perks li::before { color: var(--accent); }
+    .btn-role {
+      display: inline-block; text-decoration: none;
+      padding: 0.8rem 1.8rem; border-radius: 50px;
+      font-weight: 700; font-size: 0.9rem; transition: all 0.2s;
+    }
+    .btn-role.green { background: var(--black); color: var(--white); }
+    .btn-role.green:hover { background: #222; }
+    .btn-role.accent { background: var(--accent); color: var(--black); }
+    .btn-role.accent:hover { background: var(--accent-dark); }
+
+    /* ── ESCROW FLOW ── */
+    .flow { background: var(--black); }
+    .flow-steps {
+      display: flex; flex-direction: column; gap: 0;
+      margin-top: 3.5rem; max-width: 700px;
+    }
+    .flow-row {
+      display: flex; align-items: flex-start; gap: 2rem; position: relative;
+    }
+    .flow-row + .flow-row { margin-top: 0.5rem; }
+    .flow-line-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0;
+    }
+    .flow-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(200,255,0,0.08); border: 2px solid rgba(200,255,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 800; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .flow-connector {
+      width: 2px; height: 40px; background: rgba(200,255,0,0.1); margin: 0.25rem 0;
+    }
+    .flow-content { padding-top: 0.6rem; padding-bottom: 2rem; }
+    .flow-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .flow-content p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.65; }
+    .flow-status {
+      display: inline-flex; gap: 0.35rem; align-items: center; margin-top: 0.5rem;
+      background: rgba(255,255,255,0.05); border-radius: 50px;
+      padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; color: rgba(255,255,255,0.5);
+    }
+    .flow-status.active { background: rgba(200,255,0,0.1); color: var(--accent); }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: var(--accent); color: var(--black);
+      padding: 5rem 4rem; text-align: center;
+    }
+    .cta-band h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1rem;
+    }
+    .cta-band p { font-size: 1.1rem; color: rgba(0,0,0,0.6); margin-bottom: 2.5rem; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-dark {
+      background: var(--black); color: var(--white);
+      padding: 1rem 2.4rem; border-radius: 50px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-dark:hover { background: #222; }
+    .btn-outline-dark {
+      background: transparent; color: var(--black);
+      padding: 1rem 2.4rem; border-radius: 50px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      border: 2px solid rgba(0,0,0,0.3);
+      transition: border-color 0.2s;
+    }
+    .btn-outline-dark:hover { border-color: var(--black); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 3rem 4rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; }
+      .wallet-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .roles-grid { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#">EXP EQUITY</a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="gigs.html">Gig Board</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="#roles">Join</a></li>
+  </ul>
+  <a href="#roles" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-tag"><span></span>MVP — Now Onboarding</div>
+  <h1>Your degree is the résumé.<br/><em>Your work is the proof.</em></h1>
+  <p>EXP EQUITY connects recent graduates with businesses through escrow-backed micro-gigs — earning you real portfolio credits and paying your bills directly, not your bank account.</p>
+  <div class="hero-btns">
+    <a href="#roles" class="btn-primary">Apply as a Graduate</a>
+    <a href="#roles" class="btn-secondary">Post a Gig</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Work Categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">72hr</div>
+      <div class="stat-label">Auto-Approval Window</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">0%</div>
+      <div class="stat-label">Unrestricted Cash</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Escrow Protected</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section class="problem">
+  <div class="section-label">The Problem</div>
+  <h2 class="section-title">The entry-level catch-22</h2>
+  <p class="section-sub">You need experience to get a job. You need a job to get experience. Meanwhile, rent is due.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">🎓</div>
+      <h3>Experience Required for Entry</h3>
+      <p>Most entry-level roles demand 1–3 years of experience, locking recent graduates out of the labor market before they start.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">💸</div>
+      <h3>Costs Aren't Waiting</h3>
+      <p>Rent, utilities, groceries — survival costs accrue with zero regard for employment status. Financial pressure forces bad career decisions.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🌐</div>
+      <h3>Global Price Wars on Freelance Platforms</h3>
+      <p>Upwork and Fiverr pit U.S. graduates against global contractors at unsustainable rates, making the economics unworkable.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🙏</div>
+      <h3>Charity Undermines Dignity</h3>
+      <p>GoFundMe and mutual aid handouts provide capital without accountability — and no professional credential in return.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how" id="how">
+  <div class="how-header">
+    <div>
+      <div class="section-label">Process</div>
+      <h2 class="section-title">How EXP EQUITY works</h2>
+    </div>
+    <p style="max-width:380px;color:rgba(255,255,255,0.45);font-size:0.9rem;line-height:1.7;">Every gig moves through a locked pipeline — from verified onboarding to direct vendor payment, with no cash leakage.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Sponsor Posts a Gig</h3>
+      <p>Sponsor defines a clear Definition of Done (DoD) checklist and sets a flat fee. Platform locks funds into escrow before any work begins.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Graduate Accepts</h3>
+      <p>A verified contractor reviews the DoD and accepts. Project status shifts to Active. Scope is now legally frozen — no hidden requests.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Work &amp; Submit</h3>
+      <p>Graduate delivers the work via the platform. Sponsor has 72 hours to review against the checklist. No response = auto-approval.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Escrow Releases to Wallet</h3>
+      <p>Approved funds go to the graduate's Restricted Wallet — a programmable ledger that routes payments directly to verified vendors.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <h3>Bills Get Paid, Portfolio Grows</h3>
+      <p>Rent, utilities, and groceries are paid directly to vendors. The completed project is added to the graduate's verified portfolio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="categories" id="categories">
+  <div class="section-label">Service Categories</div>
+  <h2 class="section-title">What you can build — or hire for</h2>
+  <p class="section-sub">Four authorized work verticals, each with clear scope expectations and structured delivery.</p>
+  <div class="cats-grid">
+    <div class="cat-card">
+      <div class="cat-icon">💻</div>
+      <h3>Technical &amp; Software</h3>
+      <p>Web development, script automation, front-end layout, data parsing, database setup, API integration, and technical troubleshooting.</p>
+      <span class="cat-tag">Coding</span>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">📋</div>
+      <h3>Business Administration</h3>
+      <p>Data entry, inbox triage, meeting coordination, spreadsheet auditing, market research, and general digital business operations.</p>
+      <span class="cat-tag">Admin Work</span>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🎨</div>
+      <h3>Creative &amp; Design</h3>
+      <p>Graphic design, branding, UI/UX layouts, corporate document design, social media assets, video editing, and marketing collateral.</p>
+      <span class="cat-tag">Design</span>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🤝</div>
+      <h3>On-Site &amp; In-Person</h3>
+      <p>Local physical operations — event setup, inventory, moving assistance, manual labor support, and operational "extra hand" services.</p>
+      <span class="cat-tag">In-Person</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── WALLET ── -->
+<section class="wallet" id="wallet">
+  <div class="wallet-inner">
+    <div class="wallet-visual">
+      <div class="wallet-header">
+        <div class="wallet-title">Restricted Digital Wallet</div>
+        <div class="wallet-badge">Zero-Cash-Touch</div>
+      </div>
+      <div class="wallet-balance">$1,240.00</div>
+      <div class="wallet-sub">Available Ledger Equity</div>
+      <div class="wallet-items">
+        <div class="wallet-item">
+          <div class="wallet-item-left">
+            <span class="wallet-item-icon">🏠</span>
+            <div>
+              <div class="wallet-item-name">Rent Payment</div>
+              <div class="wallet-item-vendor">Greystar Property Mgmt</div>
+            </div>
+          </div>
+          <div class="wallet-item-amount">−$850.00</div>
+        </div>
+        <div class="wallet-item">
+          <div class="wallet-item-left">
+            <span class="wallet-item-icon">⚡</span>
+            <div>
+              <div class="wallet-item-name">Electric Bill</div>
+              <div class="wallet-item-vendor">Con Edison</div>
+            </div>
+          </div>
+          <div class="wallet-item-amount">−$97.50</div>
+        </div>
+        <div class="wallet-item">
+          <div class="wallet-item-left">
+            <span class="wallet-item-icon">🛒</span>
+            <div>
+              <div class="wallet-item-name">Groceries</div>
+              <div class="wallet-item-vendor">Whole Foods Market</div>
+            </div>
+          </div>
+          <div class="wallet-item-amount">−$143.20</div>
+        </div>
+        <div class="wallet-item">
+          <div class="wallet-item-left">
+            <span class="wallet-item-icon">🚌</span>
+            <div>
+              <div class="wallet-item-name">Transit Pass</div>
+              <div class="wallet-item-vendor">MTA New York City</div>
+            </div>
+          </div>
+          <div class="wallet-item-amount">−$138.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-text">
+      <div class="section-label">The Wallet</div>
+      <h2 class="section-title">Funds go straight to your survival costs</h2>
+      <p class="section-sub">Earned equity is locked to essential vendor categories via Merchant Category Codes — protecting graduates from financial mismanagement and giving sponsors total transparency.</p>
+      <ul class="allowed-list">
+        <li>Housing &amp; Rent — direct to property managers</li>
+        <li>Utilities — electric, gas, water, internet</li>
+        <li>Groceries — physical and digital supermarkets</li>
+        <li>Transportation — fuel stations and transit authorities</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── ESCROW FLOW ── -->
+<section class="flow" id="flow">
+  <div class="section-label">Escrow Pipeline</div>
+  <h2 class="section-title">Every dollar is tracked<br/>from post to payment</h2>
+  <div class="flow-steps">
+    <div class="flow-row">
+      <div class="flow-line-wrap">
+        <div class="flow-dot">1</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-content">
+        <h4>Sponsor funds escrow</h4>
+        <p>Payment is charged via Stripe and held in the EXP EQUITY escrow account. No funds are released until a verifiable outcome is reached.</p>
+        <span class="flow-status active">PENDING → ACTIVE</span>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-line-wrap">
+        <div class="flow-dot">2</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-content">
+        <h4>Contractor submits deliverables</h4>
+        <p>Work is uploaded to the platform. Sponsor has 72 hours to review against the locked DoD checklist. Silence = approval.</p>
+        <span class="flow-status active">ACTIVE → SUBMITTED</span>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-line-wrap">
+        <div class="flow-dot">3</div>
+        <div class="flow-connector"></div>
+      </div>
+      <div class="flow-content">
+        <h4>Escrow releases to wallet</h4>
+        <p>Upon approval, funds move to the contractor's Restricted Digital Wallet. Maximum 2 revision cycles protect against scope creep.</p>
+        <span class="flow-status active">SUBMITTED → PAID</span>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-line-wrap">
+        <div class="flow-dot">4</div>
+      </div>
+      <div class="flow-content">
+        <h4>Vendor payment + portfolio entry</h4>
+        <p>Bills are paid directly to verified vendors. The project is anonymized and added to the contractor's verified public portfolio.</p>
+        <span class="flow-status active">EQUITY CAPTURED</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARISON ── -->
+<section class="compare" id="compare">
+  <div class="section-label">Market Positioning</div>
+  <h2 class="section-title">Not freelance. Not charity.<br/>Something new.</h2>
+  <div class="compare-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Upwork / Fiverr</th>
+          <th>GoFundMe</th>
+          <th>Corporate Cards</th>
+          <th class="highlight">EXP EQUITY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Currency Type</td>
+          <td>Liquid Cash</td>
+          <td>Cash Donation</td>
+          <td>Corporate Credit</td>
+          <td class="highlight">Restricted Wallet Ledger</td>
+        </tr>
+        <tr>
+          <td>Mechanism</td>
+          <td>Open Marketplace</td>
+          <td>Altruistic Handout</td>
+          <td>Internal Expense</td>
+          <td class="highlight">Micro-Gig Skill Equity</td>
+        </tr>
+        <tr>
+          <td>Fraud Risk</td>
+          <td class="cross">High — profile mimicry</td>
+          <td class="cross">High — no controls</td>
+          <td>Internal only</td>
+          <td class="highlight tick">Absolute direct-to-vendor</td>
+        </tr>
+        <tr>
+          <td>Career Value</td>
+          <td class="cross">Global price war</td>
+          <td class="cross">Zero portfolio value</td>
+          <td class="cross">Operational only</td>
+          <td class="highlight tick">Verified portfolio + endorsement</td>
+        </tr>
+        <tr>
+          <td>Worker Protection</td>
+          <td class="cross">None</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td class="highlight tick">Scope-lock + auto-approval</td>
+        </tr>
+        <tr>
+          <td>Target Participant</td>
+          <td>Global contractors</td>
+          <td>Anyone in need</td>
+          <td>Corporate employees</td>
+          <td class="highlight tick">Verified recent graduates</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── ROLES ── -->
+<section class="roles" id="roles">
+  <div class="section-label">Who It's For</div>
+  <h2 class="section-title">Two sides. One platform.</h2>
+  <div class="roles-grid">
+    <div class="role-card">
+      <div class="role-tag">Graduate Contractor</div>
+      <h3>You have the skills.<br/>We'll prove it.</h3>
+      <p>Get matched with real businesses, execute high-value gigs, and build a verified commercial portfolio — all while covering your essential living costs.</p>
+      <ul class="perks">
+        <li>Three onboarding paths: degree, certification, or sandbox proof-of-work</li>
+        <li>Scope-locked contracts — sponsors can't add requirements after escrow</li>
+        <li>72-hour auto-approval protects you from ghosted reviews</li>
+        <li>Every project adds a verified entry to your portfolio</li>
+        <li>Restricted wallet pays rent, utilities, and groceries directly</li>
+      </ul>
+      <a href="#" class="btn-role green">Apply as a Graduate →</a>
+    </div>
+    <div class="role-card dark">
+      <div class="role-tag">Sponsor / Business</div>
+      <h3>Get work done.<br/>Build the next generation.</h3>
+      <p>Access a vetted pool of emerging professionals hungry to prove themselves. Post clear deliverables, fund escrow, and get results — with zero scope disputes.</p>
+      <ul class="perks">
+        <li>All contractors are degree or certification verified</li>
+        <li>Pay only on completion — escrow holds funds until DoD is met</li>
+        <li>Platform algorithm benchmarks fair pricing for your category</li>
+        <li>Objective dispute arbitration based strictly on your checklist</li>
+        <li>Automated endorsement prompts build community trust</li>
+      </ul>
+      <a href="#" class="btn-role accent">Post a Gig →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<div class="cta-band">
+  <h2>Ready to exchange equity<br/>for essentials?</h2>
+  <p>Join the waitlist. We're onboarding our first cohort of graduates and sponsors now.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-dark">I'm a Graduate — Sign Me Up</a>
+    <a href="#" class="btn-outline-dark">I'm a Sponsor — Post a Gig</a>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQ</a>
+    <a href="gigs.html">Gig Board</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
