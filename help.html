@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help & Support — EXP EQUITY</title>
+  <style>
+    :root{--black:#0a0a0a;--white:#ffffff;--off-white:#f5f4f0;--accent:#c8ff00;--accent-dark:#9ccc00;--gray:#888;--light-gray:#e8e8e4;--card-bg:#141414;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--black);color:var(--white);line-height:1.6;overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);}
+    .nav-logo{font-size:1.15rem;font-weight:800;letter-spacing:0.04em;color:var(--accent);text-decoration:none;}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.875rem;font-weight:500;letter-spacing:0.02em;transition:color 0.2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--white);}
+    .nav-cta{background:var(--accent);color:var(--black);padding:0.55rem 1.4rem;border-radius:50px;font-size:0.875rem;font-weight:700;text-decoration:none;transition:background 0.2s;}
+    .nav-cta:hover{background:var(--accent-dark);}
+
+    .page-header{padding:7rem 4rem 3rem;max-width:700px;}
+    .page-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.25);color:var(--accent);padding:0.35rem 1rem;border-radius:50px;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.5rem;}
+    .page-tag span{width:6px;height:6px;border-radius:50%;background:var(--accent);display:block;}
+    .page-header h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.5rem;}
+    .page-header p{font-size:1rem;color:rgba(255,255,255,0.45);}
+
+    /* QUICK LINKS */
+    .quick-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;padding:0 4rem 3rem;max-width:1100px;}
+    .quick-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.5rem;cursor:pointer;transition:border-color 0.2s,transform 0.15s;text-decoration:none;color:inherit;display:block;}
+    .quick-card:hover{border-color:rgba(200,255,0,0.3);transform:translateY(-2px);}
+    .quick-icon{font-size:1.8rem;margin-bottom:0.75rem;}
+    .quick-title{font-size:0.9rem;font-weight:700;margin-bottom:0.25rem;}
+    .quick-desc{font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.5;}
+
+    /* MAIN LAYOUT */
+    .help-layout{display:grid;grid-template-columns:1fr 360px;gap:3rem;padding:0 4rem 6rem;max-width:1100px;}
+
+    /* FAQ */
+    .section-label{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;}
+    .section-title{font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem;}
+    .accordion{display:flex;flex-direction:column;gap:0;}
+    .accordion-item{border-bottom:1px solid rgba(255,255,255,0.07);}
+    .accordion-item:first-child{border-top:1px solid rgba(255,255,255,0.07);}
+    .accordion-btn{width:100%;background:none;border:none;color:var(--white);text-align:left;padding:1.1rem 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-size:0.9rem;font-weight:600;transition:color 0.15s;font-family:inherit;}
+    .accordion-btn:hover,.accordion-btn.open{color:var(--accent);}
+    .accordion-icon{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem;transition:all 0.2s;color:var(--gray);}
+    .accordion-btn.open .accordion-icon{border-color:var(--accent);color:var(--accent);background:rgba(200,255,0,0.1);transform:rotate(45deg);}
+    .accordion-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+    .accordion-body.open{max-height:500px;}
+    .accordion-body-inner{padding-bottom:1.25rem;font-size:0.875rem;color:rgba(255,255,255,0.5);line-height:1.8;}
+    .accordion-body-inner strong{color:var(--white);}
+    .accordion-body-inner a{color:var(--accent);text-decoration:none;}
+    .accordion-body-inner a:hover{text-decoration:underline;}
+
+    /* CONTACT FORM */
+    .contact-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:2rem;position:sticky;top:90px;}
+    .contact-card h3{font-size:1rem;font-weight:800;margin-bottom:0.3rem;}
+    .contact-card p{font-size:0.82rem;color:rgba(255,255,255,0.4);margin-bottom:1.5rem;line-height:1.6;}
+    .form-group{margin-bottom:1rem;}
+    .form-label{display:block;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.4rem;}
+    .form-input,.form-textarea,.form-select{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:var(--white);font-size:0.875rem;font-family:inherit;padding:0.65rem 0.9rem;outline:none;transition:border-color 0.18s;resize:none;}
+    .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:rgba(200,255,0,0.4);}
+    .form-textarea{min-height:100px;}
+    .form-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.9rem center;padding-right:2.2rem;}
+    .form-select option{background:#1a1a1a;}
+    .btn-submit{width:100%;background:var(--accent);color:var(--black);padding:0.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+    .btn-submit:hover{background:var(--accent-dark);}
+    .contact-success{display:none;text-align:center;padding:1.5rem 0;}
+    .contact-success .icon{font-size:2rem;margin-bottom:0.5rem;}
+    .contact-success p{font-size:0.85rem;color:rgba(255,255,255,0.5);}
+
+    /* STATUS BANNER */
+    .status-banner{background:rgba(100,220,150,0.07);border:1px solid rgba(100,220,150,0.2);border-radius:12px;padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;margin-bottom:2.5rem;}
+    .status-dot{width:8px;height:8px;border-radius:50%;background:#78dfa0;flex-shrink:0;}
+    .status-text{font-size:0.82rem;color:rgba(255,255,255,0.6);}
+    .status-text strong{color:#78dfa0;}
+
+    footer{background:var(--black);border-top:1px solid rgba(255,255,255,0.07);padding:3rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+    .footer-logo{font-size:1rem;font-weight:800;color:var(--accent);letter-spacing:0.04em;}
+    .footer-note{font-size:0.8rem;color:var(--gray);}
+    .footer-links{display:flex;gap:2rem;}
+    .footer-links a{font-size:0.8rem;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--white);}
+
+    @media(max-width:900px){
+      nav{padding:1rem 1.5rem;}
+      .nav-links{display:none;}
+      .page-header{padding:6rem 1.5rem 2rem;}
+      .quick-links{padding:0 1.5rem 2rem;grid-template-columns:1fr 1fr;}
+      .help-layout{grid-template-columns:1fr;padding:0 1.5rem 4rem;}
+      .contact-card{position:static;}
+      footer{padding:2rem 1.5rem;flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-header">
+  <div class="page-tag"><span></span>Sponsor Help Center</div>
+  <h1>How can we help?</h1>
+  <p>Find answers about posting gigs, escrow, disputes, and payments — or send us a message directly.</p>
+</div>
+
+<div class="quick-links">
+  <a href="post-gig.html" class="quick-card">
+    <div class="quick-icon">📝</div>
+    <div class="quick-title">Post a Gig</div>
+    <div class="quick-desc">Create a new project and fund escrow in 4 steps</div>
+  </a>
+  <a href="gigs.html" class="quick-card">
+    <div class="quick-icon">📋</div>
+    <div class="quick-title">Gig Board</div>
+    <div class="quick-desc">View all active gigs, including yours</div>
+  </a>
+  <a href="faq.html" class="quick-card">
+    <div class="quick-icon">📖</div>
+    <div class="quick-title">Full FAQ</div>
+    <div class="quick-desc">Deep-dive on rules, wallet, and arbitration</div>
+  </a>
+  <a href="profile.html" class="quick-card">
+    <div class="quick-icon">🏢</div>
+    <div class="quick-title">Your Profile</div>
+    <div class="quick-desc">Manage posted gigs and account details</div>
+  </a>
+</div>
+
+<div class="help-layout">
+
+  <!-- FAQ -->
+  <div>
+    <div class="status-banner">
+      <div class="status-dot"></div>
+      <div class="status-text"><strong>All systems operational.</strong> Escrow processing and admin arbitration are running normally.</div>
+    </div>
+
+    <div class="section-label">Sponsor FAQs</div>
+    <h2 class="section-title">Common questions from Sponsors</h2>
+
+    <div class="accordion">
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">When does my payment method get charged? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>Your payment method is <strong>not charged when you post a gig</strong> — it's only charged when a verified Graduate accepts and claims your gig. At that point, the platform automatically initiates an escrow charge via Stripe and holds the funds until the DoD is verified. If no one claims your gig within 7 days, it auto-expires and you are never charged.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">Can I change the project requirements after posting? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>Yes, <strong>before</strong> a Graduate claims the gig. Once a Graduate accepts and escrow locks (status changes to <em>Active</em>), the Definition of Done checklist is legally frozen and cannot be altered by either party. This protects both you and the Graduate from disputes over shifting requirements.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">What happens if I don't review the work in time? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>Once a Graduate submits their deliverables, you have exactly <strong>72 hours</strong> to review and respond. If you do not approve, reject, or open a dispute within that window, the platform automatically approves the submission and releases escrow funds to the Graduate's Restricted Wallet. This is by design — it prevents Graduates from being held hostage by unresponsive sponsors. You should set a reminder as soon as you receive the submission notification.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">How many revisions can I request? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>A maximum of <strong>two (2) revision cycles</strong>. A valid revision request must cite specific DoD items that were not met — aesthetic preferences or requests that weren't in the original brief are flagged as unauthorized scope creep and rejected by the system. After two revision cycles, if you still believe the DoD was not met, you may open a formal dispute.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">How do I open a dispute? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>If the submitted work doesn't meet the DoD and revisions haven't resolved it, you can trigger a <strong>Disputed</strong> status within the 72-hour review window. This freezes the escrow account. You then have <strong>48 hours</strong> to submit written documentation specifying exactly which DoD items were not fulfilled. The platform admin acts as a neutral arbitrator and rules based strictly on the original checklist — not subjective taste.</p>
+          <p>To open a dispute, use the contact form on this page or email the admin directly with your gig ID and the specific checklist items at issue.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">What if I need to cancel a gig before it's claimed? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>You can cancel an unclaimed gig at any time with no charge — escrow hasn't been triggered yet. Once a Graduate claims the gig and escrow locks, cancellations require admin involvement. If cancellation is approved due to a legitimate reason, the full escrow amount is refunded to your original payment method. Contact us via the form on this page to initiate.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">My gig sat for 48 hours with no bids — what now? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>After 48 hours with no bids, the platform sends you an automated request to <strong>increase the project budget</strong>. Our algorithm benchmarks fair pricing by category — underpriced gigs receive significantly fewer bids. If the gig remains unclaimed for 7 consecutive days, it auto-expires and is archived. You can repost it with a higher compensation or adjusted scope at any time.</p>
+        </div></div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggle(this)">Where do the funds actually go when I pay? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">
+          <p>Your payment goes directly into the <strong>EXP EQUITY Escrow Account</strong> via Stripe — it never goes to the Graduate's personal bank account. Upon approval, funds transfer to the Graduate's Restricted Digital Wallet, which is locked to essential spending categories (rent, utilities, groceries, transport) via Merchant Category Codes. You can be confident the money is going toward survival costs, not arbitrary spending.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <aside>
+    <div class="contact-card">
+      <h3>Contact Support</h3>
+      <p>For disputes, cancellations, billing questions, or anything else — send us a message and the admin team will respond within 24 hours.</p>
+
+      <div id="contactForm">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="Alex Johnson" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Topic</label>
+          <select class="form-select">
+            <option value="">Select a topic</option>
+            <option>Open a dispute</option>
+            <option>Cancel a gig</option>
+            <option>Billing / payment issue</option>
+            <option>Graduate quality concern</option>
+            <option>Account issue</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gig ID (if applicable)</label>
+          <input class="form-input" type="text" placeholder="e.g. #GIG-0042" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Describe your issue in detail. For disputes, include which DoD items were not met."></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitContact()">Send Message →</button>
+      </div>
+
+      <div class="contact-success" id="contactSuccess">
+        <div class="icon">✅</div>
+        <p>Message received. The admin team will respond to your email within 24 hours.</p>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="gigs.html">Gig Board</a>
+    <a href="faq.html">Full FAQ</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  function toggle(btn) {
+    var body = btn.nextElementSibling;
+    var isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.accordion-btn.open').forEach(function(b) {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); body.classList.add('open'); }
+  }
+
+  function submitContact() {
+    var email = document.querySelector('.form-input[type="email"]').value.trim();
+    if (!email) { alert('Please enter your email address.'); return; }
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+  }
+</script>
+</body>
+</html>

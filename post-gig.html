@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post a Gig — EXP EQUITY</title>
+  <style>
+    :root {
+      --black: #0a0a0a; --white: #ffffff; --off-white: #f5f4f0;
+      --accent: #c8ff00; --accent-dark: #9ccc00;
+      --gray: #888; --light-gray: #e8e8e4; --card-bg: #141414;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--black); padding: 0.55rem 1.4rem; border-radius: 50px; font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    /* PAGE */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 7rem 4rem 6rem; }
+
+    .page-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); padding: 0.35rem 1rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .page-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .page-wrap h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .page-wrap > p { font-size: 1rem; color: rgba(255,255,255,0.45); margin-bottom: 3rem; }
+
+    /* STEPS */
+    .steps-indicator { display: flex; align-items: center; gap: 0; margin-bottom: 3rem; }
+    .step-pip { display: flex; align-items: center; gap: 0.6rem; }
+    .step-pip .num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; border: 2px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.3); transition: all 0.25s; }
+    .step-pip .num.done { background: rgba(200,255,0,0.15); border-color: rgba(200,255,0,0.4); color: var(--accent); }
+    .step-pip .num.active { background: var(--accent); border-color: var(--accent); color: var(--black); }
+    .step-pip .lbl { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.3); transition: color 0.25s; }
+    .step-pip .lbl.active { color: var(--white); }
+    .step-pip .lbl.done { color: rgba(255,255,255,0.5); }
+    .step-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); margin: 0 0.75rem; min-width: 24px; }
+
+    /* FORM CARD */
+    .form-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2.5rem; margin-bottom: 1.5rem; }
+    .form-card-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .form-card-sub { font-size: 0.83rem; color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
+    .form-label span { color: var(--accent); }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: var(--white); font-size: 0.9rem; font-family: inherit;
+      padding: 0.75rem 1rem; outline: none; transition: border-color 0.18s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: rgba(200,255,0,0.4); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+    .form-select option { background: #1a1a1a; }
+    .form-hint { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 0.4rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    /* CAT GRID */
+    .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .cat-opt { border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.18s; }
+    .cat-opt:hover { border-color: rgba(200,255,0,0.3); }
+    .cat-opt.selected { border-color: var(--accent); background: rgba(200,255,0,0.07); }
+    .cat-opt input[type="radio"] { display: none; }
+    .cat-opt-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .cat-opt-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .cat-opt-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+    /* DOD BUILDER */
+    .dod-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.75rem; }
+    .dod-row { display: flex; align-items: center; gap: 0.6rem; }
+    .dod-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .dod-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; color: var(--white); font-size: 0.875rem; font-family: inherit; padding: 0.6rem 0.85rem; outline: none; transition: border-color 0.18s; }
+    .dod-input:focus { border-color: rgba(200,255,0,0.35); }
+    .dod-remove { background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; font-size: 1.1rem; padding: 0.2rem; transition: color 0.15s; line-height: 1; }
+    .dod-remove:hover { color: #ff6b6b; }
+    .btn-add-dod { background: none; border: 1px dashed rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); border-radius: 9px; padding: 0.55rem 1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.18s; font-family: inherit; }
+    .btn-add-dod:hover { border-color: rgba(200,255,0,0.3); color: var(--accent); }
+
+    /* PRICING HINT */
+    .pricing-hint { background: rgba(200,255,0,0.06); border: 1px solid rgba(200,255,0,0.15); border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; display: none; }
+    .pricing-hint p { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+    .pricing-hint strong { color: var(--accent); }
+
+    /* PREVIEW CARD */
+    .preview-section { margin-top: 0; }
+    .preview-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 0.75rem; }
+    .preview-card { background: #1a1a1a; border: 1px solid rgba(200,255,0,0.15); border-radius: 16px; padding: 1.5rem; }
+    .preview-card-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .preview-cat-tag { background: rgba(100,160,255,0.1); color: #82b4ff; border-radius: 50px; padding: 0.25rem 0.75rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+    .preview-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; color: rgba(255,255,255,0.9); }
+    .preview-desc { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1rem; line-height: 1.6; }
+    .preview-dod { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+    .preview-dod-item { font-size: 0.78rem; color: rgba(255,255,255,0.45); display: flex; gap: 0.45rem; }
+    .preview-dod-item::before { content: '✓'; color: var(--accent); flex-shrink: 0; }
+    .preview-pay { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+    .preview-pay-label { font-size: 0.7rem; color: rgba(255,255,255,0.3); }
+
+    /* NAV BUTTONS */
+    .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+    .btn-back { background: none; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); padding: 0.8rem 1.75rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.18s; }
+    .btn-back:hover { border-color: rgba(255,255,255,0.35); color: var(--white); }
+    .btn-next { background: var(--accent); color: var(--black); padding: 0.8rem 2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: background 0.18s, transform 0.15s; }
+    .btn-next:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .btn-next:disabled { background: rgba(200,255,0,0.3); color: rgba(0,0,0,0.4); cursor: not-allowed; transform: none; }
+
+    /* SUCCESS */
+    .success-screen { display: none; text-align: center; padding: 5rem 2rem; }
+    .success-icon { font-size: 4rem; margin-bottom: 1.5rem; }
+    .success-screen h2 { font-size: 2rem; font-weight: 900; letter-spacing: -0.025em; margin-bottom: 0.75rem; }
+    .success-screen p { font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 2.5rem; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .success-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary-sm { background: var(--accent); color: var(--black); padding: 0.85rem 2rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background 0.2s; }
+    .btn-primary-sm:hover { background: var(--accent-dark); }
+    .btn-secondary-sm { background: transparent; color: var(--white); padding: 0.85rem 2rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s; }
+    .btn-secondary-sm:hover { border-color: rgba(255,255,255,0.5); }
+
+    /* FOOTER */
+    footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.07); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-wrap { padding: 6rem 1.5rem 4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap">
+  <div class="page-tag"><span></span>Sponsor Dashboard</div>
+  <h1>Post a New Gig</h1>
+  <p>Fill in your project details. Funds are only charged once a Graduate accepts and escrow is locked.</p>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps-indicator" id="stepsIndicator">
+    <div class="step-pip">
+      <div class="num active" id="pip1">1</div>
+      <div class="lbl active" id="lbl1">Category</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-pip">
+      <div class="num" id="pip2">2</div>
+      <div class="lbl" id="lbl2">Details</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-pip">
+      <div class="num" id="pip3">3</div>
+      <div class="lbl" id="lbl3">Requirements</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-pip">
+      <div class="num" id="pip4">4</div>
+      <div class="lbl" id="lbl4">Pricing & Review</div>
+    </div>
+  </div>
+
+  <!-- ── STEP 1: CATEGORY ── -->
+  <div id="step1">
+    <div class="form-card">
+      <div class="form-card-title">What type of work do you need?</div>
+      <div class="form-card-sub">Select the category that best matches your project. This determines which Graduates see your gig.</div>
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-opt" onclick="selectCat(this, 'coding')">
+          <div class="cat-opt-icon">💻</div>
+          <div class="cat-opt-name">Technical & Software</div>
+          <div class="cat-opt-desc">Web dev, scripts, APIs, databases, automation</div>
+        </div>
+        <div class="cat-opt" onclick="selectCat(this, 'admin')">
+          <div class="cat-opt-icon">📋</div>
+          <div class="cat-opt-name">Business Administration</div>
+          <div class="cat-opt-desc">Data entry, research, inbox, spreadsheets, ops</div>
+        </div>
+        <div class="cat-opt" onclick="selectCat(this, 'design')">
+          <div class="cat-opt-icon">🎨</div>
+          <div class="cat-opt-name">Creative & Design</div>
+          <div class="cat-opt-desc">Branding, UI/UX, graphics, video, marketing assets</div>
+        </div>
+        <div class="cat-opt" onclick="selectCat(this, 'inperson')">
+          <div class="cat-opt-icon">🤝</div>
+          <div class="cat-opt-name">On-Site / In-Person</div>
+          <div class="cat-opt-desc">Physical presence required — local only</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <span></span>
+      <button class="btn-next" id="nextBtn1" onclick="goStep(2)" disabled>Next: Project Details →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: DETAILS ── -->
+  <div id="step2" style="display:none">
+    <div class="form-card">
+      <div class="form-card-title">Project Details</div>
+      <div class="form-card-sub">Give Graduates a clear picture of the work. The more specific, the better the match.</div>
+      <div class="form-group">
+        <label class="form-label">Gig Title <span>*</span></label>
+        <input class="form-input" id="gigTitle" type="text" placeholder="e.g. Build a Responsive Landing Page (HTML/CSS/JS)" maxlength="100" oninput="syncPreview()" />
+        <div class="form-hint">Be specific. Titles like "Build X for Y" outperform vague ones.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Short Description <span>*</span></label>
+        <textarea class="form-textarea" id="gigDesc" placeholder="Describe the project context, what you need done, and any relevant background. (2–4 sentences)" oninput="syncPreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Brief (optional)</label>
+        <textarea class="form-textarea" id="gigBrief" placeholder="Additional detail: what assets you'll provide, access you'll grant, preferred tools, etc." style="min-height:80px;"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Deadline</label>
+          <select class="form-select" id="gigDeadline">
+            <option value="">Select a timeframe</option>
+            <option value="3 days">3 days</option>
+            <option value="5 days">5 days</option>
+            <option value="7 days">7 days</option>
+            <option value="10 days">10 days</option>
+            <option value="14 days">14 days</option>
+            <option value="21 days">21 days</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0" id="locationGroup">
+          <label class="form-label">Location <span style="color:rgba(255,255,255,0.25);font-weight:400;text-transform:none;letter-spacing:0">(in-person only)</span></label>
+          <input class="form-input" id="gigLocation" type="text" placeholder="e.g. Brooklyn, NY" />
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" id="nextBtn2" onclick="goStep(3)">Next: Requirements →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: DOD ── -->
+  <div id="step3" style="display:none">
+    <div class="form-card">
+      <div class="form-card-title">Definition of Done</div>
+      <div class="form-card-sub">Write at least 3 objective, binary (Yes/No) requirements. These are legally binding once escrow locks — be precise and measurable.</div>
+      <div class="dod-list" id="dodList"></div>
+      <button class="btn-add-dod" onclick="addDod()" id="addDodBtn">+ Add another requirement</button>
+      <div class="form-hint" style="margin-top:0.75rem">Good example: "Must be deployed at a live URL and pass Lighthouse score ≥ 85." Bad: "Must look good."</div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" id="nextBtn3" onclick="validateDodThenNext()">Next: Pricing & Review →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: PRICING + REVIEW ── -->
+  <div id="step4" style="display:none">
+    <div class="form-card">
+      <div class="form-card-title">Set Compensation</div>
+      <div class="form-card-sub">Set a flat fee for the entire project. All funds go into escrow — you're only charged when a Graduate claims the gig.</div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Flat Fee (USD) <span>*</span></label>
+          <input class="form-input" id="gigPay" type="number" min="50" step="5" placeholder="e.g. 350" oninput="syncPreview()" />
+          <div class="form-hint">Minimum $50. Platform pricing guidance shown below.</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Payment Source</label>
+          <select class="form-select">
+            <option>Visa ···· 4242 (verified)</option>
+            <option>Add new payment method</option>
+          </select>
+        </div>
+      </div>
+      <div class="pricing-hint" id="pricingHint">
+        <p id="pricingHintText"></p>
+      </div>
+    </div>
+
+    <div class="form-card preview-section">
+      <div class="preview-label">Live Preview — How your gig will appear on the board</div>
+      <div class="preview-card">
+        <div class="preview-card-top">
+          <span class="preview-cat-tag" id="prevCat">Category</span>
+        </div>
+        <div class="preview-title" id="prevTitle">Your gig title will appear here</div>
+        <div class="preview-desc" id="prevDesc">Your description will appear here.</div>
+        <div class="preview-dod" id="prevDod"></div>
+        <div style="display:flex;align-items:baseline;gap:0.4rem">
+          <div class="preview-pay" id="prevPay">$—</div>
+          <div class="preview-pay-label">Flat Fee · Escrow Locked</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-next" id="nextBtn4" onclick="submitGig()">Post Gig & Lock Escrow →</button>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🚀</div>
+    <h2>Your gig is live!</h2>
+    <p>It's now visible on the Gig Board. Graduates can claim it immediately. Escrow will be charged automatically when someone accepts.</p>
+    <div class="success-btns">
+      <a href="gigs.html" class="btn-primary-sm">View Gig Board</a>
+      <a href="post-gig.html" class="btn-secondary-sm">Post Another Gig</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="gigs.html">Gig Board</a>
+    <a href="faq.html">FAQ</a>
+    <a href="help.html">Help</a>
+  </div>
+</footer>
+
+<script>
+  var selectedCat = '';
+  var dodCount = 0;
+
+  var CAT_LABELS = { coding: '💻 Technical', admin: '📋 Admin', design: '🎨 Design', inperson: '🤝 In-Person' };
+  var CAT_PRICING = {
+    coding:   'Typical range for <strong>Technical & Software</strong> gigs: <strong>$150 – $500</strong>. Simple scripts or landing pages: $100–200. Full integrations or custom builds: $300–500.',
+    admin:    'Typical range for <strong>Business Admin</strong> gigs: <strong>$75 – $200</strong>. Research reports and data entry tend toward $100–175. Complex audits may reach $200+.',
+    design:   'Typical range for <strong>Creative & Design</strong> gigs: <strong>$100 – $350</strong>. Social assets and simple layouts: $100–175. Full brand identities or decks: $200–350.',
+    inperson: 'Typical range for <strong>In-Person / On-Site</strong> gigs: <strong>$100 – $300</strong>. Day-rate physical work typically $100–200 depending on hours and location.',
+  };
+
+  function selectCat(el, cat) {
+    document.querySelectorAll('.cat-opt').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedCat = cat;
+    document.getElementById('nextBtn1').disabled = false;
+    // show/hide location field
+    document.getElementById('locationGroup').style.opacity = cat === 'inperson' ? '1' : '0.4';
+    syncPreview();
+  }
+
+  function goStep(n) {
+    for (var i = 1; i <= 4; i++) {
+      document.getElementById('step' + i).style.display = (i === n) ? '' : 'none';
+    }
+    // update step indicators
+    for (var i = 1; i <= 4; i++) {
+      var pip = document.getElementById('pip' + i);
+      var lbl = document.getElementById('lbl' + i);
+      pip.className = 'num ' + (i < n ? 'done' : i === n ? 'active' : '');
+      lbl.className = 'lbl ' + (i < n ? 'done' : i === n ? 'active' : '');
+      pip.textContent = i < n ? '✓' : i;
+    }
+    // init DoD rows on step 3
+    if (n === 3 && dodCount === 0) {
+      addDod(); addDod(); addDod();
+    }
+    // show pricing hint on step 4
+    if (n === 4 && selectedCat) {
+      var hint = document.getElementById('pricingHint');
+      hint.style.display = 'block';
+      document.getElementById('pricingHintText').innerHTML = CAT_PRICING[selectedCat] || '';
+      syncPreview();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function addDod() {
+    var list = document.getElementById('dodList');
+    if (list.children.length >= 8) return;
+    dodCount++;
+    var n = list.children.length + 1;
+    var row = document.createElement('div');
+    row.className = 'dod-row';
+    row.innerHTML =
+      '<div class="dod-num">' + n + '</div>' +
+      '<input class="dod-input" type="text" placeholder="Requirement ' + n + ' — must be binary (Yes/No)" oninput="checkDod()" />' +
+      '<button class="dod-remove" onclick="removeDod(this)" title="Remove">✕</button>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+    checkDod();
+    if (list.children.length >= 8) document.getElementById('addDodBtn').style.display = 'none';
+  }
+
+  function removeDod(btn) {
+    var row = btn.parentElement;
+    row.parentElement.removeChild(row);
+    // re-number
+    document.querySelectorAll('.dod-num').forEach(function(n, i) { n.textContent = i + 1; });
+    document.getElementById('addDodBtn').style.display = '';
+    checkDod();
+    syncPreview();
+  }
+
+  function checkDod() {
+    syncPreview();
+  }
+
+  function validateDodThenNext() {
+    var inputs = document.querySelectorAll('#dodList .dod-input');
+    var filled = Array.from(inputs).filter(function(i) { return i.value.trim().length > 0; }).length;
+    if (filled < 3) {
+      alert('Please fill in at least 3 requirements before continuing.');
+      return;
+    }
+    goStep(4);
+  }
+
+  function syncPreview() {
+    // cat
+    var catEl = document.getElementById('prevCat');
+    catEl.textContent = CAT_LABELS[selectedCat] || 'Category';
+    catEl.style.background = { coding:'rgba(100,160,255,0.1)', admin:'rgba(255,180,100,0.1)', design:'rgba(200,100,255,0.1)', inperson:'rgba(100,220,150,0.1)' }[selectedCat] || 'rgba(255,255,255,0.07)';
+    catEl.style.color = { coding:'#82b4ff', admin:'#ffbe78', design:'#d08cff', inperson:'#78dfa0' }[selectedCat] || 'rgba(255,255,255,0.4)';
+    // title & desc
+    var title = document.getElementById('gigTitle');
+    var desc = document.getElementById('gigDesc');
+    if (title) document.getElementById('prevTitle').textContent = title.value || 'Your gig title will appear here';
+    if (desc) document.getElementById('prevDesc').textContent = desc.value || 'Your description will appear here.';
+    // dod
+    var dodInputs = document.querySelectorAll('#dodList .dod-input');
+    var dodHTML = Array.from(dodInputs).filter(function(i){ return i.value.trim(); }).map(function(i) {
+      return '<div class="preview-dod-item">' + i.value + '</div>';
+    }).join('');
+    document.getElementById('prevDod').innerHTML = dodHTML;
+    // pay
+    var pay = document.getElementById('gigPay');
+    if (pay) document.getElementById('prevPay').textContent = pay.value ? '$' + pay.value : '$—';
+  }
+
+  function submitGig() {
+    var pay = document.getElementById('gigPay').value;
+    if (!pay || parseInt(pay) < 50) { alert('Please set a fee of at least $50.'); return; }
+
+    // Collect DoD items
+    var dodInputs = document.querySelectorAll('#dodList .dod-input');
+    var dod = Array.from(dodInputs).map(function(i) { return i.value.trim(); }).filter(Boolean);
+
+    // Build gig object
+    var gig = {
+      id: 'custom_' + Date.now(),
+      cat: selectedCat,
+      title: document.getElementById('gigTitle').value.trim() || 'Untitled Gig',
+      desc: document.getElementById('gigDesc').value.trim(),
+      pay: parseInt(pay),
+      deadline: document.getElementById('gigDeadline').value || 'TBD',
+      location: selectedCat === 'inperson' ? (document.getElementById('gigLocation').value.trim() || null) : null,
+      dod: dod,
+      posted: 'Just now',
+      featured: false,
+    };
+
+    // Save to localStorage
+    var existing = [];
+    try { existing = JSON.parse(localStorage.getItem('ee_posted_gigs') || '[]'); } catch(e) {}
+    existing.unshift(gig);
+    localStorage.setItem('ee_posted_gigs', JSON.stringify(existing));
+
+    // Show success
+    for (var i = 1; i <= 4; i++) document.getElementById('step' + i).style.display = 'none';
+    document.getElementById('stepsIndicator').style.display = 'none';
+    document.querySelector('.page-wrap > p').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Init location field opacity
+  document.getElementById('locationGroup').style.opacity = '0.4';
+</script>
+</body>
+</html>

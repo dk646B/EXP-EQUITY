@@ -292,16 +292,8 @@
 <body>
 
 <!-- ── NAV ── -->
-<nav>
-  <a class="nav-logo" href="index.html">EXP EQUITY</a>
-  <ul class="nav-links">
-    <li><a href="index.html#how">How It Works</a></li>
-    <li><a href="gigs.html" class="active">Gig Board</a></li>
-    <li><a href="faq.html">FAQ</a></li>
-    <li><a href="index.html#roles">Join</a></li>
-  </ul>
-  <a href="index.html#roles" class="nav-cta">Get Started</a>
-</nav>
+<nav></nav>
+<script src="nav.js"></script>
 
 <!-- ── PAGE HEADER ── -->
 <div class="page-header">
@@ -619,71 +611,144 @@
 </footer>
 
 <script>
-  // Navigate to detail page
-  function claimGig(e, btn) {
-    e.stopPropagation();
-    const card = btn.closest('.gig-card');
-    const id = card.dataset.id;
-    window.location.href = 'gig-detail.html?id=' + id;
+  var CAT_LABELS = { coding: '💻 Technical', admin: '📋 Admin', design: '🎨 Design', inperson: '🤝 In-Person' };
+  var CAT_CLASS  = { coding: 'coding', admin: 'admin', design: 'design', inperson: 'inperson' };
+
+  /* ── Load user-posted gigs from localStorage and prepend them ── */
+  function loadPostedGigs() {
+    var posted = [];
+    try { posted = JSON.parse(localStorage.getItem('ee_posted_gigs') || '[]'); } catch(e) {}
+    if (!posted.length) return;
+
+    var grid = document.getElementById('gigsGrid');
+
+    posted.forEach(function(gig) {
+      // Don't add duplicates if page is refreshed
+      if (document.querySelector('[data-id="' + gig.id + '"]')) return;
+
+      var dodHTML = (gig.dod || []).map(function(d) {
+        return '<div class="dod-item">' + d + '</div>';
+      }).join('');
+
+      var locationHTML = gig.location
+        ? '<span class="gig-meta-item"><span class="gig-meta-icon">📍</span> ' + gig.location + '</span>'
+        : '';
+
+      var card = document.createElement('div');
+      card.className = 'gig-card';
+      card.dataset.cat = gig.cat || 'coding';
+      card.dataset.pay = gig.pay || 0;
+      card.dataset.id  = gig.id;
+      card.innerHTML =
+        '<div class="gig-body">' +
+          '<div class="gig-top">' +
+            '<span class="gig-cat ' + (CAT_CLASS[gig.cat] || '') + '">' + (CAT_LABELS[gig.cat] || gig.cat) + '</span>' +
+            '<span class="gig-featured-badge">New</span>' +
+          '</div>' +
+          '<div class="gig-title">' + gig.title + '</div>' +
+          '<div class="gig-desc">' + (gig.desc || '') + '</div>' +
+          '<div class="gig-dod">' + dodHTML + '</div>' +
+          '<div class="gig-meta">' +
+            '<span class="gig-meta-item"><span class="gig-meta-icon">📅</span> ' + (gig.posted || 'Just now') + '</span>' +
+            '<span class="gig-meta-item"><span class="gig-meta-icon">⏱</span> ' + (gig.deadline || 'TBD') + '</span>' +
+            locationHTML +
+            '<span class="gig-meta-item"><span class="gig-meta-icon">🏢</span> Verified Sponsor</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="gig-right">' +
+          '<div>' +
+            '<div class="gig-pay">$' + gig.pay + '</div>' +
+            '<div class="gig-pay-label">Flat Fee · Escrow Locked</div>' +
+          '</div>' +
+          '<span class="gig-status open">Open</span>' +
+          '<button class="btn-claim" onclick="claimGig(event, this)">Claim Gig →</button>' +
+        '</div>';
+
+      // Prepend so newest posted gigs appear first
+      grid.insertBefore(card, grid.firstChild);
+
+      // Make card body clickable
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function() {
+        window.location.href = 'gig-detail.html?id=' + card.dataset.id;
+      });
+    });
+
+    updateCount();
   }
 
-  // Also make the card body clickable
-  document.querySelectorAll('.gig-card').forEach(card => {
+  /* ── Navigate to detail page ── */
+  function claimGig(e, btn) {
+    e.stopPropagation();
+    var card = btn.closest('.gig-card');
+    window.location.href = 'gig-detail.html?id=' + card.dataset.id;
+  }
+
+  /* ── Make hardcoded cards clickable ── */
+  document.querySelectorAll('.gig-card').forEach(function(card) {
     card.style.cursor = 'pointer';
-    card.addEventListener('click', () => {
+    card.addEventListener('click', function() {
       window.location.href = 'gig-detail.html?id=' + card.dataset.id;
     });
   });
 
-  let activeSort = 'newest';
+  function updateCount() {
+    var visible = Array.from(document.querySelectorAll('#gigsGrid .gig-card')).filter(function(c) {
+      return c.style.display !== 'none';
+    });
+    document.getElementById('visibleCount').textContent = visible.length;
+  }
+
+  var activeSort = 'newest';
 
   function filterCat(btn, cat) {
-    document.querySelectorAll('#catFilters .filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#catFilters .filter-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     applyFilters();
   }
 
   function filterBudget(val) {
-    const display = parseInt(val) >= 500 ? '$500+' : '$' + val;
+    var display = parseInt(val) >= 500 ? '$500+' : '$' + val;
     document.getElementById('budgetDisplay').textContent = 'Up to ' + display;
-    // update slider gradient
-    const pct = ((val - 50) / (500 - 50)) * 100;
+    var pct = ((val - 50) / (500 - 50)) * 100;
     document.getElementById('budgetSlider').style.background =
-      `linear-gradient(90deg, var(--accent) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+      'linear-gradient(90deg, var(--accent) ' + pct + '%, rgba(255,255,255,0.1) ' + pct + '%)';
     applyFilters();
   }
 
   function sortGigs(btn, sortType) {
     activeSort = sortType;
-    document.querySelectorAll('.sidebar .filter-options:last-of-type .filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sidebar .filter-options:last-of-type .filter-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     applyFilters();
   }
 
   function applyFilters() {
-    const activeCat = document.querySelector('#catFilters .filter-btn.active').dataset.cat;
-    const maxBudget = parseInt(document.getElementById('budgetSlider').value);
-    const grid = document.getElementById('gigsGrid');
-    const cards = Array.from(grid.querySelectorAll('.gig-card'));
+    var activeCat = document.querySelector('#catFilters .filter-btn.active').dataset.cat;
+    var maxBudget = parseInt(document.getElementById('budgetSlider').value);
+    var grid = document.getElementById('gigsGrid');
+    var cards = Array.from(grid.querySelectorAll('.gig-card'));
 
-    cards.forEach(card => {
-      const cat = card.dataset.cat;
-      const pay = parseInt(card.dataset.pay);
-      const show = (activeCat === 'all' || cat === activeCat) && pay <= maxBudget;
+    cards.forEach(function(card) {
+      var cat = card.dataset.cat;
+      var pay = parseInt(card.dataset.pay);
+      var show = (activeCat === 'all' || cat === activeCat) && pay <= maxBudget;
       card.style.display = show ? '' : 'none';
     });
 
-    // sort visible cards
-    const visible = cards.filter(c => c.style.display !== 'none');
-    visible.sort((a, b) => {
+    var visible = cards.filter(function(c) { return c.style.display !== 'none'; });
+    visible.sort(function(a, b) {
       if (activeSort === 'highest') return parseInt(b.dataset.pay) - parseInt(a.dataset.pay);
-      if (activeSort === 'lowest') return parseInt(a.dataset.pay) - parseInt(b.dataset.pay);
-      return 0; // newest = original order
+      if (activeSort === 'lowest')  return parseInt(a.dataset.pay) - parseInt(b.dataset.pay);
+      return 0;
     });
-    visible.forEach(c => grid.appendChild(c));
+    visible.forEach(function(c) { grid.appendChild(c); });
 
     document.getElementById('visibleCount').textContent = visible.length;
   }
+
+  // Run on load
+  loadPostedGigs();
 </script>
 </body>
 </html>

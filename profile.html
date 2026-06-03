@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — EXP EQUITY</title>
+  <style>
+    :root { --black:#0a0a0a;--white:#ffffff;--off-white:#f5f4f0;--accent:#c8ff00;--accent-dark:#9ccc00;--gray:#888;--light-gray:#e8e8e4;--card-bg:#141414; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--black);color:var(--white);line-height:1.6;overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);}
+    .nav-logo{font-size:1.15rem;font-weight:800;letter-spacing:0.04em;color:var(--accent);text-decoration:none;}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.875rem;font-weight:500;letter-spacing:0.02em;transition:color 0.2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--white);}
+    .nav-cta{background:var(--accent);color:var(--black);padding:0.55rem 1.4rem;border-radius:50px;font-size:0.875rem;font-weight:700;text-decoration:none;transition:background 0.2s;}
+    .nav-cta:hover{background:var(--accent-dark);}
+
+    .page-wrap{max-width:1100px;margin:0 auto;padding:7rem 4rem 6rem;}
+
+    /* PROFILE HEADER */
+    .profile-header{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;margin-bottom:3rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(200,255,0,0.2),rgba(200,255,0,0.05));border:2px solid rgba(200,255,0,0.2);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
+    .profile-info h1{font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:0.25rem;}
+    .profile-info p{font-size:0.88rem;color:var(--gray);}
+    .profile-role-badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.2);color:var(--accent);padding:0.3rem 0.85rem;border-radius:50px;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-top:0.6rem;}
+    .profile-actions{margin-left:auto;display:flex;gap:0.75rem;align-self:flex-start;}
+    .btn-edit{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:0.55rem 1.2rem;border-radius:50px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.18s;}
+    .btn-edit:hover{border-color:rgba(255,255,255,0.35);color:#fff;}
+
+    /* STATS ROW */
+    .stats-row{display:grid;gap:1rem;margin-bottom:2.5rem;}
+    .stat-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.5rem 1.75rem;}
+    .stat-card .num{font-size:2rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1;}
+    .stat-card .label{font-size:0.75rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.3rem;}
+    .stat-card.wallet{background:linear-gradient(135deg,#141414,#1a1f0a);border-color:rgba(200,255,0,0.15);}
+
+    /* SECTION */
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+    .section-title{font-size:1rem;font-weight:800;letter-spacing:-0.01em;}
+    .section-sub{font-size:0.78rem;color:var(--gray);}
+    .section-link{font-size:0.82rem;color:var(--accent);text-decoration:none;font-weight:600;}
+    .section-link:hover{text-decoration:underline;}
+    .profile-section{margin-bottom:3rem;}
+
+    /* GIG ROWS (sponsor) */
+    .gig-row{background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+    .gig-row-info{flex:1;min-width:0;}
+    .gig-row-title{font-size:0.9rem;font-weight:700;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .gig-row-meta{font-size:0.75rem;color:var(--gray);display:flex;gap:1rem;flex-wrap:wrap;}
+    .gig-row-pay{font-size:1.1rem;font-weight:800;color:var(--accent);flex-shrink:0;}
+    .status-pill{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.65rem;border-radius:50px;font-size:0.68rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;flex-shrink:0;}
+    .status-pill.open{background:rgba(200,255,0,0.1);color:var(--accent);border:1px solid rgba(200,255,0,0.2);}
+    .status-pill.active{background:rgba(100,160,255,0.1);color:#82b4ff;border:1px solid rgba(100,160,255,0.2);}
+    .status-pill.submitted{background:rgba(255,180,100,0.1);color:#ffbe78;border:1px solid rgba(255,180,100,0.2);}
+    .status-pill.paid{background:rgba(100,220,150,0.1);color:#78dfa0;border:1px solid rgba(100,220,150,0.2);}
+    .status-pill.open::before,.status-pill.active::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+    /* PORTFOLIO (graduate) */
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+    .portfolio-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.5rem;transition:border-color 0.2s;}
+    .portfolio-card:hover{border-color:rgba(200,255,0,0.25);}
+    .port-cat{font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;}
+    .port-title{font-size:0.92rem;font-weight:700;margin-bottom:0.4rem;line-height:1.35;}
+    .port-desc{font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.55;margin-bottom:1rem;}
+    .port-footer{display:flex;align-items:center;justify-content:space-between;}
+    .port-stars{color:#ffd700;font-size:0.85rem;letter-spacing:0.05em;}
+    .port-date{font-size:0.72rem;color:var(--gray);}
+    .verified-badge{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:700;color:var(--accent);background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.15);padding:0.18rem 0.55rem;border-radius:50px;margin-top:0.5rem;}
+
+    /* WALLET (graduate) */
+    .wallet-card{background:linear-gradient(135deg,#141414,#1a1f0a);border:1px solid rgba(200,255,0,0.15);border-radius:20px;padding:2rem;}
+    .wallet-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+    .wallet-badge{background:rgba(200,255,0,0.15);color:var(--accent);font-size:0.7rem;font-weight:700;padding:0.25rem 0.7rem;border-radius:50px;border:1px solid rgba(200,255,0,0.2);}
+    .wallet-balance{font-size:2.5rem;font-weight:900;letter-spacing:-0.03em;color:var(--accent);margin-bottom:0.2rem;}
+    .wallet-sub{font-size:0.78rem;color:var(--gray);margin-bottom:1.5rem;}
+    .wallet-items{display:flex;flex-direction:column;gap:0.65rem;}
+    .wallet-item{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.04);border-radius:10px;padding:0.75rem 1rem;}
+    .wallet-item-left{display:flex;align-items:center;gap:0.75rem;}
+    .wallet-item-icon{font-size:1rem;}
+    .wallet-item-name{font-size:0.85rem;font-weight:600;}
+    .wallet-item-vendor{font-size:0.72rem;color:var(--gray);}
+    .wallet-item-amount{font-size:0.85rem;font-weight:700;color:var(--accent);}
+    .btn-pay{margin-top:1.25rem;width:100%;background:var(--accent);color:var(--black);padding:0.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+    .btn-pay:hover{background:var(--accent-dark);}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,0.25);}
+    .empty-state .icon{font-size:2.5rem;margin-bottom:0.75rem;}
+    .empty-state p{font-size:0.88rem;}
+    .empty-state a{color:var(--accent);text-decoration:none;font-weight:600;}
+
+    /* ACCOUNT INFO */
+    .account-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .account-field{background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1rem 1.25rem;}
+    .account-field .field-label{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:0.3rem;}
+    .account-field .field-val{font-size:0.9rem;font-weight:600;color:var(--white);}
+
+    footer{background:var(--black);border-top:1px solid rgba(255,255,255,0.07);padding:3rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+    .footer-logo{font-size:1rem;font-weight:800;color:var(--accent);letter-spacing:0.04em;}
+    .footer-note{font-size:0.8rem;color:var(--gray);}
+    .footer-links{display:flex;gap:2rem;}
+    .footer-links a{font-size:0.8rem;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--white);}
+
+    @media(max-width:900px){
+      nav{padding:1rem 1.5rem;}
+      .nav-links{display:none;}
+      .page-wrap{padding:6rem 1.5rem 4rem;}
+      .profile-header{grid-template-columns:auto 1fr;}
+      .account-grid{grid-template-columns:1fr;}
+      .portfolio-grid{grid-template-columns:1fr;}
+      footer{padding:2rem 1.5rem;flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap" id="pageWrap">
+  <!-- rendered by JS -->
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-links">
+    <a href="gigs.html">Gig Board</a>
+    <a href="faq.html">FAQ</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  function getRole() {
+    try { return localStorage.getItem('ee_role') || 'visitor'; } catch(e) { return 'visitor'; }
+  }
+
+  function renderProfile() {
+    var role = getRole();
+    var wrap = document.getElementById('pageWrap');
+
+    if (role === 'sponsor') {
+      wrap.innerHTML = sponsorProfile();
+    } else if (role === 'graduate') {
+      wrap.innerHTML = graduateProfile();
+    } else {
+      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Profile not available</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">Switch to a Sponsor or Graduate role to view a profile.</p><a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none;">Go to Home →</a></div>';
+    }
+  }
+
+  function sponsorProfile() {
+    return `
+      <div class="profile-header">
+        <div class="avatar">🏢</div>
+        <div class="profile-info">
+          <h1>Acme Creative Co.</h1>
+          <p>acme@example.com · Member since May 2026</p>
+          <div class="profile-role-badge">🏢 Sponsor</div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-edit">Edit Profile</button>
+        </div>
+      </div>
+
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="num">3</div><div class="label">Gigs Posted</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="label">Active Contracts</div></div>
+        <div class="stat-card"><div class="num">$875</div><div class="label">Total Escrowed</div></div>
+        <div class="stat-card"><div class="num">4.8★</div><div class="label">Avg. Rating Given</div></div>
+      </div>
+
+      <div class="profile-section">
+        <div class="section-head">
+          <div><div class="section-title">Your Posted Gigs</div><div class="section-sub">All gigs you've created on the platform</div></div>
+          <a href="post-gig.html" class="section-link">+ Post New Gig</a>
+        </div>
+        <div class="gig-row">
+          <div class="gig-row-info">
+            <div class="gig-row-title">Build a Responsive Landing Page (HTML/CSS/JS)</div>
+            <div class="gig-row-meta"><span>💻 Technical</span><span>Posted 2 days ago</span><span>7-day deadline</span></div>
+          </div>
+          <span class="status-pill active">Active</span>
+          <div class="gig-row-pay">$350</div>
+        </div>
+        <div class="gig-row">
+          <div class="gig-row-info">
+            <div class="gig-row-title">Market Research Report: Competitor Pricing Analysis</div>
+            <div class="gig-row-meta"><span>📋 Admin</span><span>Posted 5 days ago</span><span>4-day deadline</span></div>
+          </div>
+          <span class="status-pill submitted">Submitted</span>
+          <div class="gig-row-pay">$120</div>
+        </div>
+        <div class="gig-row">
+          <div class="gig-row-info">
+            <div class="gig-row-title">10-Slide Pitch Deck Redesign (Figma or PowerPoint)</div>
+            <div class="gig-row-meta"><span>🎨 Design</span><span>Posted 4 days ago</span><span>7-day deadline</span></div>
+          </div>
+          <span class="status-pill paid">Paid ✓</span>
+          <div class="gig-row-pay">$200</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="section-head">
+          <div><div class="section-title">Account Information</div></div>
+          <button class="btn-edit" style="font-size:0.78rem;padding:0.4rem 0.9rem;">Edit</button>
+        </div>
+        <div class="account-grid">
+          <div class="account-field"><div class="field-label">Business Name</div><div class="field-val">Acme Creative Co.</div></div>
+          <div class="account-field"><div class="field-label">Industry</div><div class="field-val">Marketing & Advertising</div></div>
+          <div class="account-field"><div class="field-label">Email</div><div class="field-val">acme@example.com</div></div>
+          <div class="account-field"><div class="field-label">Payment Method</div><div class="field-val">Visa ···· 4242 ✓</div></div>
+          <div class="account-field"><div class="field-label">Account Status</div><div class="field-val" style="color:var(--accent)">Verified Sponsor</div></div>
+          <div class="account-field"><div class="field-label">Member Since</div><div class="field-val">May 2026</div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function graduateProfile() {
+    return `
+      <div class="profile-header">
+        <div class="avatar">🎓</div>
+        <div class="profile-info">
+          <h1>Alex Johnson</h1>
+          <p>alex@example.com · Verified Graduate · CS — State University 2025</p>
+          <div class="profile-role-badge" style="background:rgba(130,180,255,0.1);border-color:rgba(130,180,255,0.2);color:#82b4ff;">🎓 Graduate</div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-edit">Edit Profile</button>
+        </div>
+      </div>
+
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card wallet"><div class="num">$490</div><div class="label">Wallet Balance</div></div>
+        <div class="stat-card"><div class="num">4</div><div class="label">Gigs Completed</div></div>
+        <div class="stat-card"><div class="num">4.9★</div><div class="label">Avg. Rating</div></div>
+        <div class="stat-card"><div class="num">$1,240</div><div class="label">Total Earned</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start">
+        <div>
+          <div class="profile-section">
+            <div class="section-head">
+              <div><div class="section-title">Active Gigs</div><div class="section-sub">Gigs you've currently claimed</div></div>
+              <a href="gigs.html" class="section-link">Browse More →</a>
+            </div>
+            <div class="gig-row">
+              <div class="gig-row-info">
+                <div class="gig-row-title">Python Script: Automate Weekly Sales Report</div>
+                <div class="gig-row-meta"><span>💻 Technical</span><span>Due in 11 days</span></div>
+              </div>
+              <span class="status-pill active">In Progress</span>
+              <div class="gig-row-pay">$425</div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <div class="section-head">
+              <div><div class="section-title">Verified Portfolio</div><div class="section-sub">Completed commercial-grade projects</div></div>
+            </div>
+            <div class="portfolio-grid">
+              <div class="portfolio-card">
+                <div class="port-cat">💻 Technical</div>
+                <div class="port-title">Shopify Custom FAQ Accordion Section</div>
+                <div class="port-desc">Built a native Shopify 2.0 section with JSON schema, full keyboard accessibility, and cross-browser compatibility.</div>
+                <div class="port-footer"><span class="port-stars">★★★★★</span><span class="port-date">May 2026</span></div>
+                <div class="verified-badge">✓ Verified</div>
+              </div>
+              <div class="portfolio-card">
+                <div class="port-cat">🎨 Design</div>
+                <div class="port-title">Brand Identity Kit — Fitness Studio</div>
+                <div class="port-desc">Logo (3 variations), full color palette with HEX/RGB/CMYK, and typography spec sheet for a fitness brand launch.</div>
+                <div class="port-footer"><span class="port-stars">★★★★★</span><span class="port-date">Apr 2026</span></div>
+                <div class="verified-badge">✓ Verified</div>
+              </div>
+              <div class="portfolio-card">
+                <div class="port-cat">📋 Admin</div>
+                <div class="port-title">HubSpot CRM Audit & Clean-Up</div>
+                <div class="port-desc">Audited 2,000+ contacts, resolved duplicates, standardized field formats, and delivered a 700-word methodology report.</div>
+                <div class="port-footer"><span class="port-stars">★★★★☆</span><span class="port-date">Mar 2026</span></div>
+                <div class="verified-badge">✓ Verified</div>
+              </div>
+              <div class="portfolio-card">
+                <div class="port-cat">💻 Technical</div>
+                <div class="port-title">Responsive Product Landing Page</div>
+                <div class="port-desc">Mobile-first HTML/CSS/JS landing page with EmailJS contact form, deployed on Vercel. Lighthouse score: 94.</div>
+                <div class="port-footer"><span class="port-stars">★★★★★</span><span class="port-date">Feb 2026</span></div>
+                <div class="verified-badge">✓ Verified</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="wallet-card" style="margin-bottom:1.5rem">
+            <div class="wallet-top">
+              <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray)">Restricted Wallet</div>
+              <div class="wallet-badge">Zero-Cash-Touch</div>
+            </div>
+            <div class="wallet-balance">$490.00</div>
+            <div class="wallet-sub">Available Ledger Equity</div>
+            <div class="wallet-items">
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span class="wallet-item-icon">🏠</span><div><div class="wallet-item-name">Rent</div><div class="wallet-item-vendor">Greystar Mgmt</div></div></div>
+                <div class="wallet-item-amount">$850 due</div>
+              </div>
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span class="wallet-item-icon">⚡</span><div><div class="wallet-item-name">Electric</div><div class="wallet-item-vendor">Con Edison</div></div></div>
+                <div class="wallet-item-amount">$97.50 due</div>
+              </div>
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span class="wallet-item-icon">🛒</span><div><div class="wallet-item-name">Groceries</div><div class="wallet-item-vendor">Whole Foods</div></div></div>
+                <div class="wallet-item-amount">Available</div>
+              </div>
+            </div>
+            <button class="btn-pay" onclick="alert('Payout routing is managed by the EXP EQUITY admin. Submit a payment request via Help.')">Request Payout →</button>
+          </div>
+
+          <div class="profile-section">
+            <div class="section-head"><div class="section-title">Account Info</div></div>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <div class="account-field"><div class="field-label">Full Name</div><div class="field-val">Alex Johnson</div></div>
+              <div class="account-field"><div class="field-label">Verification</div><div class="field-val" style="color:var(--accent)">✓ Degree — CS, State U.</div></div>
+              <div class="account-field"><div class="field-label">Account Level</div><div class="field-val" style="color:var(--accent)">Verified Graduate</div></div>
+              <div class="account-field"><div class="field-label">Strikes</div><div class="field-val">0 / 2</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // re-render when role changes
+  var _origSetRole = window.__eeSetRole;
+  window.__eeSetRole = function(role) {
+    if (_origSetRole) _origSetRole(role);
+    setTimeout(renderProfile, 50);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderProfile);
+  } else {
+    renderProfile();
+  }
+</script>
+</body>
+</html>
