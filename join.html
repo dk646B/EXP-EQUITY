@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join EXP EQUITY</title>
+  <style>
+    :root {
+      --black: #0a0a0a; --white: #ffffff; --off-white: #f5f4f0;
+      --accent: #c8ff00; --accent-dark: #9ccc00;
+      --gray: #888; --light-gray: #e8e8e4; --card-bg: #141414;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--black); padding: 0.55rem 1.4rem; border-radius: 50px; font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    .page-wrap { max-width: 1000px; margin: 0 auto; padding: 7rem 4rem 6rem; }
+
+    .page-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(200,255,0,0.1); border: 1px solid rgba(200,255,0,0.25); color: var(--accent); padding: 0.35rem 1rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .page-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; }
+    .page-wrap h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+    .page-wrap > p { font-size: 1rem; color: rgba(255,255,255,0.45); margin-bottom: 3.5rem; max-width: 560px; line-height: 1.7; }
+
+    /* ── ROLE SELECTOR ── */
+    .role-tabs { display: flex; gap: 0.75rem; margin-bottom: 2.5rem; }
+    .role-tab {
+      flex: 1; padding: 1.25rem 1.5rem; border-radius: 16px; cursor: pointer;
+      border: 2px solid rgba(255,255,255,0.08); background: var(--card-bg);
+      text-align: left; font-family: inherit; color: var(--white);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .role-tab:hover { border-color: rgba(255,255,255,0.2); }
+    .role-tab.active.contractor-tab { border-color: rgba(130,180,255,0.5); background: rgba(130,180,255,0.06); }
+    .role-tab.active.sponsor-tab { border-color: rgba(200,255,0,0.5); background: rgba(200,255,0,0.06); }
+    .role-tab-icon { font-size: 1.75rem; margin-bottom: 0.6rem; display: block; }
+    .role-tab h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .role-tab p { font-size: 0.8rem; color: rgba(255,255,255,0.45); }
+
+    /* ── FORM PANEL ── */
+    .form-panel { display: none; }
+    .form-panel.visible { display: block; }
+    .form-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2.5rem; margin-bottom: 1.5rem; }
+    .form-card-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .form-card-sub { font-size: 0.83rem; color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.45rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; color: var(--white);
+      font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: rgba(200,255,0,0.4); }
+    .form-group select option { background: #1c1c1c; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    /* ── MAJOR TAGS ── */
+    .tag-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+    .tag-option {
+      padding: 0.4rem 0.9rem; border-radius: 50px; border: 1px solid rgba(255,255,255,0.12);
+      background: none; color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .tag-option:hover { border-color: rgba(130,180,255,0.4); color: rgba(130,180,255,0.9); }
+    .tag-option.selected { background: rgba(130,180,255,0.12); border-color: rgba(130,180,255,0.5); color: #82b4ff; }
+
+    /* ── VERIFICATION OPTIONS ── */
+    .verify-opts { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+    .verify-opt {
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .verify-opt:hover { border-color: rgba(200,255,0,0.25); }
+    .verify-opt input[type="radio"] { margin-top: 0.2rem; accent-color: var(--accent); flex-shrink: 0; }
+    .verify-opt-text h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .verify-opt-text p { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+
+    /* ── SUBMIT ── */
+    .form-submit-row { display: flex; align-items: center; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .btn-submit {
+      background: var(--accent); color: var(--black);
+      padding: 0.9rem 2.4rem; border-radius: 50px;
+      font-weight: 700; font-size: 1rem; border: none;
+      cursor: pointer; font-family: inherit; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .form-legal { font-size: 0.78rem; color: rgba(255,255,255,0.3); max-width: 420px; line-height: 1.55; }
+    .form-legal a { color: rgba(200,255,0,0.6); text-decoration: none; }
+
+    /* ── SUCCESS STATE ── */
+    .success-state { display: none; text-align: center; padding: 5rem 2rem; }
+    .success-state.visible { display: block; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 1.5rem; }
+    .success-state h2 { font-size: 2rem; font-weight: 900; letter-spacing: -0.025em; margin-bottom: 0.75rem; }
+    .success-state p { font-size: 1rem; color: rgba(255,255,255,0.5); max-width: 480px; margin: 0 auto 2rem; line-height: 1.7; }
+    .btn-home { background: var(--accent); color: var(--black); padding: 0.9rem 2.2rem; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; display: inline-block; transition: background 0.2s; }
+    .btn-home:hover { background: var(--accent-dark); }
+
+    footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.07); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+    .footer-note { font-size: 0.8rem; color: var(--gray); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-wrap { padding: 6rem 1.5rem 4rem; }
+      .role-tabs { flex-direction: column; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap">
+  <div class="page-tag"><span></span>Join EXP EQUITY</div>
+  <h1>Choose your role to get started</h1>
+  <p>Contractors earn real income that covers their bills directly. Sponsors get verified talent at fair rates, with money held in escrow until work is complete.</p>
+
+  <!-- ROLE TABS -->
+  <div class="role-tabs">
+    <button class="role-tab contractor-tab active" id="tabContractor" onclick="switchTab('contractor')">
+      <span class="role-tab-icon">🎓</span>
+      <h3>I'm a Contractor</h3>
+      <p>Recent graduate or certified professional looking for gigs that pay your essential bills</p>
+    </button>
+    <button class="role-tab sponsor-tab" id="tabSponsor" onclick="switchTab('sponsor')">
+      <span class="role-tab-icon">🏢</span>
+      <h3>I'm a Sponsor</h3>
+      <p>Business or individual looking to hire verified talent for defined, escrow-backed projects</p>
+    </button>
+  </div>
+
+  <!-- CONTRACTOR FORM -->
+  <div class="form-panel visible" id="panelContractor">
+    <form onsubmit="handleSubmit(event, 'contractor')">
+      <div class="form-card">
+        <div class="form-card-title">Personal Information</div>
+        <div class="form-card-sub">Basic details for your contractor profile</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Alex" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Johnson" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="alex@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Create a secure password" required />
+        </div>
+        <div class="form-group">
+          <label>Location (City, State)</label>
+          <input type="text" placeholder="New York, NY" required />
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Your Major &amp; Skill Tags</div>
+        <div class="form-card-sub">Select all that apply — this determines which gig categories appear on your board</div>
+        <div class="form-group">
+          <label>Field of Study / Primary Discipline</label>
+          <select required>
+            <option value="">Select your major</option>
+            <option>Computer Science / Software Engineering</option>
+            <option>Information Technology</option>
+            <option>Graphic Design / Visual Arts</option>
+            <option>Marketing / Communications</option>
+            <option>Business Administration</option>
+            <option>Finance / Accounting</option>
+            <option>Data Science / Analytics</option>
+            <option>Journalism / Media Studies</option>
+            <option>Architecture / Interior Design</option>
+            <option>General Studies / Liberal Arts</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Skill Tags (select all that match)</label>
+          <div class="tag-grid" id="skillTagGrid">
+            <button type="button" class="tag-option" data-tag="coding" onclick="toggleTag(this)">💻 Technical / Coding</button>
+            <button type="button" class="tag-option" data-tag="design" onclick="toggleTag(this)">🎨 Design / Creative</button>
+            <button type="button" class="tag-option" data-tag="admin" onclick="toggleTag(this)">📋 Business Admin</button>
+            <button type="button" class="tag-option" data-tag="inperson" onclick="toggleTag(this)">🤝 On-Site / In-Person</button>
+            <button type="button" class="tag-option" data-tag="writing" onclick="toggleTag(this)">✍️ Writing / Content</button>
+            <button type="button" class="tag-option" data-tag="data" onclick="toggleTag(this)">📊 Data Analysis</button>
+            <button type="button" class="tag-option" data-tag="video" onclick="toggleTag(this)">🎬 Video / Audio</button>
+            <button type="button" class="tag-option" data-tag="social" onclick="toggleTag(this)">📱 Social Media</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Verification Path</div>
+        <div class="form-card-sub">Choose how you'll verify your credentials — all paths give full platform access</div>
+        <div class="verify-opts">
+          <label class="verify-opt">
+            <input type="radio" name="verify" value="degree" checked />
+            <div class="verify-opt-text">
+              <h4>🎓 Degree Verification</h4>
+              <p>Upload your diploma or official transcript. We verify within 24 hours.</p>
+            </div>
+          </label>
+          <label class="verify-opt">
+            <input type="radio" name="verify" value="cert" />
+            <div class="verify-opt-text">
+              <h4>📜 Certification Verification</h4>
+              <p>Upload a professional certification (AWS, Google, CompTIA, Adobe, etc.).</p>
+            </div>
+          </label>
+          <label class="verify-opt">
+            <input type="radio" name="verify" value="sandbox" />
+            <div class="verify-opt-text">
+              <h4>🧪 Sandbox Proof-of-Work</h4>
+              <p>Complete a short platform skill assessment — no documents required.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-submit-row">
+        <button type="submit" class="btn-submit">Create Contractor Account →</button>
+        <p class="form-legal">By applying, you agree to the <a href="faq.html">EXP EQUITY Terms of Service</a> and the Restricted Wallet usage policy. Your wallet earnings will only be disbursed to verified necessity vendors.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- SPONSOR FORM -->
+  <div class="form-panel" id="panelSponsor">
+    <form onsubmit="handleSubmit(event, 'sponsor')">
+      <div class="form-card">
+        <div class="form-card-title">Business Information</div>
+        <div class="form-card-sub">Tell us about your organization</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Business / Organization Name</label>
+            <input type="text" placeholder="Acme Creative Co." required />
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <select required>
+              <option value="">Select industry</option>
+              <option>Technology</option>
+              <option>Marketing &amp; Advertising</option>
+              <option>Retail &amp; E-commerce</option>
+              <option>Finance &amp; Accounting</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Real Estate</option>
+              <option>Non-profit</option>
+              <option>Media &amp; Entertainment</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Contact Name</label>
+          <input type="text" placeholder="Jordan Smith" required />
+        </div>
+        <div class="form-group">
+          <label>Business Email</label>
+          <input type="email" placeholder="jordan@acme.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Create a secure password" required />
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">About Your Hiring Needs</div>
+        <div class="form-card-sub">Optional — helps us onboard you faster</div>
+        <div class="form-group">
+          <label>What type of work are you primarily looking for?</label>
+          <div class="tag-grid">
+            <button type="button" class="tag-option" onclick="toggleTag(this)">💻 Technical</button>
+            <button type="button" class="tag-option" onclick="toggleTag(this)">🎨 Design</button>
+            <button type="button" class="tag-option" onclick="toggleTag(this)">📋 Admin</button>
+            <button type="button" class="tag-option" onclick="toggleTag(this)">🤝 In-Person</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Estimated budget per gig</label>
+          <select>
+            <option value="">Select range</option>
+            <option>Under $100</option>
+            <option>$100 – $250</option>
+            <option>$250 – $500</option>
+            <option>$500+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Anything else we should know?</label>
+          <textarea placeholder="Optional notes about your projects or timeline…"></textarea>
+        </div>
+      </div>
+
+      <div class="form-submit-row">
+        <button type="submit" class="btn-submit">Create Sponsor Account →</button>
+        <p class="form-legal">By registering, you agree to the <a href="faq.html">EXP EQUITY Terms of Service</a>. All gigs require escrow funding before becoming visible to contractors.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">✅</div>
+    <h2 id="successTitle">You're on the list.</h2>
+    <p id="successMsg">We'll review your application and send your verification link within 24 hours. Welcome to EXP EQUITY.</p>
+    <a href="index.html" class="btn-home">Back to Home →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — June 2026</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQ</a>
+    <a href="index.html">Home</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function switchTab(role) {
+    document.querySelectorAll('.role-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.form-panel').forEach(function(p) { p.classList.remove('visible'); });
+    document.getElementById('tab' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('active');
+    document.getElementById('panel' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('visible');
+  }
+
+  function toggleTag(btn) {
+    btn.classList.toggle('selected');
+  }
+
+  function handleSubmit(e, role) {
+    e.preventDefault();
+    document.querySelectorAll('.role-tabs, .form-panel').forEach(function(el) { el.style.display = 'none'; });
+    var s = document.getElementById('successState');
+    if (role === 'sponsor') {
+      document.getElementById('successTitle').textContent = 'Sponsor account created.';
+      document.getElementById('successMsg').textContent = 'Your account is pending verification. Once approved you\'ll be able to post gigs and fund escrow. Expect an email within 24 hours.';
+    }
+    s.classList.add('visible');
+    // set role in localStorage for demo
+    try { localStorage.setItem('ee_role', role); } catch(e) {}
+  }
+
+  // Check if arriving with #sponsor hash
+  if (window.location.hash === '#sponsor') {
+    switchTab('sponsor');
+  }
+</script>
+<script src="dev-nav.js"></script>
+</body>
+</html>

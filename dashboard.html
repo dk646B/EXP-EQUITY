@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — EXP EQUITY</title>
+  <style>
+    :root { --black:#0a0a0a;--white:#ffffff;--off-white:#f5f4f0;--accent:#c8ff00;--accent-dark:#9ccc00;--gray:#888;--light-gray:#e8e8e4;--card-bg:#141414; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--black); color:var(--white); line-height:1.6; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 4rem; background:rgba(10,10,10,0.85); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-size:1.15rem; font-weight:800; letter-spacing:0.04em; color:var(--accent); text-decoration:none; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { color:rgba(255,255,255,0.65); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.2s; }
+    .nav-links a:hover,.nav-links a.active { color:var(--white); }
+    .nav-cta { background:var(--accent); color:var(--black); padding:0.55rem 1.4rem; border-radius:50px; font-size:0.875rem; font-weight:700; text-decoration:none; transition:background 0.2s; }
+    .nav-cta:hover { background:var(--accent-dark); }
+
+    .page-wrap { max-width:1100px; margin:0 auto; padding:7rem 4rem 6rem; }
+
+    /* HEADER */
+    .dash-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
+    .dash-header h1 { font-size:1.8rem; font-weight:900; letter-spacing:-0.02em; margin-bottom:0.2rem; }
+    .dash-header p { font-size:0.88rem; color:var(--gray); }
+    .btn-action { background:var(--accent); color:var(--black); padding:0.7rem 1.6rem; border-radius:50px; font-weight:700; font-size:0.9rem; text-decoration:none; border:none; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+    .btn-action:hover { background:var(--accent-dark); }
+
+    /* STATS */
+    .stats-row { display:grid; gap:1rem; margin-bottom:2.5rem; }
+    .stat-card { background:var(--card-bg); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:1.5rem 1.75rem; }
+    .stat-card .num { font-size:2rem; font-weight:900; color:var(--accent); letter-spacing:-0.02em; line-height:1; }
+    .stat-card .label { font-size:0.72rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.06em; margin-top:0.3rem; }
+    .stat-card.accent-card { background:linear-gradient(135deg,#141414,#1a1f0a); border-color:rgba(200,255,0,0.15); }
+
+    /* TABS */
+    .tab-row { display:flex; gap:0; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:2rem; }
+    .tab-btn { background:none; border:none; color:rgba(255,255,255,0.45); font-size:0.875rem; font-weight:600; padding:0.75rem 1.5rem; cursor:pointer; font-family:inherit; border-bottom:2px solid transparent; transition:all 0.2s; margin-bottom:-1px; }
+    .tab-btn:hover { color:var(--white); }
+    .tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+    .tab-panel { display:none; }
+    .tab-panel.visible { display:block; }
+
+    /* GIG ROWS */
+    .gig-row { background:var(--card-bg); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1.25rem; margin-bottom:0.75rem; flex-wrap:wrap; transition:border-color 0.2s; }
+    .gig-row:hover { border-color:rgba(255,255,255,0.15); }
+    .gig-row.clickable { cursor:pointer; }
+    .gig-row.clickable:hover { border-color:rgba(200,255,0,0.3); }
+    .row-arrow { font-size:0.9rem; color:rgba(255,255,255,0.2); flex-shrink:0; transition:color 0.2s; }
+    .gig-row.clickable:hover .row-arrow { color:var(--accent); }
+    .completed-table tbody tr.clickable:hover td { background:rgba(200,255,0,0.03); }
+    .gig-row-info { flex:1; min-width:0; }
+    .gig-row-title { font-size:0.9rem; font-weight:700; margin-bottom:0.25rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .gig-row-meta { font-size:0.75rem; color:var(--gray); display:flex; gap:1rem; flex-wrap:wrap; }
+    .gig-row-pay { font-size:1.1rem; font-weight:800; color:var(--accent); flex-shrink:0; }
+    .status-pill { display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.65rem; border-radius:50px; font-size:0.68rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; flex-shrink:0; }
+    .status-pill.open { background:rgba(200,255,0,0.1); color:var(--accent); border:1px solid rgba(200,255,0,0.2); }
+    .status-pill.active { background:rgba(100,160,255,0.1); color:#82b4ff; border:1px solid rgba(100,160,255,0.2); }
+    .status-pill.submitted { background:rgba(255,180,100,0.1); color:#ffbe78; border:1px solid rgba(255,180,100,0.2); }
+    .status-pill.paid { background:rgba(100,220,150,0.1); color:#78dfa0; border:1px solid rgba(100,220,150,0.2); }
+    .status-pill.open::before,.status-pill.active::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+    /* TIME BADGES */
+    .time-badge { display:inline-flex; align-items:center; gap:0.3rem; font-size:0.72rem; font-weight:600; padding:0.2rem 0.6rem; border-radius:50px; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); flex-shrink:0; }
+    .time-badge.expiring { background:rgba(255,160,50,0.1); color:#ffbe78; }
+
+    /* CONTRACTOR MINI PROFILE */
+    .contractor-link { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(130,180,255,0.08); border:1px solid rgba(130,180,255,0.15); border-radius:50px; padding:0.25rem 0.65rem; font-size:0.72rem; font-weight:600; color:#82b4ff; text-decoration:none; flex-shrink:0; transition:background 0.2s; }
+    .contractor-link:hover { background:rgba(130,180,255,0.15); }
+
+    /* COMPLETED TABLE (sponsor) */
+    .completed-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .completed-table thead th { padding:0.85rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray); border-bottom:1px solid rgba(255,255,255,0.07); }
+    .completed-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s; }
+    .completed-table tbody tr:hover { background:rgba(255,255,255,0.02); }
+    .completed-table tbody tr:last-child { border-bottom:none; }
+    .completed-table td { padding:0.9rem 1rem; color:rgba(255,255,255,0.65); vertical-align:middle; }
+    .completed-table td:first-child { color:var(--white); font-weight:600; }
+    .total-contributed { background:linear-gradient(135deg,#141414,#1a1f0a); border:1px solid rgba(200,255,0,0.15); border-radius:16px; padding:1.5rem 2rem; margin-bottom:1.75rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .total-contributed .amount { font-size:2rem; font-weight:900; color:var(--accent); letter-spacing:-0.02em; }
+    .total-contributed .desc { font-size:0.82rem; color:rgba(255,255,255,0.4); margin-top:0.2rem; }
+    .total-contributed-text h3 { font-size:0.85rem; font-weight:700; margin-bottom:0.2rem; }
+
+    /* WALLET CARD (contractor dashboard) */
+    .wallet-card { background:linear-gradient(135deg,#141414,#1a1f0a); border:1px solid rgba(200,255,0,0.15); border-radius:20px; padding:2rem; margin-bottom:2rem; }
+    .wallet-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
+    .wallet-badge { background:rgba(200,255,0,0.15); color:var(--accent); font-size:0.7rem; font-weight:700; padding:0.25rem 0.7rem; border-radius:50px; border:1px solid rgba(200,255,0,0.2); }
+    .wallet-balance { font-size:2.5rem; font-weight:900; letter-spacing:-0.03em; color:var(--accent); margin-bottom:0.2rem; }
+    .wallet-sub { font-size:0.78rem; color:var(--gray); margin-bottom:1.25rem; }
+    .wallet-items { display:flex; flex-direction:column; gap:0.65rem; }
+    .wallet-item { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border-radius:10px; padding:0.75rem 1rem; }
+    .wallet-item-left { display:flex; align-items:center; gap:0.75rem; }
+    .wallet-item-name { font-size:0.85rem; font-weight:600; }
+    .wallet-item-vendor { font-size:0.72rem; color:var(--gray); }
+    .wallet-item-amount { font-size:0.85rem; font-weight:700; color:var(--accent); }
+
+    /* SECTION HEAD */
+    .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
+    .section-title { font-size:1rem; font-weight:800; letter-spacing:-0.01em; }
+    .section-sub { font-size:0.78rem; color:var(--gray); }
+    .section-link { font-size:0.82rem; color:var(--accent); text-decoration:none; font-weight:600; }
+    .section-link:hover { text-decoration:underline; }
+    .dash-section { margin-bottom:3rem; }
+
+    /* EMPTY */
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:rgba(255,255,255,0.25); }
+    .empty-state .icon { font-size:2rem; margin-bottom:0.5rem; }
+    .empty-state p { font-size:0.85rem; }
+    .empty-state a { color:var(--accent); text-decoration:none; font-weight:600; }
+
+    footer { background:var(--black); border-top:1px solid rgba(255,255,255,0.07); padding:3rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; }
+    .footer-logo { font-size:1rem; font-weight:800; color:var(--accent); letter-spacing:0.04em; }
+    .footer-note { font-size:0.8rem; color:var(--gray); }
+    .footer-links { display:flex; gap:2rem; }
+    .footer-links a { font-size:0.8rem; color:var(--gray); text-decoration:none; transition:color 0.2s; }
+    .footer-links a:hover { color:var(--white); }
+
+    @media (max-width:900px) {
+      nav { padding:1rem 1.5rem; }
+      .nav-links { display:none; }
+      .page-wrap { padding:6rem 1.5rem 4rem; }
+      .completed-table { font-size:0.78rem; }
+      footer { padding:2rem 1.5rem; flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap" id="pageWrap">
+  <!-- rendered by JS -->
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — June 2026</div>
+  <div class="footer-links">
+    <a href="faq.html">FAQ</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  function getRole() {
+    try { return localStorage.getItem('ee_role') || 'visitor'; } catch(e) { return 'visitor'; }
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('visible'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('visible');
+  }
+
+  function renderDashboard() {
+    var role = getRole();
+    var wrap = document.getElementById('pageWrap');
+    if (role === 'sponsor') {
+      wrap.innerHTML = sponsorDash();
+    } else if (role === 'contractor') {
+      wrap.innerHTML = contractorDash();
+    } else {
+      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Dashboard not available</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">Switch to a Sponsor or Contractor role to view your dashboard.</p><a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none;">Go to Home →</a></div>';
+    }
+  }
+
+  /* ─── SPONSOR DASHBOARD ─── */
+  function sponsorDash() {
+    return `
+      <div class="dash-header">
+        <div>
+          <h1>Sponsor Dashboard</h1>
+          <p>Acme Creative Co. · acme@example.com</p>
+        </div>
+        <a href="post-gig.html" class="btn-action">+ Post a Gig</a>
+      </div>
+
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card accent-card"><div class="num">5</div><div class="label">Gigs Posted</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="label">Active Contracts</div></div>
+        <div class="stat-card"><div class="num">3</div><div class="label">Completed</div></div>
+        <div class="stat-card"><div class="num">$1,545</div><div class="label">Total Escrowed</div></div>
+      </div>
+
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-active" onclick="switchTab('active')">Active Posts</button>
+        <button class="tab-btn" id="tab-completed" onclick="switchTab('completed')">Completed</button>
+      </div>
+
+      <!-- ACTIVE POSTS TAB -->
+      <div class="tab-panel visible" id="panel-active">
+        <div class="gig-row clickable" onclick="window.location.href='sponsor-gig.html?gig=1'">
+          <div class="gig-row-info">
+            <div class="gig-row-title">Build a Responsive Landing Page (HTML/CSS/JS)</div>
+            <div class="gig-row-meta">
+              <span>💻 Technical</span>
+              <span>Posted 2 days ago</span>
+              <span>Deadline: 5 days left</span>
+            </div>
+          </div>
+          <span class="time-badge">Posted 2d ago</span>
+          <span class="time-badge expiring">Expires in 12d</span>
+          <span class="contractor-link">🎓 Alex J. →</span>
+          <span class="status-pill active">In Progress</span>
+          <div class="gig-row-pay">$350</div>
+          <span class="row-arrow">→</span>
+        </div>
+
+        <div class="gig-row clickable" onclick="window.location.href='sponsor-gig.html?gig=4'">
+          <div class="gig-row-info">
+            <div class="gig-row-title">Python Script: Automate Weekly Sales Report</div>
+            <div class="gig-row-meta">
+              <span>💻 Technical</span>
+              <span>Posted today</span>
+              <span>Deadline: 14 days</span>
+            </div>
+          </div>
+          <span class="time-badge">Posted today</span>
+          <span class="time-badge">Expires in 21d</span>
+          <span class="contractor-link" style="opacity:0.4;cursor:default;">Unclaimed</span>
+          <span class="status-pill open">Open</span>
+          <div class="gig-row-pay">$425</div>
+          <span class="row-arrow">→</span>
+        </div>
+
+        <div class="gig-row clickable" onclick="window.location.href='sponsor-gig.html?gig=6'">
+          <div class="gig-row-info">
+            <div class="gig-row-title">Market Research Report: Competitor Pricing Analysis</div>
+            <div class="gig-row-meta">
+              <span>📋 Admin</span>
+              <span>Posted 5 days ago</span>
+              <span>Submitted — awaiting review</span>
+            </div>
+          </div>
+          <span class="time-badge expiring">Review expires in 18h</span>
+          <span class="contractor-link">🎓 Jordan K. →</span>
+          <span class="status-pill submitted">Submitted</span>
+          <div class="gig-row-pay">$120</div>
+          <span class="row-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- COMPLETED TAB -->
+      <div class="tab-panel" id="panel-completed">
+        <div class="total-contributed">
+          <div>
+            <div class="total-contributed-text"><h3>Total Contributed to the Community</h3></div>
+            <div class="desc">Funds paid out to contractor vendor accounts to date</div>
+          </div>
+          <div class="amount">$670.00</div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="completed-table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Payment</th>
+                <th>Contractor</th>
+                <th>Date Posted</th>
+                <th>Date Completed</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="clickable" onclick="window.location.href='sponsor-gig.html?gig=5'" style="cursor:pointer">
+                <td>10-Slide Pitch Deck Redesign</td>
+                <td style="color:var(--accent);font-weight:700">$200</td>
+                <td><span class="contractor-link">🎓 Alex J.</span></td>
+                <td>Apr 30, 2026</td>
+                <td>May 6, 2026</td>
+                <td style="color:rgba(255,255,255,0.3);font-size:0.85rem">→</td>
+              </tr>
+              <tr class="clickable" onclick="window.location.href='sponsor-gig.html?gig=2'" style="cursor:pointer">
+                <td>Brand Identity Kit — Logo &amp; Typography</td>
+                <td style="color:var(--accent);font-weight:700">$280</td>
+                <td><span class="contractor-link">🎓 Sam T.</span></td>
+                <td>Apr 22, 2026</td>
+                <td>Apr 30, 2026</td>
+                <td style="color:rgba(255,255,255,0.3);font-size:0.85rem">→</td>
+              </tr>
+              <tr class="clickable" onclick="window.location.href='sponsor-gig.html?gig=8'" style="cursor:pointer">
+                <td>Warehouse Inventory Count (Brooklyn, NY)</td>
+                <td style="color:var(--accent);font-weight:700">$175</td>
+                <td><span class="contractor-link">🎓 Dana M.</span></td>
+                <td>Apr 15, 2026</td>
+                <td>Apr 17, 2026</td>
+                <td style="color:rgba(255,255,255,0.3);font-size:0.85rem">→</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── CONTRACTOR DASHBOARD ─── */
+  function contractorDash() {
+    return `
+      <div class="dash-header">
+        <div>
+          <h1>Contractor Dashboard</h1>
+          <p>Alex Johnson · alex@example.com · CS — State University 2025</p>
+        </div>
+        <a href="gigs.html" class="btn-action">Browse Gigs →</a>
+      </div>
+
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card accent-card"><div class="num">$490</div><div class="label">Wallet Balance</div></div>
+        <div class="stat-card"><div class="num">1</div><div class="label">Active Gigs</div></div>
+        <div class="stat-card"><div class="num">4</div><div class="label">Completed</div></div>
+        <div class="stat-card"><div class="num">$1,240</div><div class="label">Total Earned</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:2rem;align-items:start">
+        <div>
+          <div class="tab-row">
+            <button class="tab-btn active" id="tab-active" onclick="switchTab('active')">Active Gigs</button>
+            <button class="tab-btn" id="tab-completed" onclick="switchTab('completed')">Completed</button>
+          </div>
+
+          <div class="tab-panel visible" id="panel-active">
+            <div class="gig-row">
+              <div class="gig-row-info">
+                <div class="gig-row-title">Python Script: Automate Weekly Sales Report</div>
+                <div class="gig-row-meta"><span>💻 Technical</span><span>Due in 11 days</span><span>🏢 Acme Creative Co.</span></div>
+              </div>
+              <span class="status-pill active">In Progress</span>
+              <div class="gig-row-pay">$425</div>
+            </div>
+            <div class="empty-state" style="padding:1.5rem">
+              <p>No other active gigs. <a href="gigs.html">Browse the board →</a></p>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-completed">
+            <div style="overflow-x:auto">
+              <table class="completed-table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Payment</th>
+                    <th>Sponsor</th>
+                    <th>Completed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Shopify Custom FAQ Accordion</td>
+                    <td style="color:var(--accent);font-weight:700">$500</td>
+                    <td>Bloom Retail</td>
+                    <td>May 2026</td>
+                  </tr>
+                  <tr>
+                    <td>Brand Identity Kit — Fitness Studio</td>
+                    <td style="color:var(--accent);font-weight:700">$280</td>
+                    <td>FitLaunch Studio</td>
+                    <td>Apr 2026</td>
+                  </tr>
+                  <tr>
+                    <td>HubSpot CRM Audit &amp; Clean-Up</td>
+                    <td style="color:var(--accent);font-weight:700">$150</td>
+                    <td>NextLayer SaaS</td>
+                    <td>Mar 2026</td>
+                  </tr>
+                  <tr>
+                    <td>Responsive Product Landing Page</td>
+                    <td style="color:var(--accent);font-weight:700">$350</td>
+                    <td>Acme Creative Co.</td>
+                    <td>Feb 2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="wallet-card">
+            <div class="wallet-top">
+              <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray)">Restricted Wallet</div>
+              <div class="wallet-badge">Zero-Cash-Touch</div>
+            </div>
+            <div class="wallet-balance">$490.00</div>
+            <div class="wallet-sub">Available Ledger Equity</div>
+            <div class="wallet-items">
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span style="font-size:1rem">🏠</span><div><div class="wallet-item-name">Rent</div><div class="wallet-item-vendor">Greystar Mgmt</div></div></div>
+                <div class="wallet-item-amount">$850 due</div>
+              </div>
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span style="font-size:1rem">⚡</span><div><div class="wallet-item-name">Electric</div><div class="wallet-item-vendor">Con Edison</div></div></div>
+                <div class="wallet-item-amount">$97.50 due</div>
+              </div>
+              <div class="wallet-item">
+                <div class="wallet-item-left"><span style="font-size:1rem">🛒</span><div><div class="wallet-item-name">Groceries</div><div class="wallet-item-vendor">Whole Foods</div></div></div>
+                <div class="wallet-item-amount">Available</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="section-head">
+              <div class="section-title">Quick Links</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem">
+              <a href="gigs.html" style="display:flex;align-items:center;gap:0.75rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.85rem 1.1rem;text-decoration:none;color:var(--white);font-size:0.875rem;font-weight:600;transition:border-color 0.2s">
+                <span>📋</span> Browse Gig Board
+              </a>
+              <a href="profile.html" style="display:flex;align-items:center;gap:0.75rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.85rem 1.1rem;text-decoration:none;color:var(--white);font-size:0.875rem;font-weight:600;transition:border-color 0.2s">
+                <span>🎓</span> View Portfolio
+              </a>
+              <a href="account.html" style="display:flex;align-items:center;gap:0.75rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.85rem 1.1rem;text-decoration:none;color:var(--white);font-size:0.875rem;font-weight:600;transition:border-color 0.2s">
+                <span>⚙️</span> Account Settings
+              </a>
+              <a href="faq.html" style="display:flex;align-items:center;gap:0.75rem;background:var(--card-bg);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.85rem 1.1rem;text-decoration:none;color:var(--white);font-size:0.875rem;font-weight:600;transition:border-color 0.2s">
+                <span>❓</span> FAQ &amp; Help
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  var _origSetRole = window.__eeSetRole;
+  window.__eeSetRole = function(role) {
+    if (_origSetRole) _origSetRole(role);
+    setTimeout(renderDashboard, 50);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderDashboard);
+  } else {
+    renderDashboard();
+  }
+</script>
+<script src="dev-nav.js"></script>
+</body>
+</html>

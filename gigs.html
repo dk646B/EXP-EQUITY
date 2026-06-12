@@ -747,8 +747,39 @@
     document.getElementById('visibleCount').textContent = visible.length;
   }
 
+  /**
+   * If the current role is 'contractor', read their saved skill tags from localStorage
+   * and hide sidebar category buttons that don't match those tags.
+   * Tags saved in account.html / join.html as ee_contractor_tags (comma-separated).
+   */
+  function applyContractorTagFilter() {
+    var role = 'visitor';
+    try { role = localStorage.getItem('ee_role') || 'visitor'; } catch(e) {}
+    if (role !== 'contractor') return;
+
+    var savedTags = '';
+    try { savedTags = localStorage.getItem('ee_contractor_tags') || ''; } catch(e) {}
+    if (!savedTags) {
+      // Default: show coding and admin for a CS major
+      savedTags = 'coding,admin';
+    }
+    var allowed = savedTags.split(',').map(function(t) { return t.trim(); });
+    // Always include 'all'
+    if (allowed.indexOf('all') === -1) allowed.push('all');
+
+    document.querySelectorAll('#catFilters .filter-btn[data-cat]').forEach(function(btn) {
+      var cat = btn.dataset.cat;
+      if (cat === 'all') return;
+      if (allowed.indexOf(cat) === -1) {
+        btn.style.display = 'none';
+      }
+    });
+  }
+
   // Run on load
   loadPostedGigs();
+  applyContractorTagFilter();
 </script>
+<script src="dev-nav.js"></script>
 </body>
 </html>

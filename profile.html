@@ -145,10 +145,10 @@
 
     if (role === 'sponsor') {
       wrap.innerHTML = sponsorProfile();
-    } else if (role === 'graduate') {
-      wrap.innerHTML = graduateProfile();
+    } else if (role === 'contractor') {
+      wrap.innerHTML = contractorProfile();
     } else {
-      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Profile not available</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">Switch to a Sponsor or Graduate role to view a profile.</p><a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none;">Go to Home →</a></div>';
+      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Profile not available</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">Switch to a Sponsor or Contractor role to view a profile.</p><a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none;">Go to Home →</a></div>';
     }
   }
 
@@ -221,14 +221,18 @@
     `;
   }
 
-  function graduateProfile() {
+  function contractorProfile() {
     return `
       <div class="profile-header">
         <div class="avatar">🎓</div>
         <div class="profile-info">
           <h1>Alex Johnson</h1>
-          <p>alex@example.com · Verified Graduate · CS — State University 2025</p>
-          <div class="profile-role-badge" style="background:rgba(130,180,255,0.1);border-color:rgba(130,180,255,0.2);color:#82b4ff;">🎓 Graduate</div>
+          <p>alex@example.com · CS — State University 2025</p>
+          <div class="profile-role-badge" style="background:rgba(130,180,255,0.1);border-color:rgba(130,180,255,0.2);color:#82b4ff;">🎓 Contractor</div>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem">
+            <span style="display:inline-flex;align-items:center;gap:0.3rem;background:rgba(100,160,255,0.08);border:1px solid rgba(100,160,255,0.2);color:#82b4ff;padding:0.2rem 0.65rem;border-radius:50px;font-size:0.7rem;font-weight:700;letter-spacing:0.04em">💻 Technical / Coding</span>
+            <span style="display:inline-flex;align-items:center;gap:0.3rem;background:rgba(100,160,255,0.08);border:1px solid rgba(100,160,255,0.2);color:#82b4ff;padding:0.2rem 0.65rem;border-radius:50px;font-size:0.7rem;font-weight:700;letter-spacing:0.04em">📊 Data Analysis</span>
+          </div>
         </div>
         <div class="profile-actions">
           <button class="btn-edit">Edit Profile</button>
@@ -326,7 +330,7 @@
             <div style="display:flex;flex-direction:column;gap:0.75rem;">
               <div class="account-field"><div class="field-label">Full Name</div><div class="field-val">Alex Johnson</div></div>
               <div class="account-field"><div class="field-label">Verification</div><div class="field-val" style="color:var(--accent)">✓ Degree — CS, State U.</div></div>
-              <div class="account-field"><div class="field-label">Account Level</div><div class="field-val" style="color:var(--accent)">Verified Graduate</div></div>
+              <div class="account-field"><div class="field-label">Account Level</div><div class="field-val" style="color:var(--accent)">Verified Contractor</div></div>
               <div class="account-field"><div class="field-label">Strikes</div><div class="field-val">0 / 2</div></div>
             </div>
           </div>
@@ -348,5 +352,6 @@
     renderProfile();
   }
 </script>
+<script src="dev-nav.js"></script>
 </body>
 </html>

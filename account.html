@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — EXP EQUITY</title>
+  <style>
+    :root { --black:#0a0a0a;--white:#ffffff;--off-white:#f5f4f0;--accent:#c8ff00;--accent-dark:#9ccc00;--gray:#888;--light-gray:#e8e8e4;--card-bg:#141414; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--black); color:var(--white); line-height:1.6; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 4rem; background:rgba(10,10,10,0.85); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-size:1.15rem; font-weight:800; letter-spacing:0.04em; color:var(--accent); text-decoration:none; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { color:rgba(255,255,255,0.65); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.2s; }
+    .nav-links a:hover,.nav-links a.active { color:var(--white); }
+    .nav-cta { background:var(--accent); color:var(--black); padding:0.55rem 1.4rem; border-radius:50px; font-size:0.875rem; font-weight:700; text-decoration:none; transition:background 0.2s; }
+    .nav-cta:hover { background:var(--accent-dark); }
+
+    .page-wrap { max-width:860px; margin:0 auto; padding:7rem 4rem 6rem; }
+
+    /* PAGE HEADER */
+    .page-header { margin-bottom:3rem; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.07); }
+    .page-header h1 { font-size:1.8rem; font-weight:900; letter-spacing:-0.025em; margin-bottom:0.25rem; }
+    .page-header p { font-size:0.88rem; color:var(--gray); }
+
+    /* SECTION */
+    .acct-section { margin-bottom:2.5rem; }
+    .acct-section-title { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:1.25rem; }
+    .form-card { background:var(--card-bg); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:2rem 2.25rem; }
+
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-group { margin-bottom:1.25rem; }
+    .form-group:last-child { margin-bottom:0; }
+    .form-group label { display:block; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.4); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:0.45rem; }
+    .form-group input, .form-group select {
+      width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+      border-radius:10px; padding:0.75rem 1rem; font-size:0.9rem; color:var(--white);
+      font-family:inherit; outline:none; transition:border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color:rgba(200,255,0,0.4); }
+    .form-group input[disabled] { opacity:0.4; cursor:not-allowed; }
+    .form-group select option { background:#1c1c1c; }
+    .field-note { font-size:0.72rem; color:rgba(255,255,255,0.3); margin-top:0.35rem; }
+
+    /* TAGS */
+    .tag-grid { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.5rem; }
+    .tag-pill { padding:0.35rem 0.85rem; border-radius:50px; border:1px solid rgba(130,180,255,0.3); background:rgba(130,180,255,0.08); color:#82b4ff; font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+    .tag-pill:hover { border-color:rgba(130,180,255,0.6); }
+    .tag-pill.selected { background:rgba(130,180,255,0.18); border-color:rgba(130,180,255,0.55); }
+    .add-tag-btn { padding:0.35rem 0.85rem; border-radius:50px; border:1px dashed rgba(255,255,255,0.15); background:none; color:rgba(255,255,255,0.35); font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+    .add-tag-btn:hover { border-color:rgba(255,255,255,0.35); color:rgba(255,255,255,0.65); }
+
+    /* SAVE ROW */
+    .save-row { display:flex; align-items:center; gap:1.25rem; margin-top:1.5rem; }
+    .btn-save { background:var(--accent); color:var(--black); padding:0.75rem 2rem; border-radius:50px; font-weight:700; font-size:0.9rem; border:none; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+    .btn-save:hover { background:var(--accent-dark); }
+    .save-confirm { font-size:0.82rem; color:var(--accent); display:none; }
+
+    /* DANGER ZONE */
+    .danger-zone { background:rgba(255,50,50,0.05); border:1px solid rgba(255,50,50,0.12); border-radius:16px; padding:1.5rem 2rem; margin-top:2rem; }
+    .danger-zone h3 { font-size:0.85rem; font-weight:800; color:rgba(255,100,100,0.8); margin-bottom:0.5rem; }
+    .danger-zone p { font-size:0.82rem; color:rgba(255,255,255,0.35); margin-bottom:1rem; }
+    .btn-danger { background:none; border:1px solid rgba(255,100,100,0.3); color:rgba(255,100,100,0.7); padding:0.55rem 1.25rem; border-radius:50px; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.2s; }
+    .btn-danger:hover { border-color:rgba(255,100,100,0.6); color:rgba(255,100,100,1); }
+
+    /* VERIFICATION BADGE */
+    .verify-badge { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(200,255,0,0.08); border:1px solid rgba(200,255,0,0.2); border-radius:50px; padding:0.35rem 0.9rem; font-size:0.78rem; font-weight:700; color:var(--accent); }
+
+    footer { background:var(--black); border-top:1px solid rgba(255,255,255,0.07); padding:3rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; }
+    .footer-logo { font-size:1rem; font-weight:800; color:var(--accent); letter-spacing:0.04em; }
+    .footer-note { font-size:0.8rem; color:var(--gray); }
+    .footer-links { display:flex; gap:2rem; }
+    .footer-links a { font-size:0.8rem; color:var(--gray); text-decoration:none; transition:color 0.2s; }
+    .footer-links a:hover { color:var(--white); }
+
+    @media (max-width:900px) {
+      nav { padding:1rem 1.5rem; }
+      .nav-links { display:none; }
+      .page-wrap { padding:6rem 1.5rem 4rem; }
+      .form-row { grid-template-columns:1fr; }
+      footer { padding:2rem 1.5rem; flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap" id="pageWrap">
+  <!-- rendered by JS -->
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — June 2026</div>
+  <div class="footer-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  function getRole() {
+    try { return localStorage.getItem('ee_role') || 'visitor'; } catch(e) { return 'visitor'; }
+  }
+
+  function saveField(sectionId) {
+    var confirm = document.getElementById('confirm-' + sectionId);
+    if (confirm) { confirm.style.display = 'inline'; setTimeout(function() { confirm.style.display = 'none'; }, 2500); }
+  }
+
+  function toggleTag(el) { el.classList.toggle('selected'); }
+
+  function renderAccount() {
+    var role = getRole();
+    var wrap = document.getElementById('pageWrap');
+    if (role === 'sponsor') {
+      wrap.innerHTML = sponsorAccount();
+    } else if (role === 'contractor') {
+      wrap.innerHTML = contractorAccount();
+    } else {
+      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Account not available</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">Switch to a Sponsor or Contractor role to manage your account.</p><a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none;">Go to Home →</a></div>';
+    }
+  }
+
+  /* ─── SPONSOR ACCOUNT ─── */
+  function sponsorAccount() {
+    return `
+      <div class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your sponsor profile, payment method, and login credentials.</p>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Business Information</div>
+        <div class="form-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" value="Acme Creative Co." />
+            </div>
+            <div class="form-group">
+              <label>Industry</label>
+              <select>
+                <option selected>Marketing &amp; Advertising</option>
+                <option>Technology</option>
+                <option>Retail &amp; E-commerce</option>
+                <option>Finance &amp; Accounting</option>
+                <option>Healthcare</option>
+                <option>Education</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Contact Name</label>
+            <input type="text" value="Jordan Smith" />
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('biz')">Save Changes</button>
+            <span class="save-confirm" id="confirm-biz">✓ Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Login &amp; Security</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" value="acme@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" placeholder="Enter current password to make changes" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" placeholder="New password" />
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" placeholder="Confirm new password" />
+            </div>
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('login')">Update Login</button>
+            <span class="save-confirm" id="confirm-login">✓ Updated</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Payment Method</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Card on File</label>
+            <input type="text" value="Visa ···· 4242" disabled />
+            <div class="field-note">Card is used for escrow funding when posting gigs. To update, contact support.</div>
+          </div>
+          <div class="form-group">
+            <label>Billing Email</label>
+            <input type="email" value="billing@acme.com" />
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('payment')">Save Billing Info</button>
+            <span class="save-confirm" id="confirm-payment">✓ Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Account Status</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Verification Status</label>
+            <div style="margin-top:0.5rem"><span class="verify-badge">✓ Verified Sponsor</span></div>
+          </div>
+          <div class="form-group">
+            <label>Member Since</label>
+            <input type="text" value="May 2026" disabled />
+          </div>
+        </div>
+      </div>
+
+      <div class="danger-zone">
+        <h3>Danger Zone</h3>
+        <p>Deleting your account will cancel all active gigs and forfeit any escrowed funds that have not been released. This action cannot be undone.</p>
+        <button class="btn-danger" onclick="if(confirm('Are you sure? This cannot be undone.')) alert('Account deletion request submitted.')">Delete Account</button>
+      </div>
+    `;
+  }
+
+  /* ─── CONTRACTOR ACCOUNT ─── */
+  function contractorAccount() {
+    return `
+      <div class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your profile, major tags, verification, and login credentials.</p>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Personal Information</div>
+        <div class="form-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" value="Alex" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" value="Johnson" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" value="New York, NY" />
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('personal')">Save Changes</button>
+            <span class="save-confirm" id="confirm-personal">✓ Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Major &amp; Skill Tags</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Field of Study</label>
+            <select>
+              <option selected>Computer Science / Software Engineering</option>
+              <option>Information Technology</option>
+              <option>Graphic Design / Visual Arts</option>
+              <option>Marketing / Communications</option>
+              <option>Business Administration</option>
+              <option>Data Science / Analytics</option>
+              <option>Other</option>
+            </select>
+            <div class="field-note">Your major determines which gig categories are shown to you on the board by default.</div>
+          </div>
+          <div class="form-group">
+            <label>Skill Tags</label>
+            <div class="tag-grid">
+              <button type="button" class="tag-pill selected" onclick="toggleTag(this)">💻 Technical / Coding</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">🎨 Design / Creative</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">📋 Business Admin</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">🤝 On-Site / In-Person</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">✍️ Writing / Content</button>
+              <button type="button" class="tag-pill selected" onclick="toggleTag(this)">📊 Data Analysis</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">🎬 Video / Audio</button>
+              <button type="button" class="tag-pill" onclick="toggleTag(this)">📱 Social Media</button>
+            </div>
+            <div class="field-note" style="margin-top:0.6rem">Selected tags filter your gig board to show only matching categories.</div>
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('tags')">Save Tags</button>
+            <span class="save-confirm" id="confirm-tags">✓ Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Login &amp; Security</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" value="alex@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" placeholder="Enter current password to make changes" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" placeholder="New password" />
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" placeholder="Confirm new password" />
+            </div>
+          </div>
+          <div class="save-row">
+            <button class="btn-save" onclick="saveField('login')">Update Login</button>
+            <span class="save-confirm" id="confirm-login">✓ Updated</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Verification &amp; Standing</div>
+        <div class="form-card">
+          <div class="form-group">
+            <label>Verification Status</label>
+            <div style="margin-top:0.5rem"><span class="verify-badge">✓ Degree — CS, State University 2025</span></div>
+          </div>
+          <div class="form-group">
+            <label>Account Level</label>
+            <input type="text" value="Verified Contractor" disabled />
+          </div>
+          <div class="form-group">
+            <label>Strikes (2 max before review)</label>
+            <input type="text" value="0 / 2" disabled />
+          </div>
+          <div class="form-group">
+            <label>Member Since</label>
+            <input type="text" value="February 2026" disabled />
+          </div>
+        </div>
+      </div>
+
+      <div class="acct-section">
+        <div class="acct-section-title">Wallet Vendors</div>
+        <div class="form-card">
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.45);margin-bottom:1.25rem;line-height:1.65">Pre-registered vendor accounts determine where your wallet balance can be disbursed. All vendors are verified by EXP EQUITY admin before activation.</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Rent / Housing Vendor</label>
+              <input type="text" value="Greystar Property Mgmt" disabled />
+            </div>
+            <div class="form-group">
+              <label>Utility Vendor</label>
+              <input type="text" value="Con Edison" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Grocery Vendor</label>
+            <input type="text" value="Whole Foods Market" disabled />
+          </div>
+          <div class="field-note">To update vendor accounts, contact <a href="index.html#contact" style="color:rgba(200,255,0,0.6);text-decoration:none">onboarding@expequity.com</a>. Changes require re-verification.</div>
+        </div>
+      </div>
+
+      <div class="danger-zone">
+        <h3>Danger Zone</h3>
+        <p>Deleting your account will forfeit any unclaimed wallet balance and permanently remove your portfolio entries. This action cannot be undone.</p>
+        <button class="btn-danger" onclick="if(confirm('Are you sure? This cannot be undone.')) alert('Account deletion request submitted.')">Delete Account</button>
+      </div>
+    `;
+  }
+
+  var _origSetRole = window.__eeSetRole;
+  window.__eeSetRole = function(role) {
+    if (_origSetRole) _origSetRole(role);
+    setTimeout(renderAccount, 50);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderAccount);
+  } else {
+    renderAccount();
+  }
+</script>
+<script src="dev-nav.js"></script>
+</body>
+</html>

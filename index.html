@@ -90,7 +90,7 @@
     .hero h1 em { font-style: normal; color: var(--accent); }
     .hero p {
       font-size: 1.2rem; color: rgba(255,255,255,0.6);
-      max-width: 560px; line-height: 1.7;
+      max-width: 620px; line-height: 1.7;
       margin-bottom: 2.75rem;
     }
     .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
@@ -117,6 +117,34 @@
     .stat-item {}
     .stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
     .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.2rem; }
+
+    /* ── MISSION STATEMENT ── */
+    .mission {
+      background: var(--off-white); color: var(--black);
+      padding: 5rem 4rem;
+    }
+    .mission .section-label { color: #666; }
+    .mission-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+      margin-top: 2.5rem;
+    }
+    .mission-text h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900; letter-spacing: -0.025em; line-height: 1.15;
+      margin-bottom: 1.25rem; color: var(--black);
+    }
+    .mission-text p {
+      font-size: 1rem; color: #444; line-height: 1.75; margin-bottom: 1rem;
+    }
+    .mission-pillars { display: flex; flex-direction: column; gap: 1.25rem; }
+    .pillar {
+      background: var(--white); border: 1px solid var(--light-gray);
+      border-radius: 16px; padding: 1.5rem 1.75rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .pillar-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .pillar h4 { font-size: 0.95rem; font-weight: 800; color: var(--black); margin-bottom: 0.3rem; }
+    .pillar p { font-size: 0.85rem; color: #555; line-height: 1.6; }
 
     /* ── SECTION WRAPPER ── */
     section { padding: 6rem 4rem; }
@@ -243,10 +271,20 @@
     .wallet-item-vendor { font-size: 0.75rem; color: var(--gray); }
     .wallet-item-amount { font-size: 0.9rem; font-weight: 700; color: var(--accent); }
     .wallet-text h2 { max-width: 440px; }
-    .wallet-text .section-sub { margin-bottom: 2rem; }
+    .wallet-text .section-sub { margin-bottom: 1.5rem; }
+    .wallet-assurance {
+      background: rgba(200,255,0,0.06); border: 1px solid rgba(200,255,0,0.15);
+      border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
+    }
+    .wallet-assurance h4 {
+      font-size: 0.9rem; font-weight: 800; color: var(--accent); margin-bottom: 0.4rem;
+    }
+    .wallet-assurance p {
+      font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.65;
+    }
     .allowed-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
     .allowed-list li {
-      display: flex; align-items: center; gap: 0.75rem;
+      display: flex; align-items: flex-start; gap: 0.75rem;
       font-size: 0.9rem; color: rgba(255,255,255,0.7);
     }
     .allowed-list li::before {
@@ -254,12 +292,39 @@
       width: 20px; height: 20px; border-radius: 50%;
       background: rgba(200,255,0,0.1);
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      flex-shrink: 0; margin-top: 0.1rem;
     }
+    .blocked-note {
+      margin-top: 1.25rem; padding: 0.9rem 1.1rem;
+      background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.15);
+      border-radius: 10px; font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.6;
+    }
+    .blocked-note strong { color: rgba(255,100,100,0.85); }
 
     /* ── COMPARISON ── */
     .compare { background: #0a0a0a; }
     .compare-table-wrap { overflow-x: auto; margin-top: 3rem; }
+    .not-freelance-callout {
+      margin-top: 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .callout-card {
+      border-radius: 16px; padding: 1.75rem;
+    }
+    .callout-card.bad {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    }
+    .callout-card.good {
+      background: rgba(200,255,0,0.05); border: 1px solid rgba(200,255,0,0.15);
+    }
+    .callout-card h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .callout-card.bad h4 { color: rgba(255,255,255,0.5); }
+    .callout-card.good h4 { color: var(--accent); }
+    .callout-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .callout-card ul li { font-size: 0.85rem; color: rgba(255,255,255,0.5); display: flex; gap: 0.5rem; }
+    .callout-card ul li::before { content: '×'; color: #ff6666; font-weight: 700; flex-shrink: 0; }
+    .callout-card.good ul li::before { content: '→'; color: var(--accent); }
+    .callout-card.good ul li { color: rgba(255,255,255,0.7); }
     table {
       width: 100%; border-collapse: collapse;
       font-size: 0.88rem;
@@ -319,9 +384,10 @@
 
     /* ── ESCROW FLOW ── */
     .flow { background: var(--black); }
+    .flow-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
     .flow-steps {
       display: flex; flex-direction: column; gap: 0;
-      margin-top: 3.5rem; max-width: 700px;
+      max-width: 700px;
     }
     .flow-row {
       display: flex; align-items: flex-start; gap: 2rem; position: relative;
@@ -344,6 +410,11 @@
     .flow-content { padding-top: 0.6rem; padding-bottom: 2rem; }
     .flow-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
     .flow-content p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.65; }
+    .flow-detail {
+      margin-top: 0.6rem; font-size: 0.8rem;
+      color: rgba(255,255,255,0.3); line-height: 1.6;
+      border-left: 2px solid rgba(200,255,0,0.12); padding-left: 0.85rem;
+    }
     .flow-status {
       display: inline-flex; gap: 0.35rem; align-items: center; margin-top: 0.5rem;
       background: rgba(255,255,255,0.05); border-radius: 50px;
@@ -351,6 +422,21 @@
       letter-spacing: 0.06em; color: rgba(255,255,255,0.5);
     }
     .flow-status.active { background: rgba(200,255,0,0.1); color: var(--accent); }
+    .flow-aside { }
+    .flow-aside-card {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 2rem; margin-bottom: 1.25rem;
+    }
+    .flow-aside-card h4 {
+      font-size: 0.85rem; font-weight: 800; color: var(--accent);
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .flow-aside-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .flow-aside-card ul li {
+      font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.55;
+      display: flex; gap: 0.5rem;
+    }
+    .flow-aside-card ul li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
 
     /* ── CTA BAND ── */
     .cta-band {
@@ -379,6 +465,59 @@
     }
     .btn-outline-dark:hover { border-color: var(--black); }
 
+    /* ── ABOUT ── */
+    .about { background: #0d0d0d; }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-text h2 { max-width: 440px; }
+    .about-text .section-sub { margin-bottom: 1.75rem; }
+    .about-text p { font-size: 0.9rem; color: rgba(255,255,255,0.45); line-height: 1.75; margin-bottom: 1rem; }
+    .about-values { display: flex; flex-direction: column; gap: 1rem; }
+    .about-value {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 1.25rem 1.5rem;
+    }
+    .about-value-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .about-value h4 { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .about-value p { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin: 0; }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--off-white); color: var(--black); }
+    .contact .section-label { color: #666; }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; margin-top: 3rem; }
+    .contact-text h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .contact-text p { font-size: 0.9rem; color: #555; line-height: 1.7; margin-bottom: 1.25rem; }
+    .contact-channels { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+    .contact-channel {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--white); border: 1px solid var(--light-gray);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .contact-channel-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .contact-channel h5 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.15rem; color: var(--black); }
+    .contact-channel p { font-size: 0.78rem; color: #777; margin: 0; }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-size: 0.78rem; font-weight: 700; color: #444; letter-spacing: 0.04em; }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--white); border: 1px solid var(--light-gray);
+      border-radius: 10px; padding: 0.75rem 1rem;
+      font-size: 0.9rem; color: var(--black); font-family: inherit;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: #9ccc00;
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      background: var(--black); color: var(--white);
+      padding: 0.9rem 2rem; border-radius: 50px;
+      font-weight: 700; font-size: 0.95rem; border: none;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: #222; }
+
     /* ── FOOTER ── */
     footer {
       background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
@@ -401,6 +540,11 @@
       .wallet-inner { grid-template-columns: 1fr; gap: 2.5rem; }
       .roles-grid { grid-template-columns: 1fr; }
       .steps::before { display: none; }
+      .flow-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .mission-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .not-freelance-callout { grid-template-columns: 1fr; }
       footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
     }
   </style>
@@ -415,10 +559,10 @@
 <section class="hero" id="hero">
   <div class="hero-tag"><span></span>MVP — Now Onboarding</div>
   <h1>Your degree is the résumé.<br/><em>Your work is the proof.</em></h1>
-  <p>EXP EQUITY connects recent graduates with businesses through escrow-backed micro-gigs — earning you real portfolio credits and paying your bills directly, not your bank account.</p>
+  <p>EXP EQUITY is a structured micro-gig platform connecting verified contractors with businesses — paying your essential living costs directly, not your bank account. Every dollar earned goes straight to rent, utilities, and groceries through a zero-cash-touch wallet. No loopholes. No misuse.</p>
   <div class="hero-btns">
-    <a href="#roles" class="btn-primary">Apply as a Graduate</a>
-    <a href="#roles" class="btn-secondary">Post a Gig</a>
+    <a href="join.html" class="btn-primary">Apply as a Contractor</a>
+    <a href="join.html#sponsor" class="btn-secondary">Post a Gig</a>
   </div>
   <div class="hero-stats">
     <div class="stat-item">
@@ -440,8 +584,51 @@
   </div>
 </section>
 
+<!-- ── MISSION ── -->
+<div class="mission" id="mission">
+  <div class="section-label">What We Do</div>
+  <div class="mission-inner">
+    <div class="mission-text">
+      <h2>A platform built to close the experience gap — and cover your bills while you do it.</h2>
+      <p>EXP EQUITY is a micro-gig marketplace with one rule most platforms skip: your earnings never touch your bank account. Payments route automatically to verified necessity vendors — landlords, utility companies, and grocery stores — via a Restricted Digital Wallet locked to essential Merchant Category Codes.</p>
+      <p>For contractors, that means real projects, real portfolio credits, and real bills getting paid — without the risk of funds going anywhere else. For sponsors, it means every dollar you escrow goes to work, not waste.</p>
+      <p>We're not a freelance platform. We're not a charity. We're a structured equity exchange where skill earns survival — verifiably, accountably, and on record.</p>
+    </div>
+    <div class="mission-pillars">
+      <div class="pillar">
+        <div class="pillar-icon">🔒</div>
+        <div>
+          <h4>Escrow-backed, scope-locked gigs</h4>
+          <p>Every project is funded before work begins. The Definition of Done is frozen at acceptance — sponsors cannot add requirements mid-project.</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">💳</div>
+        <div>
+          <h4>Zero-cash-touch payments</h4>
+          <p>Earnings go directly to verified vendors via Merchant Category Code restrictions. No cash out, no detours — only essential spend.</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">📁</div>
+        <div>
+          <h4>Verified portfolio, not just a résumé</h4>
+          <p>Every completed gig generates a verified, sponsor-endorsed portfolio entry — proof of commercial-grade work that employers can actually trust.</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">⚖️</div>
+        <div>
+          <h4>Built-in dispute protection</h4>
+          <p>If a sponsor doesn't review in 72 hours, work auto-approves. If there's a dispute, arbitration is based solely on the agreed checklist — nothing subjective.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── PROBLEM ── -->
-<section class="problem">
+<section class="problem" id="problem">
   <div class="section-label">The Problem</div>
   <h2 class="section-title">The entry-level catch-22</h2>
   <p class="section-sub">You need experience to get a job. You need a job to get experience. Meanwhile, rent is due.</p>
@@ -486,23 +673,23 @@
     </div>
     <div class="step">
       <div class="step-num">02</div>
-      <h3>Graduate Accepts</h3>
+      <h3>Contractor Accepts</h3>
       <p>A verified contractor reviews the DoD and accepts. Project status shifts to Active. Scope is now legally frozen — no hidden requests.</p>
     </div>
     <div class="step">
       <div class="step-num">03</div>
       <h3>Work &amp; Submit</h3>
-      <p>Graduate delivers the work via the platform. Sponsor has 72 hours to review against the checklist. No response = auto-approval.</p>
+      <p>Contractor delivers the work via the platform. Sponsor has 72 hours to review against the checklist. No response = auto-approval.</p>
     </div>
     <div class="step">
       <div class="step-num">04</div>
       <h3>Escrow Releases to Wallet</h3>
-      <p>Approved funds go to the graduate's Restricted Wallet — a programmable ledger that routes payments directly to verified vendors.</p>
+      <p>Approved funds go to the contractor's Restricted Wallet — a programmable ledger that routes payments directly to verified vendors.</p>
     </div>
     <div class="step">
       <div class="step-num">05</div>
       <h3>Bills Get Paid, Portfolio Grows</h3>
-      <p>Rent, utilities, and groceries are paid directly to vendors. The completed project is added to the graduate's verified portfolio.</p>
+      <p>Rent, utilities, and groceries are paid directly to vendors. The completed project is added to the contractor's verified portfolio.</p>
     </div>
   </div>
 </section>
@@ -595,14 +782,21 @@
     </div>
     <div class="wallet-text">
       <div class="section-label">The Wallet</div>
-      <h2 class="section-title">Funds go straight to your survival costs</h2>
-      <p class="section-sub">Earned equity is locked to essential vendor categories via Merchant Category Codes — protecting graduates from financial mismanagement and giving sponsors total transparency.</p>
+      <h2 class="section-title">Assurance for everyone</h2>
+      <p class="section-sub">The Restricted Wallet isn't a limitation — it's the guarantee. Sponsors know exactly where their money goes. Contractors know their essentials are covered.</p>
+      <div class="wallet-assurance">
+        <h4>Only necessities. No exceptions.</h4>
+        <p>Funds are locked to essential categories via Merchant Category Codes (MCCs) — the same classification system used by Visa and Mastercard. The wallet cannot process a transaction at a bar, a casino, or an electronics retailer. It can only pay for things you need to survive and keep working.</p>
+      </div>
       <ul class="allowed-list">
-        <li>Housing &amp; Rent — direct to property managers</li>
-        <li>Utilities — electric, gas, water, internet</li>
-        <li>Groceries — physical and digital supermarkets</li>
-        <li>Transportation — fuel stations and transit authorities</li>
+        <li><span><strong>Housing &amp; Rent</strong> — direct to property management companies and landlords via ACH</span></li>
+        <li><span><strong>Utilities</strong> — electric, gas, water, and internet providers only</span></li>
+        <li><span><strong>Groceries</strong> — verified physical and digital supermarkets, not convenience stores</span></li>
+        <li><span><strong>Transportation</strong> — fuel stations and public transit authorities</span></li>
       </ul>
+      <div class="blocked-note">
+        <strong>What's blocked:</strong> Cash withdrawals, transfers to personal bank accounts, restaurants, retail, entertainment, and any non-necessity MCC. Violations trigger account review.
+      </div>
     </div>
   </div>
 </section>
@@ -611,48 +805,97 @@
 <section class="flow" id="flow">
   <div class="section-label">Escrow Pipeline</div>
   <h2 class="section-title">Every dollar is tracked<br/>from post to payment</h2>
-  <div class="flow-steps">
-    <div class="flow-row">
-      <div class="flow-line-wrap">
-        <div class="flow-dot">1</div>
-        <div class="flow-connector"></div>
+  <p class="section-sub" style="margin-bottom:3.5rem;">The money never sits loose. Here's exactly how funds move from sponsor charge to vendor payment — with full audit trail at every stage.</p>
+  <div class="flow-inner">
+    <div class="flow-steps">
+      <div class="flow-row">
+        <div class="flow-line-wrap">
+          <div class="flow-dot">1</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>Sponsor charges escrow</h4>
+          <p>Payment is charged via Stripe and held in the EXP EQUITY escrow account. No funds are released until a verifiable outcome is reached.</p>
+          <div class="flow-detail">The full gig fee is charged upfront before the gig goes live on the board. Sponsors cannot post without funding. This ensures contractors never complete work for a sponsor who can't pay.</div>
+          <span class="flow-status active">PENDING → ACTIVE</span>
+        </div>
       </div>
-      <div class="flow-content">
-        <h4>Sponsor funds escrow</h4>
-        <p>Payment is charged via Stripe and held in the EXP EQUITY escrow account. No funds are released until a verifiable outcome is reached.</p>
-        <span class="flow-status active">PENDING → ACTIVE</span>
+      <div class="flow-row">
+        <div class="flow-line-wrap">
+          <div class="flow-dot">2</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>Contractor accepts &amp; scope locks</h4>
+          <p>Contractor accepts the gig. At this moment, the DoD checklist is cryptographically frozen — no additions, no modifications.</p>
+          <div class="flow-detail">Both parties receive a timestamped copy of the locked scope. Any later request that falls outside the DoD is automatically out-of-scope and unenforceable on the platform.</div>
+          <span class="flow-status active">ACTIVE → IN PROGRESS</span>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-line-wrap">
+          <div class="flow-dot">3</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>Deliverables submitted</h4>
+          <p>Work is uploaded to the platform. Sponsor receives a 72-hour review window to approve or open a dispute against the locked checklist.</p>
+          <div class="flow-detail">Disputes are evaluated line-by-line against the original DoD — nothing subjective. If the sponsor does not respond within 72 hours, the system auto-approves and releases funds. This prevents contractors from being ghosted.</div>
+          <span class="flow-status active">IN PROGRESS → SUBMITTED</span>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-line-wrap">
+          <div class="flow-dot">4</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>Escrow releases to Restricted Wallet</h4>
+          <p>Upon approval, funds move to the contractor's Restricted Digital Wallet. Maximum 2 revision cycles are permitted before auto-approval kicks in regardless.</p>
+          <div class="flow-detail">The wallet balance is a ledger entry, not a bank balance. It can only be drawn against verified vendor accounts pre-registered in the contractor's profile. No transfers to unregistered accounts are possible.</div>
+          <span class="flow-status active">SUBMITTED → PAID</span>
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-line-wrap">
+          <div class="flow-dot">5</div>
+        </div>
+        <div class="flow-content">
+          <h4>Direct vendor payment + portfolio entry</h4>
+          <p>Bills are paid directly to verified vendors via ACH or card. The project is anonymized and added to the contractor's verified public portfolio with the sponsor's endorsement.</p>
+          <div class="flow-detail">The full audit trail — escrow charge, scope lock timestamp, submission, approval, and vendor payout — is logged and available to both parties permanently.</div>
+          <span class="flow-status active">EQUITY CAPTURED</span>
+        </div>
       </div>
     </div>
-    <div class="flow-row">
-      <div class="flow-line-wrap">
-        <div class="flow-dot">2</div>
-        <div class="flow-connector"></div>
+    <div class="flow-aside">
+      <div class="flow-aside-card">
+        <h4>Dispute Resolution</h4>
+        <ul>
+          <li>Disputes are evaluated only against the locked DoD checklist</li>
+          <li>No subjective judgment — each checklist item is binary: met or not met</li>
+          <li>Partial approval is possible if some checklist items are complete</li>
+          <li>Platform admin arbitrates within 48 hours of a filed dispute</li>
+          <li>Repeated bad-faith disputes result in sponsor account suspension</li>
+        </ul>
       </div>
-      <div class="flow-content">
-        <h4>Contractor submits deliverables</h4>
-        <p>Work is uploaded to the platform. Sponsor has 72 hours to review against the locked DoD checklist. Silence = approval.</p>
-        <span class="flow-status active">ACTIVE → SUBMITTED</span>
+      <div class="flow-aside-card">
+        <h4>Revision Policy</h4>
+        <ul>
+          <li>Maximum 2 revision cycles per gig — no unlimited loops</li>
+          <li>Revisions must be scoped to items explicitly listed in the original DoD</li>
+          <li>After 2 cycles, work auto-approves if sponsor hasn't resolved the dispute</li>
+          <li>Revision requests outside original scope are rejected by the platform</li>
+        </ul>
       </div>
-    </div>
-    <div class="flow-row">
-      <div class="flow-line-wrap">
-        <div class="flow-dot">3</div>
-        <div class="flow-connector"></div>
-      </div>
-      <div class="flow-content">
-        <h4>Escrow releases to wallet</h4>
-        <p>Upon approval, funds move to the contractor's Restricted Digital Wallet. Maximum 2 revision cycles protect against scope creep.</p>
-        <span class="flow-status active">SUBMITTED → PAID</span>
-      </div>
-    </div>
-    <div class="flow-row">
-      <div class="flow-line-wrap">
-        <div class="flow-dot">4</div>
-      </div>
-      <div class="flow-content">
-        <h4>Vendor payment + portfolio entry</h4>
-        <p>Bills are paid directly to verified vendors. The project is anonymized and added to the contractor's verified public portfolio.</p>
-        <span class="flow-status active">EQUITY CAPTURED</span>
+      <div class="flow-aside-card">
+        <h4>Wallet Security</h4>
+        <ul>
+          <li>Vendor accounts are pre-registered and verified before payout is possible</li>
+          <li>MCC restrictions are enforced at the transaction layer — not just the UI</li>
+          <li>All transactions generate receipts visible to both the contractor and admin</li>
+          <li>Wallet balance cannot be withdrawn as cash under any circumstances</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -662,6 +905,29 @@
 <section class="compare" id="compare">
   <div class="section-label">Market Positioning</div>
   <h2 class="section-title">Not freelance. Not charity.<br/>Something new.</h2>
+  <p class="section-sub">Freelance platforms pay cash with no controls. Charities give money with no credentials. Neither solves the actual problem. EXP EQUITY does both.</p>
+  <div class="not-freelance-callout">
+    <div class="callout-card bad">
+      <h4>Why freelance platforms fail recent graduates</h4>
+      <ul>
+        <li>Cash payouts can be spent on anything — no guarantee bills get paid</li>
+        <li>You're competing against global contractors charging $5/hr</li>
+        <li>No protection from scope creep or unpaid work</li>
+        <li>Portfolio entries aren't verified or sponsor-endorsed</li>
+        <li>Zero structural support for someone just starting out</li>
+      </ul>
+    </div>
+    <div class="callout-card good">
+      <h4>What EXP EQUITY does instead</h4>
+      <ul>
+        <li>Funds route directly to verified necessity vendors — no cash leakage</li>
+        <li>Gig pricing is benchmarked to the U.S. market, not global arbitrage</li>
+        <li>Scope locks at acceptance — sponsors legally cannot add work</li>
+        <li>Every completed gig creates a verified, sponsor-signed portfolio entry</li>
+        <li>72-hour auto-approval means you can't be ghosted without payment</li>
+      </ul>
+    </div>
+  </div>
   <div class="compare-table-wrap">
     <table>
       <thead>
@@ -727,7 +993,7 @@
   <h2 class="section-title">Two sides. One platform.</h2>
   <div class="roles-grid">
     <div class="role-card">
-      <div class="role-tag">Graduate Contractor</div>
+      <div class="role-tag">Contractor</div>
       <h3>You have the skills.<br/>We'll prove it.</h3>
       <p>Get matched with real businesses, execute high-value gigs, and build a verified commercial portfolio — all while covering your essential living costs.</p>
       <ul class="perks">
@@ -737,7 +1003,7 @@
         <li>Every project adds a verified entry to your portfolio</li>
         <li>Restricted wallet pays rent, utilities, and groceries directly</li>
       </ul>
-      <a href="#" class="btn-role green">Apply as a Graduate →</a>
+      <a href="join.html" class="btn-role green">Apply as a Contractor →</a>
     </div>
     <div class="role-card dark">
       <div class="role-tag">Sponsor / Business</div>
@@ -750,7 +1016,51 @@
         <li>Objective dispute arbitration based strictly on your checklist</li>
         <li>Automated endorsement prompts build community trust</li>
       </ul>
-      <a href="#" class="btn-role accent">Post a Gig →</a>
+      <a href="join.html#sponsor" class="btn-role accent">Post a Gig →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-label">About Us</div>
+      <h2 class="section-title">Built for the gap nobody wanted to fix</h2>
+      <p class="section-sub" style="margin-bottom:1.75rem;">EXP EQUITY started with a simple observation: the most motivated workers in the country — recent graduates — have no reliable bridge between school and stable employment.</p>
+      <p>Freelance platforms exploit them. Charities don't give them credentials. Corporate hiring ignores them until they have experience they can't get without a job.</p>
+      <p>We built a third option: a structured, accountable exchange where verified professionals earn real income that goes directly to verified necessity vendors. No middlemen. No cash that can evaporate. No scope disputes decided by whoever yells loudest.</p>
+      <p>The platform enforces fairness through architecture, not policy. Scope locks are technical. Wallet restrictions are enforced at the transaction layer. The rules don't bend because the system doesn't let them.</p>
+    </div>
+    <div class="about-values">
+      <div class="about-value">
+        <div class="about-value-icon">🏗️</div>
+        <div>
+          <h4>Structure over trust</h4>
+          <p>We don't ask sponsors to be fair. We build a system where being unfair isn't an option. Scope locks, escrow, and auto-approval are architecture — not promises.</p>
+        </div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">📊</div>
+        <div>
+          <h4>Accountability at every layer</h4>
+          <p>Every dollar, every checklist item, every approval timestamp is logged. Neither party can rewrite history. The audit trail is permanent and shared.</p>
+        </div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">🎓</div>
+        <div>
+          <h4>Credentials, not charity</h4>
+          <p>Contractors earn verified portfolio entries — not handouts. Sponsors get real work done — not donations. The exchange is mutual and on record.</p>
+        </div>
+      </div>
+      <div class="about-value">
+        <div class="about-value-icon">🛡️</div>
+        <div>
+          <h4>Dignity as a design principle</h4>
+          <p>We built the wallet restriction not to control contractors, but to protect them — from financial mismanagement, from sponsor distrust, and from a system that defaults to assuming the worst.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -758,23 +1068,99 @@
 <!-- ── CTA ── -->
 <div class="cta-band">
   <h2>Ready to exchange equity<br/>for essentials?</h2>
-  <p>Join the waitlist. We're onboarding our first cohort of graduates and sponsors now.</p>
+  <p>Join the waitlist. We're onboarding our first cohort of contractors and sponsors now.</p>
   <div class="cta-btns">
-    <a href="#" class="btn-dark">I'm a Graduate — Sign Me Up</a>
-    <a href="#" class="btn-outline-dark">I'm a Sponsor — Post a Gig</a>
+    <a href="join.html" class="btn-dark">I'm a Contractor — Sign Me Up</a>
+    <a href="join.html#sponsor" class="btn-outline-dark">I'm a Sponsor — Post a Gig</a>
   </div>
 </div>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div class="section-label">Contact Us</div>
+  <h2 class="section-title" style="color:var(--black)">Get in touch</h2>
+  <div class="contact-inner">
+    <div class="contact-text">
+      <h3>We'd love to hear from you.</h3>
+      <p>Whether you're a contractor trying to get onboarded, a sponsor with questions about posting a gig, or a partner interested in integrating with our wallet infrastructure — reach out.</p>
+      <p>We respond to all inquiries within one business day.</p>
+      <div class="contact-channels">
+        <div class="contact-channel">
+          <div class="contact-channel-icon">📧</div>
+          <div>
+            <h5>General Inquiries</h5>
+            <p>hello@expequity.com</p>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="contact-channel-icon">🏢</div>
+          <div>
+            <h5>Sponsor &amp; Business Partnerships</h5>
+            <p>sponsors@expequity.com</p>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="contact-channel-icon">🎓</div>
+          <div>
+            <h5>Contractor Onboarding Support</h5>
+            <p>onboarding@expequity.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form class="contact-form" onsubmit="handleContact(event)">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Alex Johnson" required />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="alex@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>I am a…</label>
+          <select>
+            <option value="">Select one</option>
+            <option>Contractor (looking for gigs)</option>
+            <option>Sponsor (looking to post gigs)</option>
+            <option>Educator / Institution</option>
+            <option>Press / Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us what's on your mind…" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
 
 <!-- ── FOOTER ── -->
 <footer>
   <div class="footer-logo">EXP EQUITY</div>
-  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — May 2026</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — June 2026</div>
   <div class="footer-links">
     <a href="faq.html">FAQ</a>
     <a href="gigs.html">Gig Board</a>
-    <a href="#">Contact</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
   </div>
 </footer>
 
+<script>
+  function handleContact(e) {
+    e.preventDefault();
+    var btn = e.target.querySelector('.btn-submit');
+    btn.textContent = 'Message Sent ✓';
+    btn.style.background = '#9ccc00';
+    btn.disabled = true;
+  }
+</script>
+
+<script src="dev-nav.js"></script>
 </body>
 </html>

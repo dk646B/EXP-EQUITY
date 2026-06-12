@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gig Detail — EXP EQUITY</title>
+  <style>
+    :root { --black:#0a0a0a;--white:#ffffff;--off-white:#f5f4f0;--accent:#c8ff00;--accent-dark:#9ccc00;--gray:#888;--light-gray:#e8e8e4;--card-bg:#141414; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--black); color:var(--white); line-height:1.6; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 4rem; background:rgba(10,10,10,0.85); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-size:1.15rem; font-weight:800; letter-spacing:0.04em; color:var(--accent); text-decoration:none; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { color:rgba(255,255,255,0.65); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.2s; }
+    .nav-links a:hover,.nav-links a.active { color:var(--white); }
+    .nav-cta { background:var(--accent); color:var(--black); padding:0.55rem 1.4rem; border-radius:50px; font-size:0.875rem; font-weight:700; text-decoration:none; transition:background 0.2s; }
+    .nav-cta:hover { background:var(--accent-dark); }
+
+    .page-wrap { max-width:1080px; margin:0 auto; padding:7rem 4rem 6rem; }
+
+    /* BREADCRUMB */
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; font-size:0.8rem; color:rgba(255,255,255,0.35); }
+    .breadcrumb a { color:rgba(255,255,255,0.35); text-decoration:none; transition:color 0.2s; }
+    .breadcrumb a:hover { color:var(--white); }
+    .breadcrumb-sep { opacity:0.4; }
+
+    /* PAGE HEADER */
+    .page-hd { display:flex; align-items:flex-start; justify-content:space-between; gap:2rem; margin-bottom:3rem; flex-wrap:wrap; }
+    .page-hd-left {}
+    .gig-cat-tag { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.06); border-radius:50px; padding:0.25rem 0.75rem; font-size:0.72rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:0.85rem; }
+    .gig-cat-tag.coding { background:rgba(100,160,255,0.1); color:#82b4ff; }
+    .gig-cat-tag.admin  { background:rgba(255,180,100,0.1); color:#ffbe78; }
+    .gig-cat-tag.design { background:rgba(200,100,255,0.1); color:#d08cff; }
+    .gig-cat-tag.inperson { background:rgba(100,220,150,0.1); color:#78dfa0; }
+    .page-hd h1 { font-size:clamp(1.6rem,3vw,2.4rem); font-weight:900; letter-spacing:-0.025em; line-height:1.15; margin-bottom:0.75rem; }
+    .status-pill { display:inline-flex; align-items:center; gap:0.35rem; padding:0.3rem 0.85rem; border-radius:50px; font-size:0.72rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+    .status-pill.open     { background:rgba(200,255,0,0.1);  color:var(--accent); border:1px solid rgba(200,255,0,0.2); }
+    .status-pill.active   { background:rgba(100,160,255,0.1);color:#82b4ff;       border:1px solid rgba(100,160,255,0.2); }
+    .status-pill.submitted{ background:rgba(255,180,100,0.1);color:#ffbe78;       border:1px solid rgba(255,180,100,0.2); }
+    .status-pill.paid     { background:rgba(100,220,150,0.1);color:#78dfa0;       border:1px solid rgba(100,220,150,0.2); }
+    .status-pill.open::before,.status-pill.active::before,.status-pill.submitted::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .page-hd-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.75rem; flex-shrink:0; }
+    .pay-amount { font-size:2.6rem; font-weight:900; color:var(--accent); letter-spacing:-0.03em; line-height:1; }
+    .pay-label { font-size:0.72rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.05em; text-align:right; }
+
+    /* TWO-COLUMN LAYOUT */
+    .detail-layout { display:grid; grid-template-columns:1fr 340px; gap:2.5rem; align-items:start; }
+
+    /* GIG DETAILS CARD */
+    .detail-card { background:var(--card-bg); border:1px solid rgba(255,255,255,0.07); border-radius:20px; padding:2rem 2.25rem; margin-bottom:1.5rem; }
+    .detail-card-title { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:1.25rem; }
+    .detail-desc { font-size:0.9rem; color:rgba(255,255,255,0.55); line-height:1.75; }
+
+    /* DOD LIST */
+    .dod-list { list-style:none; display:flex; flex-direction:column; gap:0.65rem; }
+    .dod-item { display:flex; align-items:flex-start; gap:0.75rem; font-size:0.88rem; color:rgba(255,255,255,0.65); line-height:1.5; }
+    .dod-check { width:20px; height:20px; border-radius:50%; background:rgba(200,255,0,0.1); border:1px solid rgba(200,255,0,0.25); display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:0.15rem; }
+    .dod-item.met .dod-check { background:rgba(200,255,0,0.2); border-color:rgba(200,255,0,0.5); }
+    .dod-item.pending-check .dod-check { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.2); }
+
+    /* META GRID */
+    .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+    .meta-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:0.85rem 1rem; }
+    .meta-item .meta-label { font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:0.3rem; }
+    .meta-item .meta-val { font-size:0.88rem; font-weight:600; color:var(--white); }
+
+    /* TIMELINE */
+    .timeline { display:flex; flex-direction:column; gap:0; }
+    .tl-row { display:flex; align-items:flex-start; gap:1rem; }
+    .tl-line-wrap { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+    .tl-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:800; flex-shrink:0; }
+    .tl-dot.done    { background:rgba(200,255,0,0.15); border:2px solid rgba(200,255,0,0.4); color:var(--accent); }
+    .tl-dot.current { background:rgba(130,180,255,0.15); border:2px solid rgba(130,180,255,0.4); color:#82b4ff; }
+    .tl-dot.future  { background:rgba(255,255,255,0.04); border:2px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.2); }
+    .tl-connector { width:2px; height:28px; background:rgba(255,255,255,0.07); margin:2px 0; }
+    .tl-content { padding-top:0.2rem; padding-bottom:1.25rem; }
+    .tl-content h4 { font-size:0.85rem; font-weight:700; margin-bottom:0.15rem; }
+    .tl-content p  { font-size:0.75rem; color:rgba(255,255,255,0.35); }
+
+    /* CONTRACTOR CARD */
+    .contractor-card { background:var(--card-bg); border:1px solid rgba(130,180,255,0.15); border-radius:20px; padding:2rem; margin-bottom:1.5rem; }
+    .contractor-card.unclaimed { border-color:rgba(255,255,255,0.07); }
+    .cc-label { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:1.25rem; }
+    .cc-avatar { width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,rgba(130,180,255,0.2),rgba(130,180,255,0.05)); border:2px solid rgba(130,180,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:1rem; }
+    .cc-name { font-size:1.1rem; font-weight:800; letter-spacing:-0.01em; margin-bottom:0.2rem; }
+    .cc-sub { font-size:0.78rem; color:var(--gray); margin-bottom:0.85rem; }
+    .cc-verify { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(200,255,0,0.08); border:1px solid rgba(200,255,0,0.2); border-radius:50px; padding:0.25rem 0.7rem; font-size:0.7rem; font-weight:700; color:var(--accent); margin-bottom:1.1rem; }
+    .cc-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.25rem; }
+    .cc-tag { display:inline-block; padding:0.2rem 0.6rem; border-radius:50px; background:rgba(130,180,255,0.08); border:1px solid rgba(130,180,255,0.2); color:#82b4ff; font-size:0.68rem; font-weight:700; }
+    .cc-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:1.25rem; }
+    .cc-stat { background:rgba(255,255,255,0.03); border-radius:10px; padding:0.7rem 0.85rem; text-align:center; }
+    .cc-stat .n { font-size:1.1rem; font-weight:800; color:var(--accent); }
+    .cc-stat .l { font-size:0.65rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.06em; margin-top:0.15rem; }
+    .btn-profile { display:block; text-align:center; background:rgba(130,180,255,0.1); border:1px solid rgba(130,180,255,0.25); color:#82b4ff; padding:0.7rem 1rem; border-radius:50px; font-weight:700; font-size:0.85rem; text-decoration:none; transition:background 0.2s; }
+    .btn-profile:hover { background:rgba(130,180,255,0.2); }
+    .cc-unclaimed-msg { text-align:center; padding:2rem 1rem; color:rgba(255,255,255,0.25); font-size:0.85rem; line-height:1.6; }
+    .cc-unclaimed-msg .icon { font-size:2rem; margin-bottom:0.5rem; display:block; }
+
+    /* REVIEW PANEL */
+    .review-panel { background:rgba(255,180,100,0.05); border:1px solid rgba(255,180,100,0.2); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; }
+    .review-panel h3 { font-size:0.85rem; font-weight:800; color:#ffbe78; margin-bottom:0.5rem; }
+    .review-panel p { font-size:0.8rem; color:rgba(255,255,255,0.4); margin-bottom:1.1rem; line-height:1.6; }
+    .review-timer { font-size:1.3rem; font-weight:900; color:#ffbe78; margin-bottom:1rem; letter-spacing:-0.01em; }
+    .review-btns { display:flex; gap:0.6rem; }
+    .btn-approve { background:var(--accent); color:var(--black); padding:0.6rem 1.4rem; border-radius:50px; font-weight:700; font-size:0.85rem; border:none; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+    .btn-approve:hover { background:var(--accent-dark); }
+    .btn-dispute { background:none; border:1px solid rgba(255,180,100,0.3); color:#ffbe78; padding:0.6rem 1.2rem; border-radius:50px; font-weight:700; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:all 0.2s; }
+    .btn-dispute:hover { border-color:#ffbe78; }
+
+    /* PAYOUT CONFIRMATION (completed) */
+    .payout-card { background:linear-gradient(135deg,#141414,#1a1f0a); border:1px solid rgba(200,255,0,0.2); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; }
+    .payout-card h3 { font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray); margin-bottom:0.75rem; }
+    .payout-amount { font-size:1.8rem; font-weight:900; color:var(--accent); letter-spacing:-0.02em; margin-bottom:0.25rem; }
+    .payout-sub { font-size:0.75rem; color:rgba(255,255,255,0.35); margin-bottom:1rem; }
+    .payout-items { display:flex; flex-direction:column; gap:0.5rem; }
+    .payout-item { display:flex; justify-content:space-between; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+    .payout-item span:last-child { color:rgba(255,255,255,0.65); font-weight:600; }
+
+    footer { background:var(--black); border-top:1px solid rgba(255,255,255,0.07); padding:3rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; }
+    .footer-logo { font-size:1rem; font-weight:800; color:var(--accent); letter-spacing:0.04em; }
+    .footer-note { font-size:0.8rem; color:var(--gray); }
+    .footer-links { display:flex; gap:2rem; }
+    .footer-links a { font-size:0.8rem; color:var(--gray); text-decoration:none; transition:color 0.2s; }
+    .footer-links a:hover { color:var(--white); }
+
+    @media (max-width:900px) {
+      nav { padding:1rem 1.5rem; }
+      .nav-links { display:none; }
+      .page-wrap { padding:6rem 1.5rem 4rem; }
+      .detail-layout { grid-template-columns:1fr; }
+      .page-hd { flex-direction:column; }
+      .page-hd-right { align-items:flex-start; }
+      .meta-grid { grid-template-columns:1fr; }
+      footer { padding:2rem 1.5rem; flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav></nav>
+<script src="nav.js"></script>
+
+<div class="page-wrap" id="pageWrap">
+  <!-- rendered by JS -->
+</div>
+
+<footer>
+  <div class="footer-logo">EXP EQUITY</div>
+  <div class="footer-note">A mutual-aid professional skills exchange. Version 1.0 MVP — June 2026</div>
+  <div class="footer-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+  /* ── GIG DATA ── */
+  var GIGS = {
+    1: {
+      title: 'Build a Responsive Landing Page (HTML/CSS/JS)',
+      cat: 'coding', catLabel: '💻 Technical',
+      pay: '$350', status: 'active', statusLabel: 'In Progress',
+      posted: 'June 2, 2026', deadline: 'June 9, 2026', timePosted: '2 days ago', timeLeft: '5 days left',
+      autoRemove: 'June 23, 2026',
+      desc: 'Small e-commerce brand needs a single-page product landing page. Must be mobile-first, use their provided brand assets, and include a contact form.',
+      dod: [
+        { text: 'Mobile-responsive at 375px, 768px, and 1280px breakpoints', met: true },
+        { text: 'Contact form submits via EmailJS or Formspree', met: true },
+        { text: 'Deployed and live on a public URL (Vercel, Netlify, or GitHub Pages)', met: false },
+        { text: 'Passes Google Lighthouse performance score ≥ 85', met: false },
+      ],
+      contractor: {
+        name: 'Alex Johnson', initials: '🎓',
+        sub: 'CS — State University 2025 · New York, NY',
+        verify: '✓ Degree — CS, State University 2025',
+        tags: ['💻 Technical / Coding', '📊 Data Analysis'],
+        gigs: 4, rating: '4.9★',
+      },
+      timeline: [
+        { label: 'Escrow Funded', date: 'June 2, 2026', state: 'done' },
+        { label: 'Contractor Accepted', date: 'June 2, 2026', state: 'done' },
+        { label: 'Work In Progress', date: 'Since June 2', state: 'current' },
+        { label: 'Submission', date: 'Due June 9', state: 'future' },
+        { label: 'Review & Payout', date: 'By June 11', state: 'future' },
+      ],
+    },
+    4: {
+      title: 'Python Script: Automate Weekly Sales Report from Google Sheets',
+      cat: 'coding', catLabel: '💻 Technical',
+      pay: '$425', status: 'open', statusLabel: 'Open — Unclaimed',
+      posted: 'June 4, 2026', deadline: 'June 18, 2026', timePosted: 'Today', timeLeft: '14 days',
+      autoRemove: 'June 25, 2026',
+      desc: 'Sales ops team manually copies data from 3 Google Sheets tabs into a formatted PDF every Monday. Need a Python script that automates this and emails the PDF.',
+      dod: [
+        { text: 'Script reads live data from specified Google Sheets via API', met: false },
+        { text: 'Generates a formatted PDF report matching provided template', met: false },
+        { text: 'Sends PDF via Gmail API to a specified distribution list', met: false },
+        { text: 'Includes a README with setup and scheduling instructions', met: false },
+      ],
+      contractor: null,
+      timeline: [
+        { label: 'Escrow Funded', date: 'June 4, 2026', state: 'done' },
+        { label: 'Awaiting Contractor', date: 'Open on board', state: 'current' },
+        { label: 'Work In Progress', date: 'TBD', state: 'future' },
+        { label: 'Submission', date: 'TBD', state: 'future' },
+        { label: 'Review & Payout', date: 'TBD', state: 'future' },
+      ],
+    },
+    6: {
+      title: 'Market Research Report: Competitor Pricing Analysis',
+      cat: 'admin', catLabel: '📋 Admin',
+      pay: '$120', status: 'submitted', statusLabel: 'Submitted — Awaiting Review',
+      posted: 'May 30, 2026', deadline: 'June 3, 2026', timePosted: '5 days ago', timeLeft: 'Review window: 18h left',
+      autoRemove: 'June 21, 2026',
+      desc: 'SaaS company needs a structured competitor pricing analysis across 8 named competitors. Delivered as a formatted Google Doc with a summary table.',
+      dod: [
+        { text: 'Minimum 8 competitors covered with pricing tiers documented', met: true },
+        { text: 'Comparative summary table included with feature-to-price mapping', met: true },
+        { text: 'Minimum 1,500 words of written analysis', met: true },
+      ],
+      contractor: {
+        name: 'Jordan Kim', initials: '🎓',
+        sub: 'Business Administration — NYU 2024 · New York, NY',
+        verify: '✓ Degree — Business Admin, NYU 2024',
+        tags: ['📋 Business Admin', '✍️ Writing / Content'],
+        gigs: 2, rating: '4.7★',
+      },
+      reviewMode: true,
+      timeline: [
+        { label: 'Escrow Funded', date: 'May 30, 2026', state: 'done' },
+        { label: 'Contractor Accepted', date: 'May 30, 2026', state: 'done' },
+        { label: 'Work Completed', date: 'June 3, 2026', state: 'done' },
+        { label: 'Submitted for Review', date: 'June 3, 2026', state: 'current' },
+        { label: 'Review & Payout', date: 'By June 5 (auto)', state: 'future' },
+      ],
+    },
+    5: {
+      title: '10-Slide Pitch Deck Redesign (Figma or PowerPoint)',
+      cat: 'design', catLabel: '🎨 Design',
+      pay: '$200', status: 'paid', statusLabel: 'Completed',
+      posted: 'Apr 30, 2026', deadline: 'May 7, 2026', timePosted: 'Apr 30, 2026', timeLeft: 'Completed May 6, 2026',
+      autoRemove: null,
+      desc: 'Early-stage startup needed their investor pitch deck redesigned. Content was written — needed visual polish, consistent layout, and brand alignment.',
+      dod: [
+        { text: 'All 10 existing slides redesigned using provided brand kit', met: true },
+        { text: 'Delivered as editable Figma file AND exported PDF', met: true },
+        { text: 'Fonts limited to Google Fonts or provided licensed fonts only', met: true },
+      ],
+      contractor: {
+        name: 'Alex Johnson', initials: '🎓',
+        sub: 'CS — State University 2025 · New York, NY',
+        verify: '✓ Degree — CS, State University 2025',
+        tags: ['💻 Technical / Coding', '📊 Data Analysis'],
+        gigs: 4, rating: '4.9★',
+      },
+      payout: { amount: '$200', vendor1: 'Greystar Property Mgmt — Rent', vendor2: 'Con Edison — Electric', date: 'May 7, 2026' },
+      timeline: [
+        { label: 'Escrow Funded', date: 'Apr 30, 2026', state: 'done' },
+        { label: 'Contractor Accepted', date: 'Apr 30, 2026', state: 'done' },
+        { label: 'Work Submitted', date: 'May 5, 2026', state: 'done' },
+        { label: 'Sponsor Approved', date: 'May 6, 2026', state: 'done' },
+        { label: 'Payout Complete', date: 'May 7, 2026', state: 'done' },
+      ],
+    },
+    2: {
+      title: 'Brand Identity Kit — Logo, Colors & Typography',
+      cat: 'design', catLabel: '🎨 Design',
+      pay: '$280', status: 'paid', statusLabel: 'Completed',
+      posted: 'Apr 22, 2026', deadline: 'May 2, 2026', timePosted: 'Apr 22, 2026', timeLeft: 'Completed Apr 30, 2026',
+      autoRemove: null,
+      desc: 'A local fitness studio launching online needed a full brand identity: logo (3 variations), a primary color palette, and a typography spec sheet.',
+      dod: [
+        { text: 'Minimum 3 logo variations (primary, horizontal, icon-only)', met: true },
+        { text: 'Delivered in SVG, PNG (transparent), and PDF formats', met: true },
+        { text: 'Color palette documented with HEX, RGB, and CMYK codes', met: true },
+      ],
+      contractor: {
+        name: 'Sam Torres', initials: '🎓',
+        sub: 'Graphic Design — Parsons 2024 · Brooklyn, NY',
+        verify: '✓ Degree — Graphic Design, Parsons 2024',
+        tags: ['🎨 Design / Creative', '📱 Social Media'],
+        gigs: 3, rating: '4.8★',
+      },
+      payout: { amount: '$280', vendor1: 'East River Apartments — Rent', vendor2: 'PSE&G — Electric', date: 'May 1, 2026' },
+      timeline: [
+        { label: 'Escrow Funded', date: 'Apr 22, 2026', state: 'done' },
+        { label: 'Contractor Accepted', date: 'Apr 22, 2026', state: 'done' },
+        { label: 'Work Submitted', date: 'Apr 28, 2026', state: 'done' },
+        { label: 'Sponsor Approved', date: 'Apr 30, 2026', state: 'done' },
+        { label: 'Payout Complete', date: 'May 1, 2026', state: 'done' },
+      ],
+    },
+    8: {
+      title: 'Warehouse Inventory Count & Spreadsheet Entry (Brooklyn, NY)',
+      cat: 'inperson', catLabel: '🤝 In-Person',
+      pay: '$175', status: 'paid', statusLabel: 'Completed',
+      posted: 'Apr 15, 2026', deadline: 'Apr 16, 2026', timePosted: 'Apr 15, 2026', timeLeft: 'Completed Apr 17, 2026',
+      autoRemove: null,
+      desc: 'Small import business needed a physical inventory count of approximately 400 SKUs across two shelving units. Count was entered into a provided Google Sheet template.',
+      dod: [
+        { text: 'All 400 SKUs counted and entered in the provided Google Sheet', met: true },
+        { text: 'Sheet submitted and shared with sponsor by 6pm on deadline day', met: true },
+        { text: 'Any damaged or missing items flagged in a separate "Issues" tab', met: true },
+      ],
+      contractor: {
+        name: 'Dana Martinez', initials: '🎓',
+        sub: 'Business Administration — CUNY 2025 · Brooklyn, NY',
+        verify: '✓ Degree — Business Admin, CUNY 2025',
+        tags: ['🤝 On-Site / In-Person', '📋 Business Admin'],
+        gigs: 1, rating: '5.0★',
+      },
+      payout: { amount: '$175', vendor1: 'Crown Heights Realty — Rent', vendor2: 'National Grid — Gas', date: 'Apr 18, 2026' },
+      timeline: [
+        { label: 'Escrow Funded', date: 'Apr 15, 2026', state: 'done' },
+        { label: 'Contractor Accepted', date: 'Apr 15, 2026', state: 'done' },
+        { label: 'Work Submitted', date: 'Apr 16, 2026', state: 'done' },
+        { label: 'Sponsor Approved', date: 'Apr 17, 2026', state: 'done' },
+        { label: 'Payout Complete', date: 'Apr 18, 2026', state: 'done' },
+      ],
+    },
+  };
+
+  /* ── RENDER ── */
+  function getParam(key) {
+    var params = new URLSearchParams(window.location.search);
+    return params.get(key);
+  }
+
+  function renderPage() {
+    var gigId = getParam('gig');
+    var gig = GIGS[gigId];
+    var wrap = document.getElementById('pageWrap');
+
+    if (!gig) {
+      wrap.innerHTML = '<div style="text-align:center;padding:5rem 1rem;"><h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Gig not found</h2><p style="color:rgba(255,255,255,0.4);margin-bottom:2rem;">This gig may have been removed or the link is incorrect.</p><a href="dashboard.html" style="color:var(--accent);font-weight:700;text-decoration:none;">← Back to Dashboard</a></div>';
+      return;
+    }
+
+    var dodHTML = gig.dod.map(function(d) {
+      var cls = gig.status === 'paid' ? 'met' : (gig.status === 'submitted' || (gig.status === 'active' && d.met) ? 'met' : 'pending-check');
+      var icon = (cls === 'met') ? '✓' : '·';
+      return '<li class="dod-item ' + cls + '"><span class="dod-check">' + icon + '</span><span>' + d.text + '</span></li>';
+    }).join('');
+
+    var timelineHTML = gig.timeline.map(function(t, i) {
+      var connector = (i < gig.timeline.length - 1) ? '<div class="tl-connector"></div>' : '';
+      var icon = t.state === 'done' ? '✓' : (t.state === 'current' ? '●' : '○');
+      return '<div class="tl-row"><div class="tl-line-wrap"><div class="tl-dot ' + t.state + '">' + icon + '</div>' + connector + '</div><div class="tl-content"><h4>' + t.label + '</h4><p>' + t.date + '</p></div></div>';
+    }).join('');
+
+    var contractorHTML;
+    if (!gig.contractor) {
+      contractorHTML = '<div class="contractor-card unclaimed"><div class="cc-label">Contractor</div><div class="cc-unclaimed-msg"><span class="icon">🔓</span>This gig is open on the board and hasn\'t been claimed yet. Once a contractor accepts, their profile will appear here.</div></div>';
+    } else {
+      var c = gig.contractor;
+      var tagsHTML = c.tags.map(function(t) { return '<span class="cc-tag">' + t + '</span>'; }).join('');
+      contractorHTML = '<div class="contractor-card"><div class="cc-label">Contractor on this Gig</div><div class="cc-avatar">' + c.initials + '</div><div class="cc-name">' + c.name + '</div><div class="cc-sub">' + c.sub + '</div><div class="cc-verify">' + c.verify + '</div><div class="cc-tags">' + tagsHTML + '</div><div class="cc-stats"><div class="cc-stat"><div class="n">' + c.gigs + '</div><div class="l">Gigs Done</div></div><div class="cc-stat"><div class="n">' + c.rating + '</div><div class="l">Rating</div></div></div><a href="profile.html" class="btn-profile">View Full Profile →</a></div>';
+    }
+
+    var reviewHTML = '';
+    if (gig.reviewMode) {
+      reviewHTML = '<div class="review-panel"><h3>⏱ Review Window Active</h3><p>The contractor has submitted their work. Review against the checklist below and approve or open a dispute. If you don\'t respond, work auto-approves in:</p><div class="review-timer">18:00:00</div><div class="review-btns"><button class="btn-approve" onclick="alert(\'Work approved. Escrow released to contractor wallet.\')">Approve &amp; Release Escrow</button><button class="btn-dispute" onclick="alert(\'Dispute filed. Admin will arbitrate within 48 hours.\')">Open Dispute</button></div></div>';
+    }
+
+    var payoutHTML = '';
+    if (gig.payout) {
+      var p = gig.payout;
+      payoutHTML = '<div class="payout-card"><h3>Payout Confirmed</h3><div class="payout-amount">' + p.amount + '</div><div class="payout-sub">Disbursed to contractor\'s verified vendors</div><div class="payout-items"><div class="payout-item"><span>Vendor 1</span><span>' + p.vendor1 + '</span></div><div class="payout-item"><span>Vendor 2</span><span>' + p.vendor2 + '</span></div><div class="payout-item"><span>Payout Date</span><span>' + p.date + '</span></div></div></div>';
+    }
+
+    var autoRemoveHTML = gig.autoRemove ? '<div class="meta-item"><div class="meta-label">Auto-Remove Date</div><div class="meta-val">' + gig.autoRemove + '</div></div>' : '';
+
+    wrap.innerHTML = `
+      <div class="breadcrumb">
+        <a href="dashboard.html">Dashboard</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>${gig.status === 'paid' ? 'Completed' : 'Active Posts'}</span>
+        <span class="breadcrumb-sep">›</span>
+        <span style="color:rgba(255,255,255,0.6)">${gig.title.length > 50 ? gig.title.slice(0, 50) + '…' : gig.title}</span>
+      </div>
+
+      <div class="page-hd">
+        <div class="page-hd-left">
+          <div class="gig-cat-tag ${gig.cat}">${gig.catLabel}</div>
+          <h1>${gig.title}</h1>
+          <span class="status-pill ${gig.status}">${gig.statusLabel}</span>
+        </div>
+        <div class="page-hd-right">
+          <div class="pay-amount">${gig.pay}</div>
+          <div class="pay-label">Flat Fee · Escrow Locked</div>
+        </div>
+      </div>
+
+      <div class="detail-layout">
+        <div>
+          <div class="detail-card">
+            <div class="detail-card-title">Project Description</div>
+            <p class="detail-desc">${gig.desc}</p>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Definition of Done Checklist</div>
+            <ul class="dod-list">${dodHTML}</ul>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Gig Details</div>
+            <div class="meta-grid">
+              <div class="meta-item"><div class="meta-label">Date Posted</div><div class="meta-val">${gig.posted}</div></div>
+              <div class="meta-item"><div class="meta-label">Deadline</div><div class="meta-val">${gig.deadline}</div></div>
+              <div class="meta-item"><div class="meta-label">Time Since Posted</div><div class="meta-val">${gig.timePosted}</div></div>
+              <div class="meta-item"><div class="meta-label">Status Note</div><div class="meta-val">${gig.timeLeft}</div></div>
+              ${autoRemoveHTML}
+              <div class="meta-item"><div class="meta-label">Category</div><div class="meta-val">${gig.catLabel}</div></div>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Project Timeline</div>
+            <div class="timeline">${timelineHTML}</div>
+          </div>
+        </div>
+
+        <div>
+          ${reviewHTML}
+          ${payoutHTML}
+          ${contractorHTML}
+        </div>
+      </div>
+    `;
+
+    /* start review countdown if applicable */
+    if (gig.reviewMode) {
+      var secs = 18 * 3600;
+      setInterval(function() {
+        secs = Math.max(0, secs - 1);
+        var h = Math.floor(secs / 3600);
+        var m = Math.floor((secs % 3600) / 60);
+        var s = secs % 60;
+        var el = document.querySelector('.review-timer');
+        if (el) el.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+      }, 1000);
+    }
+  }
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  var _orig = window.__eeSetRole;
+  window.__eeSetRole = function(role) {
+    if (_orig) _orig(role);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderPage);
+  } else {
+    renderPage();
+  }
+</script>
+<script src="dev-nav.js"></script>
+</body>
+</html>
